@@ -157,13 +157,14 @@ export function Footer() {
       <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-black/50 z-1" />
 
       {/* Glass Content - Centered with original margins */}
-      <div className="relative z-10 w-full mx-[8vw] md:mx-[12vw] border border-white/11 bg-black/18 backdrop-blur-[20px] saturate-[1.5]">
-        <div className="flex flex-col gap-[64px]" style={{ padding: "60px 80px 48px" }}>
+      {/* Glass Content - Centered with original margins */}
+      <div className="relative z-10 w-full mx-[4vw] md:mx-[12vw] border border-white/11 bg-black/18 backdrop-blur-[20px] saturate-[1.5]">
+        <div className="flex flex-col gap-[48px] md:gap-[64px]" style={{ padding: "40px clamp(20px, 8vw, 80px) 32px" }}>
           
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-[80px] items-start">
-            <div className="md:col-span-8 flex flex-col items-start gap-[40px] md:gap-[52px]">
-              <div className="flex items-center gap-[20px] md:gap-[28px]">
-                <svg width="28" height="32" viewBox="0 0 51 58" fill="none" xmlns="http://www.w3.org/2000/svg" className="opacity-90 shrink-0">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-[48px] md:gap-[80px] items-start">
+            <div className="md:col-span-8 flex flex-col items-start gap-[32px] md:gap-[52px]">
+              <div className="flex items-center gap-[16px] md:gap-[28px]">
+                <svg width="24" height="28" viewBox="0 0 51 58" fill="none" xmlns="http://www.w3.org/2000/svg" className="opacity-90 shrink-0 md:w-[32px] md:h-[36px]">
                   <path d="M25.4095 19.8857L33.5419 24.581V33.9714L25.4095 38.6667L17.2771 33.9714V24.581L25.4095 19.8857Z" fill="white"/>
                   <path d="M40.1351 20.7742V37.7771L25.4095 46.2791L10.6839 37.7771V20.7742L25.4095 12.2722L40.1351 20.7742Z" stroke="white" strokeWidth="2.12195"/>
                   <circle cx="48.0571" cy="16.019" r="2.76191" fill="white"/>
@@ -173,7 +174,7 @@ export function Footer() {
                   <circle cx="25.4095" cy="2.76191" r="2.76191" fill="white"/>
                   <circle cx="25.4095" cy="55.2381" r="2.76191" fill="white"/>
                 </svg>
-                <span className="font-rhymes italic font-thin text-[38px] md:text-[54px] text-white/95 leading-none tracking-tight">Saturn Labs</span>
+                <span className="font-rhymes italic font-thin text-[32px] xs:text-[38px] md:text-[54px] text-white/95 leading-none tracking-tight whitespace-nowrap">Saturn Labs</span>
               </div>
               <p className="font-gilroy text-[13px] md:text-[15px] uppercase tracking-[0.2em] text-white/32 font-light leading-relaxed max-w-[400px]">Building the data infrastructure for Physical AI.</p>
               
