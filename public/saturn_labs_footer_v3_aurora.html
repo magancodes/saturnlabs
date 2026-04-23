@@ -1,0 +1,355 @@
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,300;1,400&family=DM+Sans:wght@300;400&display=swap');
+
+  *{margin:0;padding:0;box-sizing:border-box}
+
+  .root{
+    position:relative;
+    width:100%;
+    min-height:280px;
+    overflow:hidden;
+    font-family:'DM Sans',sans-serif;
+  }
+
+  canvas#aurora{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+    display:block;
+  }
+
+  /* dark overlay to calm the shader */
+  .overlay{
+    position:absolute;
+    inset:0;
+    background:linear-gradient(to top, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.38) 60%, rgba(0,0,0,0.55) 100%);
+    z-index:1;
+  }
+
+  .glass{
+    position:relative;
+    z-index:2;
+    margin:22px 22px;
+    border:1px solid rgba(255,255,255,0.11);
+    background:rgba(0,0,0,0.18);
+    backdrop-filter:blur(20px) saturate(1.5);
+    -webkit-backdrop-filter:blur(20px) saturate(1.5);
+  }
+
+  .inner{
+    padding:30px 34px 24px;
+    display:flex;
+    flex-direction:column;
+    gap:24px;
+  }
+
+  .top{
+    display:grid;
+    grid-template-columns:1fr auto;
+    gap:40px;
+    align-items:start;
+  }
+
+  .brand-row{
+    display:flex;
+    align-items:center;
+    gap:11px;
+  }
+
+  .brand-name{
+    font-family:'Playfair Display',Georgia,serif;
+    font-style:italic;
+    font-weight:300;
+    font-size:32px;
+    color:rgba(255,255,255,0.93);
+    letter-spacing:-0.3px;
+    line-height:1;
+  }
+
+  .tagline{
+    margin-top:10px;
+    font-size:10px;
+    letter-spacing:0.07em;
+    color:rgba(255,255,255,0.32);
+    font-weight:300;
+    line-height:1;
+  }
+
+  .hire{
+    margin-top:16px;
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    border:1px solid rgba(255,255,255,0.1);
+    padding:6px 11px;
+    width:fit-content;
+  }
+
+  .hire-label{
+    font-size:9.5px;
+    letter-spacing:0.15em;
+    text-transform:uppercase;
+    color:rgba(255,255,255,0.36);
+    font-weight:300;
+  }
+
+  .hire-dot{
+    width:3px;height:3px;
+    border-radius:50%;
+    background:rgba(255,255,255,0.22);
+    flex-shrink:0;
+  }
+
+  .hire a{
+    font-size:9.5px;
+    letter-spacing:0.06em;
+    color:rgba(255,255,255,0.72);
+    text-decoration:none;
+    font-weight:300;
+    border-bottom:1px solid rgba(255,255,255,0.22);
+    padding-bottom:1px;
+    transition:color 0.2s,border-color 0.2s;
+  }
+  .hire a:hover{color:#fff;border-color:rgba(255,255,255,0.5);}
+
+  .nav{
+    display:flex;
+    flex-direction:column;
+    align-items:flex-end;
+    gap:12px;
+    padding-top:2px;
+  }
+
+  .nav-label{
+    font-size:8.5px;
+    letter-spacing:0.22em;
+    text-transform:uppercase;
+    color:rgba(255,255,255,0.2);
+    font-weight:300;
+  }
+
+  .nav-links{
+    display:flex;
+    flex-direction:column;
+    align-items:flex-end;
+    gap:8px;
+  }
+
+  .nav-links a{
+    font-size:10.5px;
+    letter-spacing:0.13em;
+    text-transform:uppercase;
+    color:rgba(255,255,255,0.45);
+    text-decoration:none;
+    font-weight:300;
+    transition:color 0.15s;
+  }
+  .nav-links a:hover{color:rgba(255,255,255,0.9);}
+
+  .rule{width:100%;height:1px;background:rgba(255,255,255,0.07);}
+
+  .bottom{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+  }
+
+  .legal{
+    font-size:9px;
+    letter-spacing:0.07em;
+    color:rgba(255,255,255,0.18);
+    font-weight:300;
+  }
+
+  .backed{
+    font-size:9px;
+    letter-spacing:0.07em;
+    color:rgba(255,255,255,0.18);
+    text-align:right;
+    font-weight:300;
+  }
+  .backed span{color:rgba(255,255,255,0.38);}
+</style>
+
+<div class="root">
+  <canvas id="aurora"></canvas>
+  <div class="overlay"></div>
+  <div class="glass">
+    <div class="inner">
+
+      <div class="top">
+        <div>
+          <div class="brand-row">
+            <svg width="26" height="30" viewBox="0 0 51 58" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0;opacity:0.88">
+              <path d="M25.4095 19.8857L33.5419 24.581V33.9714L25.4095 38.6667L17.2771 33.9714V24.581L25.4095 19.8857Z" fill="white"/>
+              <path d="M40.1351 20.7742V37.7771L25.4095 46.2791L10.6839 37.7771V20.7742L25.4095 12.2722L40.1351 20.7742Z" stroke="white" stroke-width="2.12195"/>
+              <circle cx="48.0571" cy="16.019" r="2.76191" fill="white"/>
+              <circle cx="48.0571" cy="42.5333" r="2.76191" fill="white"/>
+              <circle cx="2.76191" cy="41.9809" r="2.76191" fill="white"/>
+              <circle cx="2.76191" cy="16.019" r="2.76191" fill="white"/>
+              <circle cx="25.4095" cy="2.76191" r="2.76191" fill="white"/>
+              <circle cx="25.4095" cy="55.2381" r="2.76191" fill="white"/>
+            </svg>
+            <span class="brand-name">Saturn Labs</span>
+          </div>
+          <div class="tagline">Building the data infrastructure for Physical AI.</div>
+          <div class="hire">
+            <span class="hire-label">Hiring — BLR &amp; SF</span>
+            <span class="hire-dot"></span>
+            <a href="mailto:hiring@saturnlabs.ai">hiring@saturnlabs.ai</a>
+          </div>
+        </div>
+
+        <div class="nav">
+          <div class="nav-label">Company</div>
+          <div class="nav-links">
+            <a href="#">LinkedIn</a>
+            <a href="#">Privacy Policy</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="rule"></div>
+
+      <div class="bottom">
+        <div class="legal">Silverlabs AI Inc, Delaware 19901.</div>
+        <div class="backed">Backed by <span>Entrepreneurs First</span></div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+const canvas = document.getElementById('aurora');
+const gl = canvas.getContext('webgl');
+
+function resize(){
+  const r = canvas.parentElement;
+  canvas.width = r.offsetWidth;
+  canvas.height = r.offsetHeight;
+  gl.viewport(0,0,canvas.width,canvas.height);
+}
+resize();
+
+const mousePos = {x:0.5, y:0.5};
+window.addEventListener('mousemove', e=>{
+  const rect = canvas.getBoundingClientRect();
+  mousePos.x = (e.clientX - rect.left) / rect.width;
+  mousePos.y = (e.clientY - rect.top)  / rect.height;
+});
+
+const vs = `attribute vec2 aPosition; void main(){gl_Position=vec4(aPosition,0,1);}`;
+
+const fs = `
+precision highp float;
+uniform vec2 iResolution;
+uniform float iTime;
+uniform vec2 iMouse;
+uniform float uFlowSpeed;
+uniform float uColorIntensity;
+uniform float uNoiseLayers;
+uniform float uMouseInfluence;
+
+#define MARCH_STEPS 32
+
+float hash(vec2 p){
+  p=fract(p*vec2(123.34,456.21));
+  p+=dot(p,p+45.32);
+  return fract(p.x*p.y);
+}
+
+float fbm(vec3 p){
+  float f=0.;float amp=0.5;
+  for(int i=0;i<8;i++){
+    if(float(i)>=uNoiseLayers)break;
+    f+=amp*hash(p.xy);
+    p*=2.;amp*=0.5;
+  }
+  return f;
+}
+
+float map(vec3 p){
+  vec3 q=p;
+  q.z+=iTime*uFlowSpeed;
+  vec2 mouse=(iMouse.xy/iResolution.xy-0.5)*2.;
+  q.xy+=mouse*uMouseInfluence;
+  float f=fbm(q*2.);
+  f*=sin(p.y*2.+iTime)*0.5+0.5;
+  return clamp(f,0.,1.);
+}
+
+void main(){
+  vec2 uv=(gl_FragCoord.xy-0.5*iResolution.xy)/iResolution.y;
+  vec3 ro=vec3(0,-1,0);
+  vec3 rd=normalize(vec3(uv,1.));
+  vec3 col=vec3(0);
+  float t=0.;
+
+  for(int i=0;i<MARCH_STEPS;i++){
+    vec3 p=ro+rd*t;
+    float density=map(p);
+    if(density>0.){
+      // cool teal-violet aurora palette — minimal, not rainbow
+      vec3 base=vec3(0.05,0.18,0.28);
+      vec3 highlight=vec3(0.12,0.32,0.42);
+      float hue=sin(iTime*0.3+p.y*1.5)*0.5+0.5;
+      vec3 auroraColor=mix(base,highlight,hue);
+      // add faint violet shimmer
+      auroraColor+=vec3(0.04,0.02,0.12)*sin(iTime*0.7+p.x*2.)*0.5+0.5;
+      col+=auroraColor*density*0.12*uColorIntensity;
+    }
+    t+=0.1;
+  }
+
+  // keep it dark and moody — desaturate slightly
+  col=pow(col,vec3(0.85));
+  col*=0.9;
+
+  gl_FragColor=vec4(col,1.);
+}
+`;
+
+function mkShader(type,src){
+  const s=gl.createShader(type);
+  gl.shaderSource(s,src);gl.compileShader(s);
+  return s;
+}
+const prog=gl.createProgram();
+gl.attachShader(prog,mkShader(gl.VERTEX_SHADER,vs));
+gl.attachShader(prog,mkShader(gl.FRAGMENT_SHADER,fs));
+gl.linkProgram(prog);gl.useProgram(prog);
+
+const verts=new Float32Array([-1,-1,1,-1,-1,1,-1,1,1,-1,1,1]);
+const buf=gl.createBuffer();
+gl.bindBuffer(gl.ARRAY_BUFFER,buf);
+gl.bufferData(gl.ARRAY_BUFFER,verts,gl.STATIC_DRAW);
+const ap=gl.getAttribLocation(prog,'aPosition');
+gl.enableVertexAttribArray(ap);
+gl.vertexAttribPointer(ap,2,gl.FLOAT,false,0,0);
+
+const uRes=gl.getUniformLocation(prog,'iResolution');
+const uTime=gl.getUniformLocation(prog,'iTime');
+const uMouse=gl.getUniformLocation(prog,'iMouse');
+const uFlow=gl.getUniformLocation(prog,'uFlowSpeed');
+const uCI=gl.getUniformLocation(prog,'uColorIntensity');
+const uNL=gl.getUniformLocation(prog,'uNoiseLayers');
+const uMI=gl.getUniformLocation(prog,'uMouseInfluence');
+
+const t0=performance.now();
+function draw(ts){
+  gl.uniform2f(uRes,canvas.width,canvas.height);
+  gl.uniform1f(uTime,(ts-t0)/1000);
+  gl.uniform2f(uMouse,mousePos.x*canvas.width,(1-mousePos.y)*canvas.height);
+  gl.uniform1f(uFlow,0.28);
+  gl.uniform1f(uCI,1.1);
+  gl.uniform1f(uNL,4.0);
+  gl.uniform1f(uMI,0.18);
+  gl.drawArrays(gl.TRIANGLES,0,6);
+  requestAnimationFrame(draw);
+}
+requestAnimationFrame(draw);
+window.addEventListener('resize',resize);
+</script>

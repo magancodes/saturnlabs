@@ -1,0 +1,219 @@
+"use client";
+
+import { useEffect, useRef, useState, useMemo } from "react";
+import { EncryptedText } from "@/components/ui/encrypted-text";
+
+function AsciiBackground() {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    let animId: number;
+    let time = 0;
+
+    const chars = "·.+:*°·.+:*°·.";
+    const fontSize = 14;
+    const gap = 18;
+
+    const resize = () => {
+      canvas.width = canvas.offsetWidth;
+      canvas.height = canvas.offsetHeight;
+    };
+    resize();
+    window.addEventListener("resize", resize);
+
+    const draw = () => {
+      time += 0.003;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.font = `${fontSize}px monospace`;
+
+      const cols = Math.ceil(canvas.width / gap);
+      const rows = Math.ceil(canvas.height / gap);
+
+      for (let row = 0; row < rows; row++) {
+        for (let col = 0; col < cols; col++) {
+          const x = col * gap;
+          const y = row * gap;
+
+          // Flowing wave pattern
+          const wave = Math.sin(col * 0.15 + time * 2) * Math.cos(row * 0.1 + time) * 0.5 + 0.5;
+          const charIdx = Math.floor((wave * chars.length + time * 3 + row * 0.5) % chars.length);
+          const alpha = 0.02 + wave * 0.04;
+
+          ctx.fillStyle = `rgba(255, 255, 255, ${alpha})`;
+          ctx.fillText(chars[charIdx], x, y);
+        }
+      }
+
+      animId = requestAnimationFrame(draw);
+    };
+
+    draw();
+
+    return () => {
+      cancelAnimationFrame(animId);
+      window.removeEventListener("resize", resize);
+    };
+  }, []);
+
+  return (
+    <canvas
+      ref={canvasRef}
+      className="absolute inset-0 w-full h-full pointer-events-none"
+      style={{ opacity: 1 }}
+    />
+  );
+}
+
+export function BentoGrid() {
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const [revealed, setRevealed] = useState<Set<number>>(new Set());
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const idx = Number(entry.target.getAttribute("data-idx"));
+            setRevealed((prev) => new Set(prev).add(idx));
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    const cards = sectionRef.current?.querySelectorAll("[data-idx]");
+    cards?.forEach((card) => observer.observe(card));
+
+    return () => observer.disconnect();
+  }, []);
+
+  const videos = [
+    { title: "Stereo Egocentric", tag: "01", cols: "col-span-4 md:col-span-8" },
+    { title: "Point Cloud", tag: "02", cols: "col-span-2 md:col-span-4" },
+    { title: "Tactile Force Sensor", tag: "03", cols: "col-span-3 md:col-span-5" },
+    { title: "Left Wrist Cam", tag: "04", cols: "col-span-3 md:col-span-7" },
+    { title: "Stereo Exocentric", tag: "05", cols: "col-span-3 md:col-span-7" },
+    { title: "Depth Maps", tag: "06", cols: "col-span-3 md:col-span-5" },
+    { title: "3D Pose Estimation", tag: "07", cols: "col-span-6 md:col-span-12" },
+  ];
+
+  return (
+    <section ref={sectionRef} className="relative z-10 bg-[#050505] overflow-hidden">
+
+      {/* Animated ASCII shader background */}
+      <AsciiBackground />
+
+      {/* Content wrapper */}
+      <div className="relative z-10" style={{ padding: "280px 50px 220px" }}>
+
+        {/* Section header — clean, aligned */}
+        <div
+          data-idx={-1}
+          className="mb-[40vh] md:mb-[50vh] transition-all duration-1000"
+          style={{
+            opacity: revealed.has(-1) ? 1 : 0,
+            transform: revealed.has(-1) ? "translateY(0)" : "translateY(40px)",
+          }}
+        >
+          <p
+            className="font-mono text-white/20 uppercase tracking-[0.4em] mb-12"
+            style={{ fontSize: "11px", letterSpacing: "0.4em" }}
+          >
+            // Data Modalities
+          </p>
+          <h2
+            className="font-gilroy font-normal text-white"
+            style={{ fontSize: "clamp(2.5rem, 6vw, 4.2rem)", lineHeight: 1.4 }}
+          >
+            <EncryptedText text="Seven" />{" "}
+            <span className="font-rhymes italic font-thin"><EncryptedText text="synchronized" /></span>{" "}
+            <EncryptedText text="streams." />
+          </h2>
+          <p
+            className="font-gilroy font-light text-white/25 mt-20"
+            style={{ fontSize: "clamp(15px, 2.2vw, 19px)", maxWidth: "550px", lineHeight: 2 }}
+          >
+            Each capture session records all modalities simultaneously for perfect temporal alignment.
+          </p>
+        </div>
+
+        {/* Bento Grid — 6 cols mobile, 12 desktop */}
+        <div className="grid grid-cols-6 md:grid-cols-12 gap-2 md:gap-3">
+          {videos.map((video, i) => (
+            <div
+              key={video.title}
+              data-idx={i}
+              className={`group relative overflow-hidden ${video.cols} border border-white/[0.06] bg-white/[0.02] hover:border-white/15 cursor-pointer`}
+              style={{
+                height: video.cols.includes("col-span-12") && !video.cols.includes("md:col-span-12") ? "clamp(160px, 25vw, 240px)" :  "clamp(160px, 30vw, 320px)",
+                opacity: revealed.has(i) ? 1 : 0,
+                transform: revealed.has(i) ? "translateY(0) scale(1)" : "translateY(80px) scale(0.95)",
+                transition: `opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1) ${i * 0.08}s, transform 0.9s cubic-bezier(0.16, 1, 0.3, 1) ${i * 0.08}s`,
+              }}
+            >
+              {/* Scan line hover */}
+              <div
+                className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-1000 pointer-events-none"
+                style={{ background: "repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,0.015) 2px, rgba(255,255,255,0.015) 4px)" }}
+              />
+
+              {/* Ambient glow */}
+              <div
+                className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700"
+                style={{ background: `linear-gradient(${110 + i * 25}deg, rgba(255,255,255,0.04) 0%, transparent 60%)` }}
+              />
+
+              {/* Tag */}
+              <div className="absolute top-0 left-0 z-10">
+                <div
+                  className="font-mono text-white/20 group-hover:text-white/50 transition-colors duration-500 border-r border-b border-white/[0.06] group-hover:border-white/10 flex items-center justify-center"
+                  style={{ width: "36px", height: "36px", fontSize: "10px" }}
+                >
+                  {video.tag}
+                </div>
+              </div>
+
+              {/* Play icon */}
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="opacity-0 group-hover:opacity-100 transition-all duration-500 group-hover:scale-100 scale-75">
+                  <div className="w-12 h-12 md:w-16 md:h-16 border border-white/20 flex items-center justify-center">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="white" fillOpacity="0.6" stroke="none">
+                      <polygon points="8,5 20,12 8,19" />
+                    </svg>
+                  </div>
+                </div>
+              </div>
+
+              {/* Label */}
+              <div className="absolute bottom-0 left-0 right-0 z-10 p-3 md:p-5 flex justify-between items-end">
+                <h3
+                  className="font-gilroy font-semibold text-white/80 group-hover:text-white transition-colors duration-500"
+                  style={{ fontSize: "clamp(12px, 2vw, 17px)" }}
+                >
+                  {video.title}
+                </h3>
+                <svg
+                  className="w-3 h-3 md:w-4 md:h-4 text-white/20 group-hover:text-white/60 transition-all duration-500 group-hover:translate-x-1 group-hover:-translate-y-1 shrink-0"
+                  viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
+                >
+                  <line x1="7" y1="17" x2="17" y2="7" />
+                  <polyline points="7 7 17 7 17 17" />
+                </svg>
+              </div>
+
+              {/* Edge accents */}
+              <div className="absolute top-0 right-0 w-[1px] h-8 md:h-12 bg-white/[0.08] group-hover:bg-white/20 group-hover:h-16 md:group-hover:h-20 transition-all duration-700" />
+              <div className="absolute bottom-0 left-0 w-8 md:w-12 h-[1px] bg-white/[0.08] group-hover:bg-white/20 group-hover:w-16 md:group-hover:w-20 transition-all duration-700" />
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
