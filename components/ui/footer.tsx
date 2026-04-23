@@ -161,9 +161,9 @@ export function Footer() {
         <div className="flex flex-col gap-[64px]" style={{ padding: "60px 80px 48px" }}>
           
           <div className="grid grid-cols-1 md:grid-cols-12 gap-[80px] items-start">
-            <div className="md:col-span-8 flex flex-col items-start gap-[52px]">
-              <div className="flex items-center gap-[28px]">
-                <svg width="32" height="36" viewBox="0 0 51 58" fill="none" xmlns="http://www.w3.org/2000/svg" className="opacity-90 shrink-0">
+            <div className="md:col-span-8 flex flex-col items-start gap-[40px] md:gap-[52px]">
+              <div className="flex items-center gap-[20px] md:gap-[28px]">
+                <svg width="28" height="32" viewBox="0 0 51 58" fill="none" xmlns="http://www.w3.org/2000/svg" className="opacity-90 shrink-0">
                   <path d="M25.4095 19.8857L33.5419 24.581V33.9714L25.4095 38.6667L17.2771 33.9714V24.581L25.4095 19.8857Z" fill="white"/>
                   <path d="M40.1351 20.7742V37.7771L25.4095 46.2791L10.6839 37.7771V20.7742L25.4095 12.2722L40.1351 20.7742Z" stroke="white" strokeWidth="2.12195"/>
                   <circle cx="48.0571" cy="16.019" r="2.76191" fill="white"/>
@@ -173,22 +173,22 @@ export function Footer() {
                   <circle cx="25.4095" cy="2.76191" r="2.76191" fill="white"/>
                   <circle cx="25.4095" cy="55.2381" r="2.76191" fill="white"/>
                 </svg>
-                <span className="font-rhymes italic font-thin text-[54px] text-white/95 leading-none tracking-tight">Saturn Labs</span>
+                <span className="font-rhymes italic font-thin text-[38px] md:text-[54px] text-white/95 leading-none tracking-tight">Saturn Labs</span>
               </div>
-              <p className="font-gilroy text-[15px] uppercase tracking-[0.2em] text-white/32 font-light leading-none">Building the data infrastructure for Physical AI.</p>
+              <p className="font-gilroy text-[13px] md:text-[15px] uppercase tracking-[0.2em] text-white/32 font-light leading-relaxed max-w-[400px]">Building the data infrastructure for Physical AI.</p>
               
-              <div className="flex items-center gap-[16px]">
-                <span className="font-gilroy text-[13px] uppercase tracking-[0.3em] text-white/36 font-light">Hiring — BLR & SF</span>
-                <div className="w-[3px] h-[3px] rounded-full bg-white/22 shrink-0" />
-                <a href="mailto:hiring@saturnlabs.ai" className="font-gilroy text-[13px] tracking-[0.08em] text-white/72 hover:text-white transition-colors border-b border-white/22 pb-[1px]">hiring@saturnlabs.ai</a>
+              <div className="flex flex-col md:flex-row items-start md:items-center gap-[12px] md:gap-[16px]">
+                <span className="font-gilroy text-[12px] md:text-[13px] uppercase tracking-[0.3em] text-white/36 font-light">Hiring — BLR & SF</span>
+                <div className="hidden md:block w-[3px] h-[3px] rounded-full bg-white/22 shrink-0" />
+                <a href="mailto:hiring@saturnlabs.ai" className="font-gilroy text-[12px] md:text-[13px] tracking-[0.08em] text-white/72 hover:text-white transition-colors border-b border-white/22 pb-[1px]">hiring@saturnlabs.ai</a>
               </div>
             </div>
 
-            <div className="md:col-span-4 flex flex-col items-end gap-[24px] pt-[12px]">
-              <span className="font-gilroy text-[11px] uppercase tracking-[0.4em] text-white/20 font-light">Company</span>
-              <div className="flex flex-col items-end gap-[18px]">
-                <a href="#" className="font-gilroy text-[15px] uppercase tracking-[0.25em] text-white/45 hover:text-white transition-colors font-light">LinkedIn</a>
-                <a href="#" className="font-gilroy text-[15px] uppercase tracking-[0.25em] text-white/45 hover:text-white transition-colors font-light">Privacy Policy</a>
+            <div className="md:col-span-4 flex flex-col items-start md:items-end gap-[20px] md:gap-[24px] pt-[8px] md:pt-[12px]">
+              <span className="font-gilroy text-[10px] md:text-[11px] uppercase tracking-[0.4em] text-white/20 font-light">Company</span>
+              <div className="flex flex-col items-start md:items-end gap-[12px] md:gap-[18px]">
+                <a href="#" className="font-gilroy text-[14px] md:text-[15px] uppercase tracking-[0.25em] text-white/45 hover:text-white transition-colors font-light">LinkedIn</a>
+                <a href="#" className="font-gilroy text-[14px] md:text-[15px] uppercase tracking-[0.25em] text-white/45 hover:text-white transition-colors font-light">Privacy Policy</a>
               </div>
             </div>
           </div>
