@@ -100,24 +100,24 @@ export function Footer() {
     `;
 
     function mkShader(type: number, src: string) {
-      const s = gl.createShader(type)!;
-      gl.shaderSource(s, src);
-      gl.compileShader(s);
+      const s = gl!.createShader(type)!;
+      gl!.shaderSource(s, src);
+      gl!.compileShader(s);
       return s;
     }
-    const prog = gl.createProgram()!;
-    gl.attachShader(prog, mkShader(gl.VERTEX_SHADER, vsSrc));
-    gl.attachShader(prog, mkShader(gl.FRAGMENT_SHADER, fsSrc));
-    gl.linkProgram(prog);
-    gl.useProgram(prog);
+    const prog = gl!.createProgram()!;
+    gl!.attachShader(prog, mkShader(gl!.VERTEX_SHADER, vsSrc));
+    gl!.attachShader(prog, mkShader(gl!.FRAGMENT_SHADER, fsSrc));
+    gl!.linkProgram(prog);
+    gl!.useProgram(prog);
 
     const verts = new Float32Array([-1, -1, 1, -1, -1, 1, -1, 1, 1, -1, 1, 1]);
-    const buf = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, buf);
-    gl.bufferData(gl.ARRAY_BUFFER, verts, gl.STATIC_DRAW);
-    const ap = gl.getAttribLocation(prog, "aPosition");
-    gl.enableVertexAttribArray(ap);
-    gl.vertexAttribPointer(ap, 2, gl.FLOAT, false, 0, 0);
+    const buf = gl!.createBuffer();
+    gl!.bindBuffer(gl!.ARRAY_BUFFER, buf);
+    gl!.bufferData(gl!.ARRAY_BUFFER, verts, gl!.STATIC_DRAW);
+    const ap = gl!.getAttribLocation(prog, "aPosition");
+    gl!.enableVertexAttribArray(ap);
+    gl!.vertexAttribPointer(ap, 2, gl!.FLOAT, false, 0, 0);
 
     const uRes = gl.getUniformLocation(prog, "iResolution");
     const uTime = gl.getUniformLocation(prog, "iTime");
