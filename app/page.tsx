@@ -3,9 +3,7 @@
 import { useEffect, useState, useRef } from "react";
 import Image from "next/image";
 import dynamic from "next/dynamic";
-import { BentoGrid } from "@/components/ui/bento-grid";
 import { EncryptedText } from "@/components/ui/encrypted-text";
-import { Footer } from "@/components/ui/footer";
 import { cn } from "@/lib/utils";
 
 const ShaderAnimation = dynamic(
@@ -16,37 +14,50 @@ const LaunchSection = dynamic(
   () => import("@/components/ui/launch").then(m => ({ default: m.LaunchSection })),
   { ssr: false }
 );
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-
-gsap.registerPlugin(ScrollTrigger);
+const BentoGrid = dynamic(
+  () => import("@/components/ui/bento-grid").then(m => ({ default: m.BentoGrid })),
+  { ssr: false }
+);
+const Footer = dynamic(
+  () => import("@/components/ui/footer").then(m => ({ default: m.Footer })),
+  { ssr: false }
+);
 
 export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const section = document.querySelector<HTMLElement>(".narrative-section");
-    const panels = gsap.utils.toArray<HTMLElement>(".narrative-panel");
-    if (!section || panels.length < 3) return;
+    let cleanup: (() => void) | null = null;
 
-    const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: section,
-        start: "top top",
-        end: "bottom bottom",
-        scrub: 1.5,
-      },
-    });
+    void (async () => {
+      const { gsap } = await import("gsap");
+      const { ScrollTrigger } = await import("gsap/ScrollTrigger");
+      gsap.registerPlugin(ScrollTrigger);
 
-    // Sequential: current exits fully before next enters — no overlap
-    tl
-      .to(panels[0], { opacity: 0, y: -80, duration: 1, ease: "none" })
-      .fromTo(panels[1], { opacity: 0, y: 80 }, { opacity: 1, y: 0, duration: 1, ease: "none" })
-      .to(panels[1], { opacity: 0, y: -80, duration: 1, ease: "none" })
-      .fromTo(panels[2], { opacity: 0, y: 80 }, { opacity: 1, y: 0, duration: 1, ease: "none" });
+      const section = document.querySelector<HTMLElement>(".narrative-section");
+      const panels = gsap.utils.toArray<HTMLElement>(".narrative-panel");
+      if (!section || panels.length < 3) return;
 
-    return () => { ScrollTrigger.getAll().forEach(t => t.kill()); };
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: section,
+          start: "top top",
+          end: "bottom bottom",
+          scrub: 1.5,
+        },
+      });
+
+      tl
+        .to(panels[0], { opacity: 0, y: -80, duration: 1, ease: "none" })
+        .fromTo(panels[1], { opacity: 0, y: 80 }, { opacity: 1, y: 0, duration: 1, ease: "none" })
+        .to(panels[1], { opacity: 0, y: -80, duration: 1, ease: "none" })
+        .fromTo(panels[2], { opacity: 0, y: 80 }, { opacity: 1, y: 0, duration: 1, ease: "none" });
+
+      cleanup = () => { ScrollTrigger.getAll().forEach((t) => t.kill()); };
+    })();
+
+    return () => { cleanup?.(); };
   }, []);
 
   return (

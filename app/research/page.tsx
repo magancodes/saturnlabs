@@ -3,9 +3,14 @@
 import { useRef, useEffect, useState } from "react";
 import { motion, useInView } from "framer-motion";
 import { EncryptedText } from "@/components/ui/encrypted-text";
-import { Footer } from "@/components/ui/footer";
 import Image from "next/image";
 import Link from "next/link";
+import dynamic from "next/dynamic";
+
+const Footer = dynamic(
+  () => import("@/components/ui/footer").then(m => ({ default: m.Footer })),
+  { ssr: false }
+);
 
 function Reveal({
   children,
