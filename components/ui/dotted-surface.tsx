@@ -41,7 +41,6 @@ export function DottedSurface({ className, ...props }: DottedSurfaceProps) {
 		});
 		renderer.setPixelRatio(window.devicePixelRatio);
 		renderer.setSize(window.innerWidth, window.innerHeight);
-		// Force dark theme colors for Saturn Labs aesthetic
 		renderer.setClearColor(0x000000, 0);
 
 		containerRef.current.appendChild(renderer.domElement);
@@ -49,19 +48,17 @@ export function DottedSurface({ className, ...props }: DottedSurfaceProps) {
 		// Create particles
 		const positions: number[] = [];
 		const colors: number[] = [];
-
-		// Create geometry for all particles
 		const geometry = new THREE.BufferGeometry();
 
 		for (let ix = 0; ix < AMOUNTX; ix++) {
 			for (let iy = 0; iy < AMOUNTY; iy++) {
 				const x = ix * SEPARATION - (AMOUNTX * SEPARATION) / 2;
-				const y = 0; // Will be animated
+				const y = 0; 
 				const z = iy * SEPARATION - (AMOUNTY * SEPARATION) / 2;
 
 				positions.push(x, y, z);
-				// Soft white/gray dots
-				colors.push(0.8, 0.8, 0.8);
+                // Colors: RGB (0-1 range for Three.js BufferAttribute)
+				colors.push(0.5, 0.5, 0.5); 
 			}
 		}
 
@@ -71,61 +68,56 @@ export function DottedSurface({ className, ...props }: DottedSurfaceProps) {
 		);
 		geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
 
-		// Create material
 		const material = new THREE.PointsMaterial({
-			size: 4,
+			size: 8,
 			vertexColors: true,
 			transparent: true,
-			opacity: 0.4,
+			opacity: 0.8,
 			sizeAttenuation: true,
 		});
 
-		// Create points object
 		const points = new THREE.Points(geometry, material);
 		scene.add(points);
 
 		let count = 0;
 		let animationId: number;
 
-		// Animation function
 		const animate = () => {
 			animationId = requestAnimationFrame(animate);
 
 			const positionAttribute = geometry.attributes.position;
-			const positions = positionAttribute.array as Float32Array;
+			const positionsArray = positionAttribute.array as Float32Array;
 
 			let i = 0;
 			for (let ix = 0; ix < AMOUNTX; ix++) {
 				for (let iy = 0; iy < AMOUNTY; iy++) {
 					const index = i * 3;
-
-					// Animate Y position with sine waves
-					positions[index + 1] =
+					positionsArray[index + 1] =
 						Math.sin((ix + count) * 0.3) * 50 +
 						Math.sin((iy + count) * 0.5) * 50;
-
 					i++;
 				}
 			}
 
 			positionAttribute.needsUpdate = true;
 			renderer.render(scene, camera);
-			count += 0.05; // Slightly slower waves
+			count += 0.1;
 		};
 
-		// Handle window resize
 		const handleResize = () => {
-			camera.aspect = window.innerWidth / window.innerHeight;
+			if (!containerRef.current) return;
+            const width = containerRef.current.clientWidth;
+            const height = containerRef.current.clientHeight;
+			camera.aspect = width / height;
 			camera.updateProjectionMatrix();
-			renderer.setSize(window.innerWidth, window.innerHeight);
+			renderer.setSize(width, height);
 		};
 
 		window.addEventListener('resize', handleResize);
+		handleResize(); // Initial call
 
-		// Start animation
 		animate();
 
-		// Store references
 		sceneRef.current = {
 			scene,
 			camera,
@@ -135,30 +127,25 @@ export function DottedSurface({ className, ...props }: DottedSurfaceProps) {
 			count,
 		};
 
-		// Cleanup function
 		return () => {
 			window.removeEventListener('resize', handleResize);
-
 			if (sceneRef.current) {
 				cancelAnimationFrame(sceneRef.current.animationId);
-
 				sceneRef.current.scene.traverse((object) => {
 					if (object instanceof THREE.Points) {
 						object.geometry.dispose();
 						if (Array.isArray(object.material)) {
-							object.material.forEach((m) => m.dispose());
+							object.material.forEach((mat) => mat.dispose());
 						} else {
 							object.material.dispose();
 						}
 					}
 				});
-
 				sceneRef.current.renderer.dispose();
-
 				if (containerRef.current && sceneRef.current.renderer.domElement) {
-				    try {
-					    containerRef.current.removeChild(sceneRef.current.renderer.domElement);
-					} catch(e) {}
+                    try {
+                        containerRef.current.removeChild(sceneRef.current.renderer.domElement);
+                    } catch(e) {}
 				}
 			}
 		};
@@ -167,7 +154,7 @@ export function DottedSurface({ className, ...props }: DottedSurfaceProps) {
 	return (
 		<div
 			ref={containerRef}
-			className={cn('pointer-events-none absolute inset-0', className)}
+			className={cn('pointer-events-none absolute inset-0 overflow-hidden', className)}
 			{...props}
 		/>
 	);

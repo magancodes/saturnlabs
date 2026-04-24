@@ -263,28 +263,30 @@ export default function Home() {
               <EncryptedText 
                 text="Saturn Labs turns human motion into the force that trains the world's most ambitious robots." 
                 encryptedClassName="text-white/20"
+                revealDelayMs={5}
               />
             </div>
             <div className="narrative-text absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full font-gilroy font-normal text-white text-[17px] md:text-[23px] tracking-[0.05em] leading-relaxed opacity-0">
               <EncryptedText 
                 text="A robot is only as good as its data, and beneath every breakthrough in Physical AI, there's a symphony of real world human action powering that learning." 
                 encryptedClassName="text-white/20"
+                revealDelayMs={5}
               />
             </div>
             <div className="narrative-text absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full font-gilroy font-normal text-white text-[17px] md:text-[23px] tracking-[0.05em] leading-relaxed opacity-0">
               <EncryptedText 
                 text="Saturn Labs captures that action, building the multimodal datasets that teach robots how to move, manipulate, and navigate the physical world with precision." 
                 encryptedClassName="text-white/20"
+                revealDelayMs={5}
               />
             </div>
           </div>
         </div>
 
-        {/* Updated Bottom Shader (DottedSurface) */}
-        <div className="w-full h-[280px] md:h-[480px] relative mt-8 md:mt-12 overflow-hidden border-t border-white/10">
-          <DottedSurface className="opacity-100" />
-          <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black pointer-events-none z-10" />
-          <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-black to-transparent z-10" />
+        {/* Optimized Shader Container */}
+        <div className="w-full h-[320px] md:h-[520px] relative mt-16 overflow-hidden border-t border-white/10 flex items-center justify-center">
+          <DottedSurface className="opacity-80" />
+          <div className="absolute inset-0 bg-gradient-to-b from-black via-transparent to-black pointer-events-none z-10" />
         </div>
       </section>
 
