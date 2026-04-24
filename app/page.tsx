@@ -129,23 +129,38 @@ export default function Home() {
             </svg>
           </a>
 
-          {/* Hamburger — visible on mobile only */}
+          {/* Hamburger — visible on mobile only, styled as glass pill */}
           <button
             onClick={() => setMenuOpen(!menuOpen)}
-            className="lg:hidden flex flex-col justify-center items-center w-10 h-10 gap-[6px] relative z-50"
+            className="lg:hidden flex flex-col justify-center items-center gap-[5px] relative z-50"
             aria-label="Toggle menu"
+            style={{
+              width: "44px",
+              height: "44px",
+              borderRadius: "10px",
+              background: "rgba(255,255,255,0.06)",
+              backdropFilter: "blur(12px)",
+              WebkitBackdropFilter: "blur(12px)",
+              border: "1px solid rgba(255,255,255,0.12)",
+            }}
           >
             <span
-              className="block w-6 h-[2px] bg-white transition-all duration-300 origin-center"
-              style={{ transform: menuOpen ? "rotate(45deg) translate(0, 4px)" : "none" }}
+              className="block bg-white transition-all duration-300 origin-center"
+              style={{
+                width: "18px", height: "1.5px",
+                transform: menuOpen ? "rotate(45deg) translate(0, 3.5px)" : "none",
+              }}
             />
             <span
-              className="block w-6 h-[2px] bg-white transition-all duration-300"
-              style={{ opacity: menuOpen ? 0 : 1 }}
+              className="block bg-white transition-all duration-300"
+              style={{ width: "18px", height: "1.5px", opacity: menuOpen ? 0 : 1 }}
             />
             <span
-              className="block w-6 h-[2px] bg-white transition-all duration-300 origin-center"
-              style={{ transform: menuOpen ? "rotate(-45deg) translate(0, -4px)" : "none" }}
+              className="block bg-white transition-all duration-300 origin-center"
+              style={{
+                width: "18px", height: "1.5px",
+                transform: menuOpen ? "rotate(-45deg) translate(0, -3.5px)" : "none",
+              }}
             />
           </button>
         </div>
@@ -172,9 +187,9 @@ export default function Home() {
           </svg>
         </button>
         <nav className="flex flex-col items-center gap-12">
-          <a href="#" onClick={() => setMenuOpen(false)} className="font-gilroy text-white/80 hover:text-white transition-opacity" style={{ fontSize: "28px" }}>home</a>
-          <a href="#" onClick={() => setMenuOpen(false)} className="font-gilroy text-white/80 hover:text-white transition-opacity" style={{ fontSize: "28px" }}>data</a>
-          <a href="#" onClick={() => setMenuOpen(false)} className="font-gilroy text-white/80 hover:text-white transition-opacity" style={{ fontSize: "28px" }}>research</a>
+          <a href="/" onClick={() => setMenuOpen(false)} className="font-gilroy text-white/80 hover:text-white transition-opacity" style={{ fontSize: "28px" }}>home</a>
+          <a href="#data" onClick={() => setMenuOpen(false)} className="font-gilroy text-white/80 hover:text-white transition-opacity" style={{ fontSize: "28px" }}>data</a>
+          <a href="/research" onClick={() => setMenuOpen(false)} className="font-gilroy text-white/80 hover:text-white transition-opacity" style={{ fontSize: "28px" }}>research</a>
           <a href="#" onClick={() => setMenuOpen(false)} className="bg-white text-black font-gilroy font-semibold inline-flex items-center hover:opacity-90 transition-all mt-4" style={{ padding: "16px 32px", borderRadius: "8px", fontSize: "16px", gap: "12px" }}>connect with us</a>
         </nav>
       </div>
