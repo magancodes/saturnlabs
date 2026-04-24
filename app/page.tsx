@@ -31,8 +31,9 @@ export default function Home() {
           ease: "power3.out",
           scrollTrigger: {
             trigger: section,
-            start: "top 80%", // 20% from bottom
-            toggleActions: "play none none none",
+            start: "top 85%", 
+            end: "bottom 15%",
+            toggleActions: "play reverse play reverse",
           },
         }
       );
