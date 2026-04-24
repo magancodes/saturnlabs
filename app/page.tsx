@@ -245,7 +245,7 @@ export default function Home() {
       {/* ═══════════════════ DATASET CARDS ═══════════════════ */}
       <section
         className="relative w-full bg-[#050505]"
-        style={{ padding: 'clamp(40px, 8vw, 120px) clamp(24px, 11vw, 160px)' }}
+        style={{ padding: 'clamp(100px, 15vw, 240px) clamp(24px, 11vw, 160px)' }}
       >
           {/* Heading */}
           <h2
@@ -290,7 +290,7 @@ export default function Home() {
           </div>
 
           {/* Disclaimer below links */}
-          <div className="flex justify-center pt-24 md:pt-32">
+          <div className="flex justify-center pt-32 md:pt-48">
             <p 
               className="font-gilroy font-light text-white/30 text-center" 
               style={{ fontSize: 'clamp(11px, 1vw, 13px)', maxWidth: '500px', lineHeight: 1.6 }}
