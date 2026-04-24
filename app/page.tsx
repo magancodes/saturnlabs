@@ -50,9 +50,9 @@ export default function Home() {
         scrollTrigger: {
           trigger: narrativeSection,
           start: "top top",
-          end: "+=150%",
+          end: "+=160%",
           pin: true,
-          scrub: 0.5,
+          scrub: true,
           invalidateOnRefresh: true,
         },
       });
