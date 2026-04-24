@@ -41,8 +41,10 @@ export default function Research() {
         className="fixed top-0 left-0 right-0 z-50 flex justify-between items-center"
         style={{
           padding: "30px 50px",
-          background:
-            "linear-gradient(to bottom, rgba(5,5,5,0.92) 0%, rgba(5,5,5,0) 100%)",
+          background: "rgba(5,5,5,0.88)",
+          backdropFilter: "blur(16px)",
+          WebkitBackdropFilter: "blur(16px)",
+          borderBottom: "1px solid rgba(255,255,255,0.05)",
         }}
       >
         <Link href="/" className="flex items-center gap-4 shrink-0">
@@ -117,14 +119,17 @@ export default function Research() {
       <section className="relative min-h-screen flex items-center overflow-hidden">
         {/* Grid background */}
         <div className="absolute inset-0 z-0 pointer-events-none">
+          {/* White grid */}
           <div
             className="absolute inset-0"
             style={{
               backgroundImage: `
-                linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px)
+                linear-gradient(rgba(255,255,255,0.07) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.07) 1px, transparent 1px)
               `,
               backgroundSize: "72px 72px",
+              maskImage: "radial-gradient(ellipse 80% 80% at 50% 40%, black 30%, transparent 100%)",
+              WebkitMaskImage: "radial-gradient(ellipse 80% 80% at 50% 40%, black 30%, transparent 100%)",
             }}
           />
 
@@ -299,54 +304,6 @@ export default function Research() {
         />
       </section>
 
-      {/* ═══ STATS BAND ═══ */}
-      <section
-        className="relative border-b border-white/[0.05] overflow-hidden"
-        style={{
-          padding:
-            "clamp(48px, 8vw, 80px) clamp(24px, 6vw, 90px)",
-        }}
-      >
-        <div
-          className="absolute inset-0 pointer-events-none"
-          style={{
-            background:
-              "radial-gradient(ellipse 60% 100% at 50% 50%, rgba(80,50,200,0.04) 0%, transparent 100%)",
-          }}
-        />
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 relative z-10">
-          {[
-            { num: "100+", label: "Hours of annotated human motion data" },
-            { num: "4", label: "Task categories across manipulation domains" },
-            { num: "∞", label: "Open questions to explore together" },
-          ].map((stat, i) => (
-            <Reveal key={stat.label} delay={i * 0.12}>
-              <div className="flex flex-col gap-3">
-                <span
-                  className="font-rhymes italic font-thin text-white"
-                  style={{
-                    fontSize: "clamp(3.2rem, 6vw, 5rem)",
-                    lineHeight: 1,
-                    letterSpacing: "-0.02em",
-                  }}
-                >
-                  {stat.num}
-                </span>
-                <div
-                  className="w-8 h-px bg-white/15"
-                  style={{ marginTop: "4px", marginBottom: "4px" }}
-                />
-                <span
-                  className="font-gilroy font-light text-white/30"
-                  style={{ fontSize: "13px", lineHeight: 1.65, maxWidth: "220px" }}
-                >
-                  {stat.label}
-                </span>
-              </div>
-            </Reveal>
-          ))}
-        </div>
-      </section>
 
       {/* ═══ OUR APPROACH ═══ */}
       <section
