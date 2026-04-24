@@ -79,7 +79,7 @@ const ShaderBackground = () => {
 
       vec4 lines = vec4(0.0);
       vec4 bgColor1 = vec4(0.0, 0.0, 0.0, 1.0);
-      vec4 bgColor2 = vec4(0.05, 0.05, 0.1, 1.0);
+      vec4 bgColor2 = vec4(0.02, 0.0, 0.05, 1.0);
 
       for(int l = 0; l < linesPerGroup; l++) {
         float normalizedLineIndex = float(l) / float(linesPerGroup);
@@ -96,7 +96,7 @@ const ShaderBackground = () => {
         float circle = drawCircle(circlePosition, 0.01, space) * 4.0;
 
         line = line + circle;
-        lines += line * lineColor * rand;
+        lines += line * vec4(0.5, 0.2, 1.0, 1.0) * rand;
       }
 
       fragColor = mix(bgColor1, bgColor2, uv.x);
