@@ -19,7 +19,7 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord)
     vec3  FC = vec3(fragCoord, t);
     vec4  o  = vec4(0.0);
 
-    for (float i, z, d, f; i++ < 1e2; o += vec4(3., 1., d, z / f) / z) {
+    for (float i, z, d, f; i++ < 60.; o += vec4(3., 1., d, z / f) / z) {
         vec3 v = vec3(0., -2., 7.);
         vec3 p = z * normalize(FC.rgb * 2. - r.xyx) + v;
         vec3 a = p;
@@ -121,8 +121,12 @@ export function ShaderCanvas({
 
     const getDpr = () => {
       const sys = window.devicePixelRatio || 1;
-      return Math.max(1, Math.min(2, pixelRatio ?? sys));
+      return Math.max(1, Math.min(1.5, pixelRatio ?? sys));
     };
+
+    let visible = true;
+    const io = new IntersectionObserver(([e]) => { visible = e.isIntersecting; }, { rootMargin: "200px" });
+    io.observe(canvas);
 
     let resizeScheduled = false;
     function applySize() {
@@ -169,6 +173,7 @@ export function ShaderCanvas({
 
     function tick(now: number) {
       if (disposed || !gl) return;
+      if (!visible) { rafRef.current = requestAnimationFrame(tick); return; }
       if (gl.isContextLost()) { rafRef.current = requestAnimationFrame(tick); return; }
 
       const t = (now - startRef.current) / 1000;
@@ -207,6 +212,7 @@ export function ShaderCanvas({
       canvas.removeEventListener("webglcontextlost", onContextLost);
       canvas.removeEventListener("webglcontextrestored", onContextRestored);
       ro?.disconnect();
+      io.disconnect();
       try { gl?.deleteBuffer(vbo); } catch {}
       try { gl?.deleteVertexArray(vao); } catch {}
     }

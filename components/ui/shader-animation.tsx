@@ -1,146 +1,99 @@
-"use client"
+"use client";
 
-import { useEffect, useRef } from "react"
-import * as THREE from "three"
+import { useEffect, useRef } from "react";
+
+const FRAG_SRC = `#version 300 es
+precision highp float;
+out vec4 fragColor;
+uniform vec2 iRes;
+uniform float iTime;
+
+void main() {
+  vec2 uv = (gl_FragCoord.xy * 2.0 - iRes) / min(iRes.x, iRes.y);
+  float t = iTime * 0.05;
+  vec3 c = vec3(0.0);
+  for (int j = 0; j < 3; j++)
+    for (int i = 0; i < 5; i++)
+      c[j] += 0.002 * float(i*i) / abs(fract(t - 0.01*float(j) + float(i)*0.01)*5.0 - length(uv) + mod(uv.x+uv.y, 0.2));
+  fragColor = vec4(c, 1.0);
+}`;
+
+const VERT_SRC = `#version 300 es
+layout(location=0) in vec2 p;
+void main(){ gl_Position = vec4(p, 0.0, 1.0); }`;
 
 export function ShaderAnimation() {
-  const containerRef = useRef<HTMLDivElement>(null)
-  const sceneRef = useRef<{
-    camera: THREE.Camera
-    scene: THREE.Scene
-    renderer: THREE.WebGLRenderer
-    uniforms: any
-    animationId: number
-  } | null>(null)
+  const ref = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
-    if (!containerRef.current) return
-    const container = containerRef.current
+    const canvas = ref.current;
+    if (!canvas) return;
+    const gl = canvas.getContext("webgl2", { alpha: false, powerPreference: "low-power" });
+    if (!gl) return;
 
-    // Vertex shader
-    const vertexShader = `
-      void main() {
-        gl_Position = vec4( position, 1.0 );
+    const mkShader = (type: number, src: string) => {
+      const s = gl.createShader(type)!;
+      gl.shaderSource(s, src); gl.compileShader(s); return s;
+    };
+    const prog = gl.createProgram()!;
+    gl.attachShader(prog, mkShader(gl.VERTEX_SHADER, VERT_SRC));
+    gl.attachShader(prog, mkShader(gl.FRAGMENT_SHADER, FRAG_SRC));
+    gl.linkProgram(prog);
+    gl.useProgram(prog);
+
+    const vao = gl.createVertexArray()!;
+    gl.bindVertexArray(vao);
+    const buf = gl.createBuffer()!;
+    gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
+    gl.enableVertexAttribArray(0);
+    gl.vertexAttribPointer(0, 2, gl.FLOAT, false, 0, 0);
+
+    const uRes  = gl.getUniformLocation(prog, "iRes");
+    const uTime = gl.getUniformLocation(prog, "iTime");
+
+    // Render at 1x — abstract background doesn't need retina resolution
+    const dpr = 1;
+    const t0 = performance.now();
+    let raf = 0;
+    let visible = true;
+
+    const resize = () => {
+      const w = Math.max(1, Math.floor(canvas.clientWidth  * dpr));
+      const h = Math.max(1, Math.floor(canvas.clientHeight * dpr));
+      if (canvas.width !== w || canvas.height !== h) {
+        canvas.width = w; canvas.height = h;
+        gl.viewport(0, 0, w, h);
       }
-    `
+    };
+    const ro = new ResizeObserver(resize);
+    ro.observe(canvas);
+    resize();
 
-    // Fragment shader
-    const fragmentShader = `
-      #define TWO_PI 6.2831853072
-      #define PI 3.14159265359
+    const io = new IntersectionObserver(([e]) => { visible = e.isIntersecting; });
+    io.observe(canvas);
 
-      #ifdef GL_FRAGMENT_PRECISION_HIGH
-        precision highp float;
-      #else
-        precision mediump float;
-      #endif
-      uniform vec2 resolution;
-      uniform float time;
+    const tick = (ts: number) => {
+      raf = requestAnimationFrame(tick);
+      if (!visible) return;
+      resize();
+      gl.uniform2f(uRes, canvas.width, canvas.height);
+      gl.uniform1f(uTime, (ts - t0) / 1000);
+      gl.drawArrays(gl.TRIANGLES, 0, 3);
+    };
+    raf = requestAnimationFrame(tick);
 
-      void main(void) {
-        vec2 uv = (gl_FragCoord.xy * 2.0 - resolution.xy) / min(resolution.x, resolution.y);
-        float t = time*0.05;
-        float lineWidth = 0.002;
-
-        vec3 color = vec3(0.0);
-        for(int j = 0; j < 3; j++){
-          for(int i=0; i < 5; i++){
-            color[j] += lineWidth*float(i*i) / abs(fract(t - 0.01*float(j)+float(i)*0.01)*5.0 - length(uv) + mod(uv.x+uv.y, 0.2));
-          }
-        }
-
-        gl_FragColor = vec4(color[0],color[1],color[2],1.0);
-      }
-    `
-
-    // Initialize Three.js scene
-    const camera = new THREE.Camera()
-    camera.position.z = 1
-
-    const scene = new THREE.Scene()
-    const geometry = new THREE.PlaneGeometry(2, 2)
-
-    const uniforms = {
-      time: { type: "f", value: 1.0 },
-      resolution: { type: "v2", value: new THREE.Vector2() },
-    }
-
-    const material = new THREE.ShaderMaterial({
-      uniforms: uniforms,
-      vertexShader: vertexShader,
-      fragmentShader: fragmentShader,
-    })
-
-    const mesh = new THREE.Mesh(geometry, material)
-    scene.add(mesh)
-
-    const renderer = new THREE.WebGLRenderer({ antialias: false, powerPreference: "low-power" })
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5))
-
-    container.appendChild(renderer.domElement)
-
-    const applySize = () => {
-      const width = container.clientWidth
-      const height = container.clientHeight
-      renderer.setSize(width, height)
-      uniforms.resolution.value.x = renderer.domElement.width
-      uniforms.resolution.value.y = renderer.domElement.height
-    }
-
-    applySize()
-    const ro = new ResizeObserver(applySize)
-    ro.observe(container)
-
-    // Animation loop
-    const animate = () => {
-      const animationId = requestAnimationFrame(animate)
-      uniforms.time.value += 0.05
-      renderer.render(scene, camera)
-
-      if (sceneRef.current) {
-        sceneRef.current.animationId = animationId
-      }
-    }
-
-    // Store scene references for cleanup
-    sceneRef.current = {
-      camera,
-      scene,
-      renderer,
-      uniforms,
-      animationId: 0,
-    }
-
-    // Start animation
-    animate()
-
-    // Cleanup function
     return () => {
-      ro.disconnect()
-
-      if (sceneRef.current) {
-        cancelAnimationFrame(sceneRef.current.animationId)
-
-        if (container && sceneRef.current.renderer.domElement) {
-          container.removeChild(sceneRef.current.renderer.domElement)
-        }
-
-        sceneRef.current.renderer.forceContextLoss()
-        sceneRef.current.renderer.dispose()
-        geometry.dispose()
-        material.dispose()
-      }
-    }
-  }, [])
+      cancelAnimationFrame(raf);
+      ro.disconnect();
+      io.disconnect();
+      try { gl.deleteBuffer(buf); gl.deleteVertexArray(vao); } catch {}
+    };
+  }, []);
 
   return (
-    <div
-      ref={containerRef}
-      className="w-full h-full"
-      style={{
-        background: "#000",
-        overflow: "hidden",
-      }}
-    />
-  )
+    <div className="w-full h-full" style={{ background: "#000", overflow: "hidden" }}>
+      <canvas ref={ref} style={{ width: "100%", height: "100%", display: "block" }} />
+    </div>
+  );
 }

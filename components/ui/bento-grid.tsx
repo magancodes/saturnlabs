@@ -15,6 +15,7 @@ function AsciiBackground() {
 
     let animId: number;
     let time = 0;
+    let lastTs = 0;
 
     const chars = "·.+:*°·.+:*°·.";
     const fontSize = 14;
@@ -23,14 +24,18 @@ function AsciiBackground() {
     const resize = () => {
       canvas.width = canvas.offsetWidth;
       canvas.height = canvas.offsetHeight;
+      ctx.font = `${fontSize}px monospace`;
     };
+    const ro = new ResizeObserver(resize);
+    ro.observe(canvas);
     resize();
-    window.addEventListener("resize", resize);
 
-    const draw = () => {
+    const draw = (ts: number) => {
+      animId = requestAnimationFrame(draw);
+      if (ts - lastTs < 1000 / 30) return; // cap at 30fps
+      lastTs = ts;
       time += 0.003;
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.font = `${fontSize}px monospace`;
 
       const cols = Math.ceil(canvas.width / gap);
       const rows = Math.ceil(canvas.height / gap);
@@ -50,14 +55,13 @@ function AsciiBackground() {
         }
       }
 
-      animId = requestAnimationFrame(draw);
     };
 
-    draw();
+    animId = requestAnimationFrame(draw);
 
     return () => {
       cancelAnimationFrame(animId);
-      window.removeEventListener("resize", resize);
+      ro.disconnect();
     };
   }, []);
 

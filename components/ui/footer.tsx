@@ -12,17 +12,22 @@ export function Footer() {
     if (!gl) return;
 
     let animId: number;
+    let visible = false;
+
+    // Render at 0.75x CSS pixels — aurora is blurry so lower res is imperceptible
+    const dpr = Math.min(window.devicePixelRatio * 0.75, 1.0);
 
     const resize = () => {
       const parent = canvas.parentElement;
       if (parent) {
-        canvas.width = parent.offsetWidth;
-        canvas.height = parent.offsetHeight;
+        canvas.width  = Math.max(1, Math.floor(parent.offsetWidth  * dpr));
+        canvas.height = Math.max(1, Math.floor(parent.offsetHeight * dpr));
         gl.viewport(0, 0, canvas.width, canvas.height);
       }
     };
+    const ro = new ResizeObserver(resize);
+    ro.observe(canvas);
     resize();
-    window.addEventListener("resize", resize);
 
     const mousePos = { x: 0.5, y: 0.5 };
     const handleMouseMove = (e: MouseEvent) => {
@@ -44,7 +49,7 @@ export function Footer() {
       uniform float uNoiseLayers;
       uniform float uMouseInfluence;
 
-      #define MARCH_STEPS 32
+      #define MARCH_STEPS 16
 
       float hash(vec2 p){
         p=fract(p*vec2(123.34,456.21));
@@ -127,8 +132,13 @@ export function Footer() {
     const uNL = gl.getUniformLocation(prog, "uNoiseLayers");
     const uMI = gl.getUniformLocation(prog, "uMouseInfluence");
 
+    const io = new IntersectionObserver(([e]) => { visible = e.isIntersecting; }, { rootMargin: "200px" });
+    io.observe(canvas);
+
     const t0 = performance.now();
     function draw(ts: number) {
+      animId = requestAnimationFrame(draw);
+      if (!visible) return;
       gl!.uniform2f(uRes, canvas!.width, canvas!.height);
       gl!.uniform1f(uTime, (ts - t0) / 1000);
       gl!.uniform2f(uMouse, mousePos.x * canvas!.width, (1 - mousePos.y) * canvas!.height);
@@ -137,13 +147,13 @@ export function Footer() {
       gl!.uniform1f(uNL, 4.0);
       gl!.uniform1f(uMI, 0.18);
       gl!.drawArrays(gl!.TRIANGLES, 0, 6);
-      animId = requestAnimationFrame(draw);
     }
     animId = requestAnimationFrame(draw);
 
     return () => {
       cancelAnimationFrame(animId);
-      window.removeEventListener("resize", resize);
+      ro.disconnect();
+      io.disconnect();
       window.removeEventListener("mousemove", handleMouseMove);
     };
   }, []);
