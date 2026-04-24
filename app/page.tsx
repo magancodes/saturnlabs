@@ -292,7 +292,7 @@ export default function Home() {
           {/* Disclaimer below links — even more huuuuuge vertical buffer */}
           <div className="flex justify-center pt-80 md:pt-[32rem] pb-32 md:pb-64">
             <p 
-              className="font-gilroy font-light text-white/30 text-center" 
+              className="font-gilroy font-light text-white/30 text-center py-20" 
               style={{ fontSize: 'clamp(11px, 1vw, 13px)', maxWidth: '500px', lineHeight: 1.6 }}
             >
               Opens Rerun visualizer in a new tab. It may be very slow on browsers due to very large MCAP size.
