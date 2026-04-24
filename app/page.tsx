@@ -48,11 +48,14 @@ export default function Home() {
     <div className="bg-[#050505]">
       {/* ═══════════════════ HERO SECTION ═══════════════════ */}
       <div className="relative min-h-screen overflow-hidden">
-        {/* Background Shader — only behind hero */}
-        <div className="absolute inset-0 z-0 pointer-events-none">
-          <ShaderAnimation />
-          <div className="absolute inset-0 bg-black/65 z-[1]"></div>
-        </div>
+      {/* ═══════════════════ GLOBAL BACKGROUND SHADER ═══════════════════ */}
+      <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
+        <WebGLShader />
+        <div className="absolute inset-0 bg-black/70 z-[1]"></div>
+      </div>
+
+      {/* ═══════════════════ HERO SECTION ═══════════════════ */}
+      <div className="relative min-h-screen overflow-hidden">
 
       {/* ═══════════════════ HEADER ═══════════════════ */}
       <header
@@ -241,26 +244,18 @@ export default function Home() {
       {/* ═══════════════════ BENTO VIDEO GRID ═══════════════════ */}
       <BentoGrid />
 
-      {/* ═══════════════════ NARRATIVE SECTION ═══════════════════ */}
-      <section className="relative z-10 py-32 px-12 md:py-64 md:px-24 bg-black overflow-hidden flex flex-col items-center">
-        <div className="max-w-4xl mx-auto space-y-32 md:space-y-56 text-center">
-          <h2 className="reveal-text font-gilroy font-normal text-white text-[clamp(1.8rem,5vw,3.5rem)] leading-tight mx-auto">
+      {/* ═══════════════════ STICKY NARRATIVE SECTION ═══════════════════ */}
+      <section className="relative z-10 bg-transparent overflow-hidden py-40 md:py-64">
+        <div className="max-w-xl mx-auto space-y-48 md:space-y-64 text-center px-6">
+          <p className="reveal-text font-gilroy font-normal text-white/50 text-xs md:text-sm uppercase tracking-[0.25em] leading-relaxed">
             Saturn Labs turns human motion into the force that trains the world&apos;s most ambitious robots.
-          </h2>
-          <p className="reveal-text font-gilroy font-light text-white/40 text-[clamp(1.3rem,3vw,2.2rem)] leading-relaxed mx-auto">
+          </p>
+          <p className="reveal-text font-gilroy font-normal text-white/50 text-xs md:text-sm uppercase tracking-[0.25em] leading-relaxed">
             A robot is only as good as its data, and beneath every breakthrough in Physical AI, there&apos;s a symphony of real world human action powering that learning.
           </p>
-          <div className="reveal-text">
-            <h3 className="font-rhymes italic font-thin text-white text-[clamp(1.8rem,5vw,3.5rem)] leading-tight mx-auto">
-              Saturn Labs captures that action, building the multimodal datasets that teach robots how to move, manipulate, and navigate the physical world with precision.
-            </h3>
-          </div>
-        </div>
-
-        {/* WebGL Shader Container */}
-        <div className="relative mt-40 md:mt-64 h-[400px] md:h-[600px] w-full max-w-7xl mx-auto border border-white/5 bg-zinc-950/50 backdrop-blur-3xl overflow-hidden rounded-2xl">
-          <WebGLShader />
-          <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black pointer-events-none" />
+          <p className="reveal-text font-gilroy font-normal text-white/50 text-xs md:text-sm uppercase tracking-[0.25em] leading-relaxed">
+            Saturn Labs captures that action, building the multimodal datasets that teach robots how to move, manipulate, and navigate the physical world with precision.
+          </p>
         </div>
       </section>
 
