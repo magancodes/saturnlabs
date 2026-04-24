@@ -91,80 +91,79 @@ export default function Home() {
 
   return (
     <div className="bg-[#050505]">
-      {/* ═══════════════════ HEADER — outside overflow:hidden so fixed works ═══════════════════ */}
-      <header
-        className="fixed top-0 left-0 right-0 z-50 flex justify-between items-center"
-        style={{
-          padding: "28px 50px",
-          background: "rgba(5,5,5,0.88)",
-          backdropFilter: "blur(16px)",
-          WebkitBackdropFilter: "blur(16px)",
-          borderBottom: "1px solid rgba(255,255,255,0.05)",
-        }}
-      >
-        {/* Logo */}
-        <div className="flex items-center gap-4 shrink-0">
-          <Image src="/logo.svg" alt="Saturn Labs Logo" width={51} height={58} style={{ width: "36px", height: "auto" }} />
-          <span style={{ fontSize: "24px" }} className="font-gilroy font-normal tracking-tight text-white">Saturn Labs</span>
-        </div>
-
-        {/* Nav — centered, hidden on mobile */}
-        <nav className="hidden lg:flex items-center absolute left-1/2 -translate-x-1/2" style={{ gap: "72px" }}>
-          <a href="/" className="font-gilroy text-white/80 hover:text-white transition-opacity" style={{ fontSize: "16px" }}>home</a>
-          <a href="#data" className="font-gilroy text-white/80 hover:text-white transition-opacity" style={{ fontSize: "16px" }}>data</a>
-          <a href="/research" className="font-gilroy text-white/80 hover:text-white transition-opacity" style={{ fontSize: "16px" }}>research</a>
-        </nav>
-
-        {/* Right side: Connect button (desktop) + Hamburger (mobile) */}
-        <div className="flex items-center gap-6">
-          <a
-            href="#"
-            className="hidden lg:inline-flex bg-white text-black font-gilroy font-semibold items-center hover:opacity-90 active:scale-95 transition-all whitespace-nowrap"
-            style={{ padding: "16px 32px", borderRadius: "8px", fontSize: "15px", gap: "16px" }}
-          >
-            connect with us
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ opacity: 0.5 }}>
-              <line x1="7" y1="17" x2="17" y2="7" />
-              <polyline points="7 7 17 7 17 17" />
-            </svg>
+      {/* ═══════════════════ FLOATING NAV ═══════════════════ */}
+      <div className="fixed top-0 left-0 right-0 z-50 flex justify-center pointer-events-none" style={{ padding: "18px 24px" }}>
+        <header
+          className="pointer-events-auto flex items-center justify-between w-full"
+          style={{
+            maxWidth: "860px",
+            padding: "10px 12px 10px 20px",
+            borderRadius: "16px",
+            background: "rgba(12,12,12,0.72)",
+            backdropFilter: "blur(20px)",
+            WebkitBackdropFilter: "blur(20px)",
+            border: "1px solid rgba(255,255,255,0.10)",
+            boxShadow: "0 8px 32px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.06)",
+          }}
+        >
+          {/* Logo */}
+          <a href="/" className="flex items-center gap-3 shrink-0">
+            <Image src="/logo.svg" alt="Saturn Labs Logo" width={51} height={58} style={{ width: "28px", height: "auto" }} />
+            <span className="font-gilroy font-normal tracking-tight text-white hidden sm:block" style={{ fontSize: "18px" }}>Saturn Labs</span>
           </a>
 
-          {/* Hamburger — visible on mobile only, styled as glass pill */}
-          <button
-            onClick={() => setMenuOpen(!menuOpen)}
-            className="lg:hidden flex flex-col justify-center items-center gap-[5px] relative z-50"
-            aria-label="Toggle menu"
-            style={{
-              width: "44px",
-              height: "44px",
-              borderRadius: "10px",
-              background: "rgba(255,255,255,0.06)",
-              backdropFilter: "blur(12px)",
-              WebkitBackdropFilter: "blur(12px)",
-              border: "1px solid rgba(255,255,255,0.12)",
-            }}
-          >
-            <span
-              className="block bg-white transition-all duration-300 origin-center"
+          {/* Nav links — desktop */}
+          <nav className="hidden lg:flex items-center" style={{ gap: "8px" }}>
+            {[
+              { label: "home", href: "/" },
+              { label: "data", href: "#data" },
+              { label: "research", href: "/research" },
+            ].map(({ label, href }) => (
+              <a
+                key={label}
+                href={href}
+                className="font-gilroy text-white/55 hover:text-white hover:bg-white/[0.06] transition-all duration-200"
+                style={{ fontSize: "14px", padding: "7px 14px", borderRadius: "9px" }}
+              >
+                {label}
+              </a>
+            ))}
+          </nav>
+
+          {/* Right: CTA + hamburger */}
+          <div className="flex items-center gap-3">
+            <a
+              href="#"
+              className="hidden lg:inline-flex bg-white text-black font-gilroy font-semibold items-center hover:bg-white/90 active:scale-95 transition-all whitespace-nowrap"
+              style={{ padding: "9px 20px", borderRadius: "9px", fontSize: "13px", gap: "10px" }}
+            >
+              connect with us
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ opacity: 0.5 }}>
+                <line x1="7" y1="17" x2="17" y2="7" />
+                <polyline points="7 7 17 7 17 17" />
+              </svg>
+            </a>
+
+            {/* Hamburger — mobile */}
+            <button
+              onClick={() => setMenuOpen(!menuOpen)}
+              className="lg:hidden flex flex-col justify-center items-center gap-[5px]"
+              aria-label="Toggle menu"
               style={{
-                width: "18px", height: "1.5px",
-                transform: menuOpen ? "rotate(45deg) translate(0, 3.5px)" : "none",
+                width: "40px",
+                height: "40px",
+                borderRadius: "10px",
+                background: "rgba(255,255,255,0.07)",
+                border: "1px solid rgba(255,255,255,0.11)",
               }}
-            />
-            <span
-              className="block bg-white transition-all duration-300"
-              style={{ width: "18px", height: "1.5px", opacity: menuOpen ? 0 : 1 }}
-            />
-            <span
-              className="block bg-white transition-all duration-300 origin-center"
-              style={{
-                width: "18px", height: "1.5px",
-                transform: menuOpen ? "rotate(-45deg) translate(0, -3.5px)" : "none",
-              }}
-            />
-          </button>
-        </div>
-      </header>
+            >
+              <span className="block bg-white transition-all duration-300 origin-center" style={{ width: "16px", height: "1.5px", transform: menuOpen ? "rotate(45deg) translate(0, 3.5px)" : "none" }} />
+              <span className="block bg-white transition-all duration-300" style={{ width: "16px", height: "1.5px", opacity: menuOpen ? 0 : 1 }} />
+              <span className="block bg-white transition-all duration-300 origin-center" style={{ width: "16px", height: "1.5px", transform: menuOpen ? "rotate(-45deg) translate(0, -3.5px)" : "none" }} />
+            </button>
+          </div>
+        </header>
+      </div>
 
       {/* ═══════════════════ MOBILE MENU OVERLAY ═══════════════════ */}
       <div
