@@ -265,7 +265,7 @@ export default function Home() {
               <div key={card.label} className="group border-t border-white/[0.09]">
                 <div
                   className="flex items-center justify-between"
-                  style={{ padding: 'clamp(18px, 2.4vw, 36px) clamp(12px, 2.2vw, 32px)' }}
+                  style={{ padding: 'clamp(24px, 3.2vw, 48px) clamp(12px, 2.2vw, 32px)' }}
                 >
                   <span
                     className="font-gilroy font-light text-white/90"
@@ -289,8 +289,8 @@ export default function Home() {
             <div className="border-t border-white/[0.09]" />
           </div>
 
-          {/* Disclaimer below links */}
-          <div className="flex justify-center pt-32 md:pt-48">
+          {/* Disclaimer below links — massive vertical buffer */}
+          <div className="flex justify-center pt-48 md:pt-80 pb-12">
             <p 
               className="font-gilroy font-light text-white/30 text-center" 
               style={{ fontSize: 'clamp(11px, 1vw, 13px)', maxWidth: '500px', lineHeight: 1.6 }}
