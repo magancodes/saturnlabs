@@ -206,27 +206,33 @@ export default function Home() {
       <BentoGrid />
 
       {/* ═══════════════════ NARRATIVE SECTION (PINNED) ═══════════════════ */}
-      <section id="narrative-section" className="relative z-10 w-full min-h-screen bg-[#0a0a0a] overflow-hidden flex flex-col items-center justify-end">
-        <div className="w-full flex items-end justify-center relative pb-12 md:pb-24">
-          <div className="relative w-full max-w-5xl mx-auto px-16 md:px-24 text-center h-[200px]">
-            <div className="narrative-text absolute bottom-0 left-1/2 -translate-x-1/2 w-full font-gilroy font-light text-white text-[19px] md:text-[23px] tracking-tight leading-relaxed opacity-0">
-               Saturn Labs turns human motion into the force that trains the world&apos;s most ambitious robots.
+      <section id="narrative-section" className="relative z-10 w-full h-screen bg-[#1a1a1e] overflow-hidden">
+        {/* Text — positioned at ~55% from top */}
+        <div className="absolute inset-x-0 top-[52%] -translate-y-1/2 z-20 px-10 md:px-24 lg:px-48 text-center">
+          <div className="relative w-full max-w-3xl mx-auto">
+            <div className="narrative-text absolute inset-0 flex items-center justify-center w-full font-gilroy font-light text-white text-[17px] md:text-[22px] lg:text-[26px] leading-[1.65] tracking-normal opacity-0">
+              Saturn Labs turns human motion into the force that trains the world&apos;s most ambitious robots.
             </div>
-            <div className="narrative-text absolute bottom-0 left-1/2 -translate-x-1/2 w-full font-gilroy font-light text-white text-[19px] md:text-[23px] tracking-tight leading-relaxed opacity-0">
+            <div className="narrative-text absolute inset-0 flex items-center justify-center w-full font-gilroy font-light text-white text-[17px] md:text-[22px] lg:text-[26px] leading-[1.65] tracking-normal opacity-0">
               A robot is only as good as its data, and beneath every breakthrough in Physical AI, there&apos;s a symphony of real world human action powering that learning.
             </div>
-            <div className="narrative-text absolute bottom-0 left-1/2 -translate-x-1/2 w-full font-gilroy font-light text-white text-[19px] md:text-[23px] tracking-tight leading-relaxed opacity-0">
+            <div className="narrative-text absolute inset-0 flex items-center justify-center w-full font-gilroy font-light text-white text-[17px] md:text-[22px] lg:text-[26px] leading-[1.65] tracking-normal opacity-0">
+              Saturn Labs captures that action, building the multimodal datasets that teach robots how to move, manipulate, and navigate the physical world with precision.
+            </div>
+            {/* Invisible spacer to hold height */}
+            <div className="invisible font-gilroy font-light text-[17px] md:text-[22px] lg:text-[26px] leading-[1.65]">
               Saturn Labs captures that action, building the multimodal datasets that teach robots how to move, manipulate, and navigate the physical world with precision.
             </div>
           </div>
         </div>
 
-        {/* Full-bleed Transition Shader at bottom */}
-        <div className="w-full h-[85vh] relative -mt-40 md:-mt-52 overflow-hidden items-end flex">
-          <div className="absolute inset-0 z-0">
-            <ShaderBackground />
-          </div>
-          <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-transparent to-[#0a0a0a] pointer-events-none z-10" />
+        {/* Shader — anchored to the bottom 42% of the viewport */}
+        <div className="absolute bottom-0 left-0 right-0 h-[42%] z-0">
+          <ShaderBackground />
+          {/* Top fade into the dark background */}
+          <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-[#1a1a1e] to-transparent pointer-events-none z-10" />
+          {/* Bottom fade */}
+          <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-[#1a1a1e] to-transparent pointer-events-none z-10" />
         </div>
       </section>
 
