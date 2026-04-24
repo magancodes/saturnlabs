@@ -1,59 +1,59 @@
 "use client";
 import React, { useEffect, useRef } from "react";
 
-const SHADER_SRC = `#version 300 es
+const SHADER_SRC = `
 precision highp float;
-
-out vec4 fragColor;
-in vec2 v_uv;
 
 uniform vec3  iResolution;
 uniform float iTime;
-uniform int   iFrame;
+uniform float iFrame;
 uniform vec4  iMouse;
 
-void mainImage(out vec4 fragColor, in vec2 fragCoord)
-{
-    vec2  r  = iResolution.xy;
-    float t  = iTime;
-    vec3  FC = vec3(fragCoord, t);
-    vec4  o  = vec4(0.0);
-
-    for (float i, z, d, f; i++ < 6e1; o += vec4(3., 1., d, z / f) / z) {
-        vec3 v = vec3(0., -2., 7.);
-        vec3 p = z * normalize(FC.rgb * 2. - r.xyx) + v;
-        vec3 a = p;
-        a.y *= .3;
-        for (d = 1.; d++ < 9.; )
-            a -= .1 * sin((a.zxy + t * v + d) * d) * p.y / d;
-
-        z += d = min(
-                max(-p.y, length(a) - 2.),
-                f = .2 + abs(length(a.xz - cos(a.zx * 6.)) + max(p.y / .1, - .6))
-            ) / 8.;
-    }
-    o = tanh(o * o.a / 1e3);
-
-    float luma = dot(o.rgb, vec3(0.299, 0.587, 0.114));
-    fragColor = vec4(o.rgb, smoothstep(0.0, 0.22, luma));
+vec4 tanh4(vec4 x) {
+  vec4 e2x = exp(clamp(2.0 * x, -20.0, 20.0));
+  return (e2x - 1.0) / (e2x + 1.0);
 }
 
-void main(){
-  mainImage(fragColor, gl_FragCoord.xy);
+void main() {
+  vec2  r  = iResolution.xy;
+  float t  = iTime;
+  vec3  FC = vec3(gl_FragCoord.xy, t);
+  vec4  o  = vec4(0.0);
+  float z  = 0.0;
+
+  for (int iter = 0; iter < 60; iter++) {
+    vec3 v = vec3(0.0, -2.0, 7.0);
+    vec3 p = z * normalize(FC.rgb * 2.0 - r.xyx) + v;
+    vec3 a = p;
+    a.y *= 0.3;
+    float d = 1.0;
+    for (int j = 0; j < 8; j++) {
+      d += 1.0;
+      a -= 0.1 * sin((a.zxy + t * v + d) * d) * p.y / d;
+    }
+    float f  = 0.2 + abs(length(a.xz - cos(a.zx * 6.0)) + max(p.y / 0.1, -0.6));
+    float dd = min(max(-p.y, length(a) - 2.0), f) / 8.0;
+    z += dd;
+    o += vec4(3.0, 1.0, dd, z / f) / z;
+  }
+
+  o = tanh4(o * o.a / 1000.0);
+  float luma = dot(o.rgb, vec3(0.299, 0.587, 0.114));
+  gl_FragColor = vec4(o.rgb, smoothstep(0.0, 0.22, luma));
 }
 `;
 
-const VERT_SRC = `#version 300 es
+const VERT_SRC = `
 precision highp float;
-layout(location=0) in vec2 a_pos;
-out vec2 v_uv;
-void main(){
+attribute vec2 a_pos;
+varying vec2 v_uv;
+void main() {
   v_uv = a_pos * 0.5 + 0.5;
   gl_Position = vec4(a_pos, 0.0, 1.0);
 }
 `;
 
-function safeCompile(gl: WebGL2RenderingContext, type: number, src: string) {
+function safeCompile(gl: WebGLRenderingContext, type: number, src: string) {
   const sh = gl.createShader(type)!;
   gl.shaderSource(sh, src);
   gl.compileShader(sh);
@@ -61,7 +61,7 @@ function safeCompile(gl: WebGL2RenderingContext, type: number, src: string) {
   const log = gl.getShaderInfoLog(sh) || "";
   return { shader: ok ? sh : null, log };
 }
-function safeLink(gl: WebGL2RenderingContext, vs: WebGLShader, fs: WebGLShader) {
+function safeLink(gl: WebGLRenderingContext, vs: WebGLShader, fs: WebGLShader) {
   const prog = gl.createProgram()!;
   gl.attachShader(prog, vs);
   gl.attachShader(prog, fs);
@@ -70,9 +70,8 @@ function safeLink(gl: WebGL2RenderingContext, vs: WebGLShader, fs: WebGLShader) 
   const log = gl.getProgramInfoLog(prog) || "";
   return { program: ok ? prog : null, log };
 }
-function drawError(gl: WebGL2RenderingContext, msg: string) {
+function drawError(gl: WebGLRenderingContext, msg: string) {
   console.error(msg);
-  gl.bindFramebuffer(gl.FRAMEBUFFER, null);
   gl.clearColor(0.2, 0.0, 0.0, 1);
   gl.clear(gl.COLOR_BUFFER_BIT);
 }
@@ -92,20 +91,16 @@ export function ShaderCanvas({
 
   useEffect(() => {
     const canvas = canvasRef.current!;
-    const glRaw = canvas.getContext("webgl2", { alpha: true, premultipliedAlpha: false, antialias: false, depth: false, stencil: false, powerPreference: "low-power" });
+    const glRaw = canvas.getContext("webgl", { alpha: true, premultipliedAlpha: false, antialias: false, depth: false, stencil: false, powerPreference: "low-power" });
     if (!glRaw) return;
-    const gl: WebGL2RenderingContext = glRaw;
+    const gl: WebGLRenderingContext = glRaw;
 
     let disposed = false;
     let ro: ResizeObserver | null = null;
 
-    const vao = gl.createVertexArray()!;
-    gl.bindVertexArray(vao);
     const vbo = gl.createBuffer()!;
     gl.bindBuffer(gl.ARRAY_BUFFER, vbo);
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
-    gl.enableVertexAttribArray(0);
-    gl.vertexAttribPointer(0, 2, gl.FLOAT, false, 0, 0);
 
     const { shader: vs, log: vsLog } = safeCompile(gl, gl.VERTEX_SHADER, VERT_SRC);
     if (!vs) { drawError(gl, `Vertex compile error:\n${vsLog}`); return cleanup; }
@@ -115,12 +110,16 @@ export function ShaderCanvas({
     gl.deleteShader(vs); gl.deleteShader(fs);
     if (!program) { drawError(gl, `Program link error:\n${linkLog}`); return cleanup; }
 
+    const posLoc = gl.getAttribLocation(program, "a_pos");
+    gl.enableVertexAttribArray(posLoc);
+    gl.vertexAttribPointer(posLoc, 2, gl.FLOAT, false, 0, 0);
+
     const uResolution = gl.getUniformLocation(program, "iResolution");
     const uTime = gl.getUniformLocation(program, "iTime");
     const uFrame = gl.getUniformLocation(program, "iFrame");
     const uMouse = gl.getUniformLocation(program, "iMouse");
 
-    const getDpr = () => Math.min(1, pixelRatio ?? window.devicePixelRatio ?? 1);
+    const getDpr = () => pixelRatio ?? window.devicePixelRatio ?? 1;
 
     let resizeScheduled = false;
     function applySize() {
@@ -180,13 +179,13 @@ export function ShaderCanvas({
 
         uResolution && gl.uniform3f(uResolution, w, h, dpr);
         uTime && gl.uniform1f(uTime, t);
-        uFrame && gl.uniform1i(uFrame, frameRef.current);
+        uFrame && gl.uniform1f(uFrame, frameRef.current);
         if (uMouse) {
           const m = mouseRef.current;
           gl.uniform4f(uMouse, m.x * dpr, m.y * dpr, m.l, m.r);
         }
 
-        gl.bindVertexArray(vao);
+        gl.bindBuffer(gl.ARRAY_BUFFER, vbo);
         gl.drawArrays(gl.TRIANGLES, 0, 3);
       } catch (err) {
         drawError(gl, (err as Error)?.message ?? String(err));
@@ -206,7 +205,6 @@ export function ShaderCanvas({
       canvas.removeEventListener("webglcontextrestored", onContextRestored);
       ro?.disconnect();
       try { gl.deleteBuffer(vbo); } catch {}
-      try { gl.deleteVertexArray(vao); } catch {}
       try { gl.getExtension("WEBGL_lose_context")?.loseContext(); } catch {}
     }
 
