@@ -1,11 +1,12 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
 import { motion, useInView } from "framer-motion";
 import { EncryptedText } from "@/components/ui/encrypted-text";
 import { Footer } from "@/components/ui/footer";
 import Image from "next/image";
 import Link from "next/link";
+import Lenis from "lenis";
 
 function Reveal({
   children,
@@ -34,6 +35,14 @@ function Reveal({
 const DOT_GRID = Array.from({ length: 5 }, (_, i) => i);
 
 export default function Research() {
+  useEffect(() => {
+    const lenis = new Lenis({ duration: 1.2 });
+    let rafId: number;
+    const loop = (time: number) => { lenis.raf(time); rafId = requestAnimationFrame(loop); };
+    rafId = requestAnimationFrame(loop);
+    return () => { cancelAnimationFrame(rafId); lenis.destroy(); };
+  }, []);
+
   return (
     <div className="bg-[#050505] min-h-screen">
       {/* ═══ HEADER ═══ */}
@@ -124,12 +133,12 @@ export default function Research() {
             className="absolute inset-0"
             style={{
               backgroundImage: `
-                linear-gradient(rgba(255,255,255,0.07) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255,255,255,0.07) 1px, transparent 1px)
+                linear-gradient(rgba(255,255,255,0.10) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.10) 1px, transparent 1px)
               `,
               backgroundSize: "72px 72px",
-              maskImage: "radial-gradient(ellipse 80% 80% at 50% 40%, black 30%, transparent 100%)",
-              WebkitMaskImage: "radial-gradient(ellipse 80% 80% at 50% 40%, black 30%, transparent 100%)",
+              maskImage: "linear-gradient(to bottom, transparent 0%, black 12%, black 75%, transparent 100%)",
+              WebkitMaskImage: "linear-gradient(to bottom, transparent 0%, black 12%, black 75%, transparent 100%)",
             }}
           />
 

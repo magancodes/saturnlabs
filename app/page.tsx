@@ -101,8 +101,14 @@ export default function Home() {
 
         {/* ═══════════════════ HEADER ═══════════════════ */}
         <header
-          className="relative z-20 flex justify-between items-center"
-          style={{ padding: "40px 50px" }}
+          className="fixed top-0 left-0 right-0 z-50 flex justify-between items-center"
+          style={{
+            padding: "28px 50px",
+            background: "rgba(5,5,5,0.88)",
+            backdropFilter: "blur(16px)",
+            WebkitBackdropFilter: "blur(16px)",
+            borderBottom: "1px solid rgba(255,255,255,0.05)",
+          }}
         >
           {/* Logo */}
           <div className="flex items-center gap-4 shrink-0">
@@ -191,7 +197,7 @@ export default function Home() {
         {/* ═══════════════════ HERO CONTENT ═══════════════════ */}
         <main
           className="relative z-10 flex flex-col justify-end"
-          style={{ minHeight: "calc(100vh - 120px)", paddingBottom: "100px", paddingLeft: "50px", paddingRight: "50px" }}
+          style={{ minHeight: "100vh", paddingTop: "100px", paddingBottom: "100px", paddingLeft: "50px", paddingRight: "50px" }}
         >
           <div>
             {/* Backed by badge */}
