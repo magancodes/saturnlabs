@@ -16,10 +16,6 @@ const LaunchSection = dynamic(
   () => import("@/components/ui/launch").then(m => ({ default: m.LaunchSection })),
   { ssr: false }
 );
-const AuroraWaves = dynamic(
-  () => import("@/components/ui/aurora-waves"),
-  { ssr: false }
-);
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -28,27 +24,45 @@ gsap.registerPlugin(ScrollTrigger);
 export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
-  const [narrativeTriggered, setNarrativeTriggered] = useState([false, false, false]);
+  const [narrativeTriggered, setNarrativeTriggered] = useState([true, false, false]);
+  const encTriggered = useRef([true, false, false]);
 
   useEffect(() => {
     const panels = gsap.utils.toArray<HTMLElement>(".narrative-panel");
+    if (!panels.length) return;
+
     panels.forEach((panel, i) => {
-      gsap.set(panel, { opacity: 0, y: 24 });
+      // Slide up + fade in on enter, slide up + fade out on exit
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: panel,
+          start: "top 85%",
+          end: "bottom 15%",
+          scrub: 1.2,
+        },
+      });
+      tl.fromTo(panel,
+        { opacity: 0, y: 60 },
+        { opacity: 1, y: 0, duration: 0.5, ease: "none" }
+      ).to(panel,
+        { opacity: 0, y: -60, duration: 0.5, ease: "none" }
+      );
+
+      // Fire EncryptedText when panel is mid-entry
       ScrollTrigger.create({
         trigger: panel,
-        start: "top 75%",
+        start: "top 60%",
         once: true,
         onEnter: () => {
-          gsap.to(panel, { opacity: 1, y: 0, duration: 0.7, ease: "power2.out" });
-          setNarrativeTriggered(prev => {
-            const next = [...prev];
-            next[i] = true;
-            return next;
-          });
+          if (!encTriggered.current[i]) {
+            encTriggered.current[i] = true;
+            setNarrativeTriggered(encTriggered.current.slice() as [boolean, boolean, boolean]);
+          }
         },
       });
     });
-    return () => { ScrollTrigger.getAll().forEach((t) => t.kill()); };
+
+    return () => { ScrollTrigger.getAll().forEach(t => t.kill()); };
   }, []);
 
   return (
@@ -210,15 +224,7 @@ export default function Home() {
       <BentoGrid />
 
       {/* ═══════════════════ NARRATIVE SECTION ═══════════════════ */}
-      {/* No pin, no scrub — 3 plain scroll panels, fade in on enter */}
-      <section className="relative w-full bg-[#050505]">
-        {/* Aurora behind all panels — desktop only */}
-        <div className="absolute inset-0 z-0 pointer-events-none hidden md:block">
-          <AuroraWaves speed={0.5} glow={20} resolutionScale={0.5} />
-          <div className="absolute inset-x-0 top-0 h-48 bg-gradient-to-b from-[#050505] to-transparent" />
-          <div className="absolute inset-x-0 bottom-0 h-48 bg-gradient-to-t from-[#050505] to-transparent" />
-        </div>
-
+      <section className="narrative-section relative w-full bg-[#050505]">
         {[
           "Saturn Labs turns human motion into the force that trains the world's most ambitious robots.",
           "A robot is only as good as its data, and beneath every breakthrough in Physical AI, there's a symphony of real world human action powering that learning.",
@@ -226,8 +232,8 @@ export default function Home() {
         ].map((sentence, i) => (
           <div
             key={i}
-            className="narrative-panel relative z-10 flex items-center justify-center"
-            style={{ minHeight: "60vh", padding: "60px clamp(24px, 8vw, 120px)" }}
+            className="narrative-panel relative flex items-center justify-center"
+            style={{ minHeight: "100vh", padding: "0 clamp(24px, 8vw, 120px)" }}
           >
             <p className="font-gilroy font-light text-white text-center max-w-2xl"
               style={{ fontSize: "clamp(17px, 2.2vw, 26px)", lineHeight: 1.7 }}>

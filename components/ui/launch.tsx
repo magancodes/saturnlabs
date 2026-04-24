@@ -19,7 +19,7 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord)
     vec3  FC = vec3(fragCoord, t);
     vec4  o  = vec4(0.0);
 
-    for (float i, z, d, f; i++ < 6e1; o += vec4(3., 1., d, z / f) / z) {
+    for (float i, z, d, f; i++ < 1e2; o += vec4(3., 1., d, z / f) / z) {
         vec3 v = vec3(0., -2., 7.);
         vec3 p = z * normalize(FC.rgb * 2. - r.xyx) + v;
         vec3 a = p;
@@ -35,7 +35,7 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord)
     o = tanh(o * o.a / 1e3);
 
     float luma = dot(o.rgb, vec3(0.299, 0.587, 0.114));
-    fragColor = vec4(o.rgb, smoothstep(0.0, 0.22, luma));
+    fragColor = vec4(o.rgb, smoothstep(0.0, 0.3, luma));
 }
 
 void main(){
@@ -92,11 +92,11 @@ export function ShaderCanvas({
 
   useEffect(() => {
     const canvas = canvasRef.current!;
-    const glRaw = canvas.getContext("webgl2", { alpha: true, premultipliedAlpha: false, antialias: false, depth: false, stencil: false, powerPreference: "low-power" });
-    if (!glRaw) return;
-    const gl: WebGL2RenderingContext = glRaw;
+    const gl = canvas.getContext("webgl2", { alpha: true, premultipliedAlpha: false });
+    if (!gl) return;
 
     let disposed = false;
+    let ro: ResizeObserver | null = null;
 
     const vao = gl.createVertexArray()!;
     gl.bindVertexArray(vao);
@@ -119,7 +119,10 @@ export function ShaderCanvas({
     const uFrame = gl.getUniformLocation(program, "iFrame");
     const uMouse = gl.getUniformLocation(program, "iMouse");
 
-    const getDpr = () => Math.max(1, Math.min(1.5, pixelRatio ?? window.devicePixelRatio ?? 1));
+    const getDpr = () => {
+      const sys = window.devicePixelRatio || 1;
+      return Math.max(1, Math.min(2, pixelRatio ?? sys));
+    };
 
     let resizeScheduled = false;
     function applySize() {
@@ -140,7 +143,7 @@ export function ShaderCanvas({
       resizeScheduled = true;
       requestAnimationFrame(applySize);
     }
-    const ro = new ResizeObserver(scheduleSize);
+    ro = new ResizeObserver(scheduleSize);
     ro.observe(canvas);
     scheduleSize();
 
@@ -203,10 +206,9 @@ export function ShaderCanvas({
       canvas.removeEventListener("mouseup", onUp);
       canvas.removeEventListener("webglcontextlost", onContextLost);
       canvas.removeEventListener("webglcontextrestored", onContextRestored);
-      ro.disconnect();
+      ro?.disconnect();
       try { gl.deleteBuffer(vbo); } catch {}
       try { gl.deleteVertexArray(vao); } catch {}
-      try { gl.getExtension("WEBGL_lose_context")?.loseContext(); } catch {}
     }
 
     return cleanup;
@@ -221,18 +223,13 @@ export function ShaderCanvas({
 
 export function LaunchSection() {
   return (
-    <section
-      className="relative overflow-hidden bg-[#050505] min-h-[70vh] lg:min-h-screen"
-    >
-      {/* Separator line from section above */}
+    <section className="relative overflow-hidden bg-[#050505] min-h-[70vh] lg:min-h-screen">
       <div className="absolute inset-x-0 top-0 z-30 border-t border-white/[0.09]" />
 
-      {/* Fire shader — full bg on mobile, left column on desktop */}
       <div className="absolute top-0 bottom-0 left-0 right-0 lg:right-auto lg:w-[52%]">
         <ShaderCanvas fragSource={SHADER_SRC} />
       </div>
 
-      {/* Mobile dim overlay */}
       <div
         className="absolute inset-0 pointer-events-none z-10 lg:hidden"
         style={{ background: "rgba(5,5,5,0.45)" }}
@@ -306,7 +303,6 @@ export function LaunchSection() {
 
       </div>
 
-      {/* Right edge chevron */}
       <div className="absolute right-5 top-1/2 -translate-y-1/2 z-20 pointer-events-none">
         <span className="text-white/25 font-gilroy" style={{ fontSize: "28px", lineHeight: 1 }}>›</span>
       </div>
