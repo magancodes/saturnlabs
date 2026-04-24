@@ -259,7 +259,7 @@ export default function Home() {
       {/* ═══════════════════ NARRATIVE SECTION (PINNED) ═══════════════════ */}
       <section id="narrative-section" className="relative z-10 w-full min-h-screen bg-black overflow-hidden flex flex-col items-center justify-between py-12 md:py-24">
         <div className="flex-1 w-full flex items-center justify-center relative">
-          <div className="relative w-full max-w-5xl mx-auto px-8 md:px-12 text-center h-[280px] md:h-[200px]">
+          <div className="relative w-full max-w-5xl mx-auto px-12 md:px-12 text-center h-[280px] md:h-[200px]">
             <div className="narrative-text absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full font-gilroy font-normal text-white text-[17px] md:text-[23px] tracking-[0.05em] leading-relaxed opacity-0">
               <EncryptedText 
                 text="Saturn Labs turns human motion into the force that trains the world's most ambitious robots." 
@@ -284,8 +284,8 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Transition Shader at the bottom of the section */}
-        <div className="w-full h-[500px] relative mt-0 overflow-hidden">
+        {/* Transition Shader overlapping slightly with the text area */}
+        <div className="w-full h-[500px] relative -mt-24 md:-mt-32 overflow-hidden">
           <div className="absolute inset-0 z-0 opacity-60">
             <WebGLShader />
           </div>
