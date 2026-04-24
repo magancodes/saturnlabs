@@ -10,14 +10,14 @@ export function WebGLShader() {
     camera: THREE.OrthographicCamera | null
     renderer: THREE.WebGLRenderer | null
     mesh: THREE.Mesh | null
-    uniforms: any
+    uniforms: Record<string, { value: unknown }>
     animationId: number | null
   }>({
     scene: null,
     camera: null,
     renderer: null,
     mesh: null,
-    uniforms: null,
+    uniforms: {},
     animationId: null,
   })
 
@@ -44,9 +44,9 @@ export function WebGLShader() {
 
       void main() {
         vec2 p = (gl_FragCoord.xy * 2.0 - resolution) / min(resolution.x, resolution.y);
-        
+
         float d = length(p) * distortion;
-        
+
         float rx = p.x * (1.0 + d);
         float gx = p.x;
         float bx = p.x * (1.0 - d);
@@ -54,28 +54,31 @@ export function WebGLShader() {
         float r = 0.05 / abs(p.y + sin((rx + time) * xScale) * yScale);
         float g = 0.05 / abs(p.y + sin((gx + time) * xScale) * yScale);
         float b = 0.05 / abs(p.y + sin((bx + time) * xScale) * yScale);
-        
+
         gl_FragColor = vec4(r, g, b, 1.0);
       }
     `
 
     const initScene = () => {
       refs.scene = new THREE.Scene()
-      refs.renderer = new THREE.WebGLRenderer({ canvas, antialias: true })
+      refs.renderer = new THREE.WebGLRenderer({ canvas, alpha: true })
       refs.renderer.setPixelRatio(window.devicePixelRatio)
-      refs.renderer.setClearColor(new THREE.Color(0x000000))
+      refs.renderer.setClearColor(new THREE.Color(0x000000), 0)
 
       refs.camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, -1)
 
+      const w = canvas.clientWidth || window.innerWidth
+      const h = canvas.clientHeight || window.innerHeight
+
       refs.uniforms = {
-        resolution: { value: [window.innerWidth, window.innerHeight] },
+        resolution: { value: [w, h] },
         time: { value: 0.0 },
         xScale: { value: 1.0 },
         yScale: { value: 0.5 },
         distortion: { value: 0.05 },
       }
 
-      const positionCount = [
+      const position = [
         -1.0, -1.0, 0.0,
          1.0, -1.0, 0.0,
         -1.0,  1.0, 0.0,
@@ -84,7 +87,7 @@ export function WebGLShader() {
          1.0,  1.0, 0.0,
       ]
 
-      const positions = new THREE.BufferAttribute(new Float32Array(positionCount), 3)
+      const positions = new THREE.BufferAttribute(new Float32Array(position), 3)
       const geometry = new THREE.BufferGeometry()
       geometry.setAttribute("position", positions)
 
@@ -93,6 +96,7 @@ export function WebGLShader() {
         fragmentShader,
         uniforms: refs.uniforms,
         side: THREE.DoubleSide,
+        transparent: true,
       })
 
       refs.mesh = new THREE.Mesh(geometry, material)
@@ -102,7 +106,7 @@ export function WebGLShader() {
     }
 
     const animate = () => {
-      if (refs.uniforms) refs.uniforms.time.value += 0.01
+      if (refs.uniforms?.time) refs.uniforms.time.value = (refs.uniforms.time.value as number) + 0.01
       if (refs.renderer && refs.scene && refs.camera) {
         refs.renderer.render(refs.scene, refs.camera)
       }
@@ -111,19 +115,23 @@ export function WebGLShader() {
 
     const handleResize = () => {
       if (!refs.renderer || !refs.uniforms) return
-      const width = canvas.parentElement?.offsetWidth || window.innerWidth
-      const height = canvas.parentElement?.offsetHeight || 300
+      const parent = canvas.parentElement
+      const width = parent ? parent.clientWidth : window.innerWidth
+      const height = parent ? parent.clientHeight : window.innerHeight
       refs.renderer.setSize(width, height, false)
-      refs.uniforms.resolution.value = [width, height]
+      ;(refs.uniforms.resolution.value as number[])[0] = width
+      ;(refs.uniforms.resolution.value as number[])[1] = height
     }
 
     initScene()
     animate()
-    window.addEventListener("resize", handleResize)
+
+    const ro = new ResizeObserver(handleResize)
+    if (canvas.parentElement) ro.observe(canvas.parentElement)
 
     return () => {
       if (refs.animationId) cancelAnimationFrame(refs.animationId)
-      window.removeEventListener("resize", handleResize)
+      ro.disconnect()
       if (refs.mesh) {
         refs.scene?.remove(refs.mesh)
         refs.mesh.geometry.dispose()
@@ -138,7 +146,7 @@ export function WebGLShader() {
   return (
     <canvas
       ref={canvasRef}
-      className="absolute inset-0 w-full h-full"
+      className="absolute top-0 left-0 w-full h-full block"
     />
   )
 }

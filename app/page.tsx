@@ -12,8 +12,8 @@ const ShaderAnimation = dynamic(
   () => import("@/components/ui/shader-animation").then(m => ({ default: m.ShaderAnimation })),
   { ssr: false }
 );
-const ShaderBackground = dynamic(
-  () => import("@/components/ui/shader-background"),
+const WebGLShader = dynamic(
+  () => import("@/components/ui/web-gl-shader").then(m => ({ default: m.WebGLShader })),
   { ssr: false }
 );
 const LaunchSection = dynamic(
@@ -227,23 +227,13 @@ export default function Home() {
         <div className="absolute inset-x-0 top-[44%] -translate-y-1/2 z-20 w-full flex justify-center">
           <div className="relative w-full max-w-[320px] md:max-w-xl lg:max-w-2xl text-center">
             <div className="narrative-text absolute inset-0 flex items-center justify-center w-full font-gilroy font-light text-white text-[17px] md:text-[22px] lg:text-[26px] leading-[1.65] tracking-normal opacity-0 text-center">
-              Saturn Labs turns{" "}
-              <EncryptedText text="human motion" triggered={narrativeTriggered[0]} revealDelayMs={8} flipDelayMs={15} className="mx-1" />{" "}
-              into the force that trains the world&apos;s most ambitious{" "}
-              <EncryptedText text="robots" triggered={narrativeTriggered[0]} revealDelayMs={8} flipDelayMs={15} className="ml-1" />.
+              <EncryptedText text="Saturn Labs turns human motion into the force that trains the world's most ambitious robots." triggered={narrativeTriggered[0]} revealDelayMs={8} flipDelayMs={15} />
             </div>
             <div className="narrative-text absolute inset-0 flex items-center justify-center w-full font-gilroy font-light text-white text-[17px] md:text-[22px] lg:text-[26px] leading-[1.65] tracking-normal opacity-0 text-center">
-              A robot is only as good as its data, and beneath every breakthrough in{" "}
-              <EncryptedText text="Physical AI" triggered={narrativeTriggered[1]} revealDelayMs={8} flipDelayMs={15} className="mx-1" />,
-              there&apos;s a symphony of real world{" "}
-              <EncryptedText text="human action" triggered={narrativeTriggered[1]} revealDelayMs={8} flipDelayMs={15} className="ml-1" />{" "}
-              powering that learning.
+              <EncryptedText text="A robot is only as good as its data, and beneath every breakthrough in Physical AI, there's a symphony of real world human action powering that learning." triggered={narrativeTriggered[1]} revealDelayMs={8} flipDelayMs={15} />
             </div>
             <div className="narrative-text absolute inset-0 flex items-center justify-center w-full font-gilroy font-light text-white text-[17px] md:text-[22px] lg:text-[26px] leading-[1.65] tracking-normal opacity-0 text-center">
-              Saturn Labs captures that action, building the{" "}
-              <EncryptedText text="multimodal datasets" triggered={narrativeTriggered[2]} revealDelayMs={8} flipDelayMs={15} className="mx-1" />{" "}
-              that teach robots how to move, manipulate, and navigate the physical world with{" "}
-              <EncryptedText text="precision" triggered={narrativeTriggered[2]} revealDelayMs={8} flipDelayMs={15} className="ml-1" />.
+              <EncryptedText text="Saturn Labs captures that action, building the multimodal datasets that teach robots how to move, manipulate, and navigate the physical world with precision." triggered={narrativeTriggered[2]} revealDelayMs={8} flipDelayMs={15} />
             </div>
             {/* Invisible spacer to hold height */}
             <div className="invisible font-gilroy font-light text-[17px] md:text-[22px] lg:text-[26px] leading-[1.65] text-center">
@@ -253,10 +243,10 @@ export default function Home() {
         </div>
 
         {/* Shader — anchored flush to the bottom */}
-        <div className="absolute bottom-0 left-0 right-0 h-[55%] md:h-[50%] z-0 overflow-hidden">
-          <ShaderBackground />
+        <div className="absolute bottom-0 left-0 right-0 h-[75%] md:h-[70%] z-0 overflow-hidden">
+          <WebGLShader />
           {/* Top fade */}
-          <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-[#050505] to-transparent pointer-events-none z-10" />
+          <div className="absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-[#050505] to-transparent pointer-events-none z-10" />
           {/* Bottom fade — dissolves into dataset section */}
           <div className="absolute inset-x-0 bottom-0 h-48 bg-gradient-to-t from-[#050505] to-transparent pointer-events-none z-10" />
         </div>
