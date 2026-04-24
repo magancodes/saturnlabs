@@ -208,19 +208,19 @@ export default function Home() {
       {/* ═══════════════════ NARRATIVE SECTION (PINNED) ═══════════════════ */}
       <section id="narrative-section" className="relative z-10 w-full h-screen bg-[#050505] overflow-hidden">
         {/* Text — positioned at ~55% from top */}
-        <div className="absolute inset-x-0 top-[52%] -translate-y-1/2 z-20 px-10 md:px-24 lg:px-48 text-center">
-          <div className="relative w-full max-w-3xl mx-auto">
-            <div className="narrative-text absolute inset-0 flex items-center justify-center w-full font-gilroy font-light text-white text-[17px] md:text-[22px] lg:text-[26px] leading-[1.65] tracking-normal opacity-0">
+        <div className="absolute inset-x-0 top-[52%] -translate-y-1/2 z-20 px-10 md:px-24 lg:px-48">
+          <div className="relative w-full max-w-3xl mx-auto text-center">
+            <div className="narrative-text absolute inset-0 flex items-center justify-center w-full font-gilroy font-light text-white text-[17px] md:text-[22px] lg:text-[26px] leading-[1.65] tracking-normal opacity-0 text-center">
               Saturn Labs turns human motion into the force that trains the world&apos;s most ambitious robots.
             </div>
-            <div className="narrative-text absolute inset-0 flex items-center justify-center w-full font-gilroy font-light text-white text-[17px] md:text-[22px] lg:text-[26px] leading-[1.65] tracking-normal opacity-0">
+            <div className="narrative-text absolute inset-0 flex items-center justify-center w-full font-gilroy font-light text-white text-[17px] md:text-[22px] lg:text-[26px] leading-[1.65] tracking-normal opacity-0 text-center">
               A robot is only as good as its data, and beneath every breakthrough in Physical AI, there&apos;s a symphony of real world human action powering that learning.
             </div>
-            <div className="narrative-text absolute inset-0 flex items-center justify-center w-full font-gilroy font-light text-white text-[17px] md:text-[22px] lg:text-[26px] leading-[1.65] tracking-normal opacity-0">
+            <div className="narrative-text absolute inset-0 flex items-center justify-center w-full font-gilroy font-light text-white text-[17px] md:text-[22px] lg:text-[26px] leading-[1.65] tracking-normal opacity-0 text-center">
               Saturn Labs captures that action, building the multimodal datasets that teach robots how to move, manipulate, and navigate the physical world with precision.
             </div>
             {/* Invisible spacer to hold height */}
-            <div className="invisible font-gilroy font-light text-[17px] md:text-[22px] lg:text-[26px] leading-[1.65]">
+            <div className="invisible font-gilroy font-light text-[17px] md:text-[22px] lg:text-[26px] leading-[1.65] text-center">
               Saturn Labs captures that action, building the multimodal datasets that teach robots how to move, manipulate, and navigate the physical world with precision.
             </div>
           </div>

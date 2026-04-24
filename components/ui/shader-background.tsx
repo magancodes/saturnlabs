@@ -181,8 +181,9 @@ const ShaderBackground = () => {
 
     const resizeCanvas = () => {
         if (!canvas) return;
-        const width = canvas.parentElement?.offsetWidth || window.innerWidth;
-        const height = canvas.parentElement?.offsetHeight || window.innerHeight;
+        // Always render at full window width to prevent compression on mobile
+        const width = window.innerWidth;
+        const height = window.innerHeight;
         canvas.width = width;
         canvas.height = height;
         gl.viewport(0, 0, canvas.width, canvas.height);
