@@ -27,7 +27,7 @@ export default function Home() {
         scrollTrigger: {
           trigger: narrativeSection,
           start: "top top",
-          end: "+=300%", // Scroll for 3 screen heights
+          end: "+=180%", // Faster sequence
           pin: true,
           scrub: 1,
           anticipatePin: 1,
@@ -258,23 +258,33 @@ export default function Home() {
       {/* ═══════════════════ NARRATIVE SECTION (PINNED) ═══════════════════ */}
       <section id="narrative-section" className="relative z-10 w-full min-h-screen bg-black overflow-hidden flex flex-col items-center justify-between py-12 md:py-24">
         <div className="flex-1 w-full flex items-center justify-center relative">
-          <div className="relative w-full max-w-4xl mx-auto px-6 md:px-12 text-center h-[250px] md:h-[200px]">
-            <h2 className="narrative-text absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full font-gilroy font-normal text-white text-[16px] md:text-[22px] tracking-[0.05em] leading-relaxed opacity-0">
-              Saturn Labs turns <span className="font-rhymes italic font-thin text-white/90">human motion</span> into the force that trains the world&apos;s most ambitious <span className="font-rhymes italic font-thin text-white/90">robots</span>.
-            </h2>
-            <h2 className="narrative-text absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full font-gilroy font-normal text-white text-[16px] md:text-[22px] tracking-[0.05em] leading-relaxed opacity-0">
-              A robot is only as good as its <span className="font-rhymes italic font-thin text-white/90">data</span>, and beneath every breakthrough in Physical AI, there&apos;s a <span className="font-rhymes italic font-thin text-white/90">symphony</span> of real world human action powering that learning.
-            </h2>
-            <h2 className="narrative-text absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full font-gilroy font-normal text-white text-[16px] md:text-[22px] tracking-[0.05em] leading-relaxed opacity-0">
-              Saturn Labs captures that action, building the <span className="font-rhymes italic font-thin text-white/90">multimodal datasets</span> that teach robots how to move, manipulate, and navigate the physical world with <span className="font-rhymes italic font-thin text-white/90">precision</span>.
-            </h2>
+          <div className="relative w-full max-w-5xl mx-auto px-8 md:px-12 text-center h-[280px] md:h-[200px]">
+            <div className="narrative-text absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full font-gilroy font-normal text-white text-[17px] md:text-[23px] tracking-[0.05em] leading-relaxed opacity-0">
+              <EncryptedText 
+                text="Saturn Labs turns human motion into the force that trains the world's most ambitious robots." 
+                encryptedClassName="text-white/20"
+              />
+            </div>
+            <div className="narrative-text absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full font-gilroy font-normal text-white text-[17px] md:text-[23px] tracking-[0.05em] leading-relaxed opacity-0">
+              <EncryptedText 
+                text="A robot is only as good as its data, and beneath every breakthrough in Physical AI, there's a symphony of real world human action powering that learning." 
+                encryptedClassName="text-white/20"
+              />
+            </div>
+            <div className="narrative-text absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full font-gilroy font-normal text-white text-[17px] md:text-[23px] tracking-[0.05em] leading-relaxed opacity-0">
+              <EncryptedText 
+                text="Saturn Labs captures that action, building the multimodal datasets that teach robots how to move, manipulate, and navigate the physical world with precision." 
+                encryptedClassName="text-white/20"
+              />
+            </div>
           </div>
         </div>
 
         {/* Updated Bottom Shader (DottedSurface) */}
-        <div className="w-full h-[250px] md:h-[450px] relative mt-8 md:mt-12 overflow-hidden border-t border-white/5 bg-black">
-          <DottedSurface className="opacity-60" />
-          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent pointer-events-none z-1" />
+        <div className="w-full h-[280px] md:h-[480px] relative mt-8 md:mt-12 overflow-hidden border-t border-white/10">
+          <DottedSurface className="opacity-100" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black pointer-events-none z-10" />
+          <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-black to-transparent z-10" />
         </div>
       </section>
 

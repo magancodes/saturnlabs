@@ -167,7 +167,7 @@ export function DottedSurface({ className, ...props }: DottedSurfaceProps) {
 	return (
 		<div
 			ref={containerRef}
-			className={cn('pointer-events-none w-full h-full relative', className)}
+			className={cn('pointer-events-none absolute inset-0', className)}
 			{...props}
 		/>
 	);
