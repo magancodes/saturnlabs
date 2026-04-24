@@ -151,7 +151,7 @@ export default function Home() {
       >
         <div>
           {/* Backed by badge */}
-          <div className="flex items-center gap-3 mb-8 blur-in" style={{ animationDelay: "0s" }}>
+          <div className="flex items-center gap-3 mb-8 blur-in opacity-60 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-500" style={{ animationDelay: "0s" }}>
             <span className="font-mono text-white/30 uppercase tracking-[0.2em]" style={{ fontSize: "11px" }}>
               Backed by
             </span>
@@ -160,8 +160,8 @@ export default function Home() {
               alt="Entrepreneurs First"
               width={160}
               height={36}
-              className="rounded-md"
-              style={{ height: "28px", width: "auto", opacity: 0.9 }}
+              className="rounded-sm"
+              style={{ height: "24px", width: "auto" }}
             />
           </div>
 
