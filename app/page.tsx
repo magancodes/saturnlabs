@@ -226,13 +226,11 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Shader — anchored to the bottom 42% of the viewport */}
-        <div className="absolute bottom-0 left-0 right-0 h-[55%] z-0">
+        {/* Shader — anchored flush to the bottom */}
+        <div className="absolute bottom-0 left-0 right-0 h-[55%] md:h-[50%] z-0 overflow-hidden">
           <ShaderBackground />
           {/* Top fade into the dark background */}
           <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-[#050505] to-transparent pointer-events-none z-10" />
-          {/* Bottom fade */}
-          <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-[#050505] to-transparent pointer-events-none z-10" />
         </div>
       </section>
 
