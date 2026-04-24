@@ -19,7 +19,7 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord)
     vec3  FC = vec3(fragCoord, t);
     vec4  o  = vec4(0.0);
 
-    for (float i, z, d, f; i++ < 1e2; o += vec4(3., 1., d, z / f) / z) {
+    for (float i, z, d, f; i++ < 6e1; o += vec4(3., 1., d, z / f) / z) {
         vec3 v = vec3(0., -2., 7.);
         vec3 p = z * normalize(FC.rgb * 2. - r.xyx) + v;
         vec3 a = p;
@@ -92,7 +92,7 @@ export function ShaderCanvas({
 
   useEffect(() => {
     const canvas = canvasRef.current!;
-    const glRaw = canvas.getContext("webgl2", { alpha: true, premultipliedAlpha: false });
+    const glRaw = canvas.getContext("webgl2", { alpha: true, premultipliedAlpha: false, antialias: false, depth: false, stencil: false, powerPreference: "low-power" });
     if (!glRaw) return;
     const gl: WebGL2RenderingContext = glRaw;
 
@@ -119,7 +119,7 @@ export function ShaderCanvas({
     const uFrame = gl.getUniformLocation(program, "iFrame");
     const uMouse = gl.getUniformLocation(program, "iMouse");
 
-    const getDpr = () => Math.max(1, Math.min(2, pixelRatio ?? window.devicePixelRatio ?? 1));
+    const getDpr = () => Math.max(1, Math.min(1.5, pixelRatio ?? window.devicePixelRatio ?? 1));
 
     let resizeScheduled = false;
     function applySize() {
@@ -206,6 +206,7 @@ export function ShaderCanvas({
       ro.disconnect();
       try { gl.deleteBuffer(vbo); } catch {}
       try { gl.deleteVertexArray(vao); } catch {}
+      try { gl.getExtension("WEBGL_lose_context")?.loseContext(); } catch {}
     }
 
     return cleanup;

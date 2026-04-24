@@ -29,7 +29,11 @@ export function ShaderAnimation() {
       #define TWO_PI 6.2831853072
       #define PI 3.14159265359
 
-      precision highp float;
+      #ifdef GL_FRAGMENT_PRECISION_HIGH
+        precision highp float;
+      #else
+        precision mediump float;
+      #endif
       uniform vec2 resolution;
       uniform float time;
 
@@ -44,7 +48,7 @@ export function ShaderAnimation() {
             color[j] += lineWidth*float(i*i) / abs(fract(t - 0.01*float(j)+float(i)*0.01)*5.0 - length(uv) + mod(uv.x+uv.y, 0.2));
           }
         }
-        
+
         gl_FragColor = vec4(color[0],color[1],color[2],1.0);
       }
     `
@@ -70,13 +74,12 @@ export function ShaderAnimation() {
     const mesh = new THREE.Mesh(geometry, material)
     scene.add(mesh)
 
-    const renderer = new THREE.WebGLRenderer({ antialias: true })
-    renderer.setPixelRatio(window.devicePixelRatio)
+    const renderer = new THREE.WebGLRenderer({ antialias: false, powerPreference: "low-power" })
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5))
 
     container.appendChild(renderer.domElement)
 
-    // Handle window resize
-    const onWindowResize = () => {
+    const applySize = () => {
       const width = container.clientWidth
       const height = container.clientHeight
       renderer.setSize(width, height)
@@ -84,9 +87,9 @@ export function ShaderAnimation() {
       uniforms.resolution.value.y = renderer.domElement.height
     }
 
-    // Initial resize
-    onWindowResize()
-    window.addEventListener("resize", onWindowResize, false)
+    applySize()
+    const ro = new ResizeObserver(applySize)
+    ro.observe(container)
 
     // Animation loop
     const animate = () => {
@@ -113,7 +116,7 @@ export function ShaderAnimation() {
 
     // Cleanup function
     return () => {
-      window.removeEventListener("resize", onWindowResize)
+      ro.disconnect()
 
       if (sceneRef.current) {
         cancelAnimationFrame(sceneRef.current.animationId)
@@ -122,6 +125,7 @@ export function ShaderAnimation() {
           container.removeChild(sceneRef.current.renderer.domElement)
         }
 
+        sceneRef.current.renderer.forceContextLoss()
         sceneRef.current.renderer.dispose()
         geometry.dispose()
         material.dispose()
