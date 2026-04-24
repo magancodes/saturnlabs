@@ -245,7 +245,7 @@ export default function Home() {
       {/* ═══════════════════ DATASET CARDS ═══════════════════ */}
       <section
         className="relative w-full bg-[#050505]"
-        style={{ padding: 'clamp(100px, 15vw, 240px) clamp(24px, 11vw, 160px)' }}
+        style={{ padding: 'clamp(200px, 25vw, 400px) clamp(24px, 11vw, 160px)' }}
       >
           {/* Heading */}
           <h2
@@ -289,8 +289,8 @@ export default function Home() {
             <div className="border-t border-white/[0.09]" />
           </div>
 
-          {/* Disclaimer below links — massive vertical buffer */}
-          <div className="flex justify-center pt-48 md:pt-80 pb-12">
+          {/* Disclaimer below links — huuuuuge vertical buffer */}
+          <div className="flex justify-center pt-64 md:pt-[24rem] pb-24">
             <p 
               className="font-gilroy font-light text-white/30 text-center" 
               style={{ fontSize: 'clamp(11px, 1vw, 13px)', maxWidth: '500px', lineHeight: 1.6 }}
