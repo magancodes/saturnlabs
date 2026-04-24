@@ -129,9 +129,8 @@ export function ShaderCanvas({
       const dpr = getDpr();
       const cssW = Math.max(1, canvas.clientWidth | 0);
       const cssH = Math.max(1, canvas.clientHeight | 0);
-      const cap = Math.min(1, Math.min(1280 / cssW, 720 / cssH));
-      const w = Math.max(1, Math.floor(cssW * cap * dpr));
-      const h = Math.max(1, Math.floor(cssH * cap * dpr));
+      const w = Math.max(1, Math.floor(cssW * dpr));
+      const h = Math.max(1, Math.floor(cssH * dpr));
       if (canvas.width !== w || canvas.height !== h) {
         canvas.width = w; canvas.height = h;
         gl.viewport(0, 0, w, h);

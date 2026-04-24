@@ -82,8 +82,7 @@ export function ShaderAnimation() {
     const applySize = () => {
       const cssW = container.clientWidth
       const cssH = container.clientHeight
-      const cap = Math.min(1, Math.min(1280 / cssW, 720 / cssH))
-      renderer.setSize(Math.round(cssW * cap), Math.round(cssH * cap))
+      renderer.setSize(cssW, cssH)
       uniforms.resolution.value.x = renderer.domElement.width
       uniforms.resolution.value.y = renderer.domElement.height
     }

@@ -18,9 +18,8 @@ export function Footer() {
       if (parent) {
         const cssW = parent.offsetWidth;
         const cssH = parent.offsetHeight;
-        const cap = Math.min(1, Math.min(1280 / cssW, 720 / cssH)) * 0.5;
-        canvas.width = Math.max(1, Math.floor(cssW * cap));
-        canvas.height = Math.max(1, Math.floor(cssH * cap));
+        canvas.width = Math.max(1, Math.floor(cssW * 0.5));
+        canvas.height = Math.max(1, Math.floor(cssH * 0.5));
         gl.viewport(0, 0, canvas.width, canvas.height);
       }
     };

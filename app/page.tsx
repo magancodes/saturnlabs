@@ -31,15 +31,21 @@ export default function Home() {
   const [narrativeTriggered, setNarrativeTriggered] = useState([false, false, false]);
 
   useEffect(() => {
-    setNarrativeTriggered([true, true, true]);
     const panels = gsap.utils.toArray<HTMLElement>(".narrative-panel");
-    panels.forEach((panel) => {
+    panels.forEach((panel, i) => {
       gsap.set(panel, { opacity: 0, y: 24 });
       ScrollTrigger.create({
         trigger: panel,
         start: "top 75%",
         once: true,
-        onEnter: () => gsap.to(panel, { opacity: 1, y: 0, duration: 0.7, ease: "power2.out" }),
+        onEnter: () => {
+          gsap.to(panel, { opacity: 1, y: 0, duration: 0.7, ease: "power2.out" });
+          setNarrativeTriggered(prev => {
+            const next = [...prev];
+            next[i] = true;
+            return next;
+          });
+        },
       });
     });
     return () => { ScrollTrigger.getAll().forEach((t) => t.kill()); };

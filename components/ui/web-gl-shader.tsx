@@ -120,8 +120,7 @@ export function WebGLShader() {
       const parent = canvas.parentElement
       const cssW = parent ? parent.clientWidth : window.innerWidth
       const cssH = parent ? parent.clientHeight : window.innerHeight
-      const cap = Math.min(1, Math.min(1280 / cssW, 720 / cssH))
-      refs.renderer.setSize(Math.round(cssW * cap), Math.round(cssH * cap), false)
+      refs.renderer.setSize(cssW, cssH, false)
       ;(refs.uniforms.resolution.value as number[])[0] = cssW
       ;(refs.uniforms.resolution.value as number[])[1] = cssH
     }

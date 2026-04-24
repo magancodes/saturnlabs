@@ -105,9 +105,8 @@ export default function AuroraWaves({ speed = 1.0, glow = 15.0, resolutionScale 
 
     const resize = () => {
       const cssW = parent.clientWidth, cssH = parent.clientHeight;
-      const cap = Math.min(1, Math.min(1280 / Math.max(1, cssW), 720 / Math.max(1, cssH))) * resolutionScale;
-      canvas.width  = Math.max(1, Math.round(cssW * cap));
-      canvas.height = Math.max(1, Math.round(cssH * cap));
+      canvas.width  = Math.max(1, Math.round(cssW * resolutionScale));
+      canvas.height = Math.max(1, Math.round(cssH * resolutionScale));
       gl.viewport(0, 0, canvas.width, canvas.height);
     };
     const ro = new ResizeObserver(resize);
