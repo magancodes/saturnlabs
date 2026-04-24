@@ -250,10 +250,16 @@ export default function Home() {
           {/* Heading */}
           <h2
             className="font-gilroy font-normal text-white leading-tight"
-            style={{ fontSize: 'clamp(20px, 3vw, 34px)', marginBottom: 'clamp(24px, 3.5vw, 48px)' }}
+            style={{ fontSize: 'clamp(20px, 3vw, 34px)', marginBottom: '12px' }}
           >
             <EncryptedText text="Explore our" encryptedClassName="text-white/30" /> <span className="font-rhymes italic"><EncryptedText text="data" encryptedClassName="text-white/30" /></span>
           </h2>
+          <p 
+            className="font-gilroy font-light text-white/40 mb-12" 
+            style={{ fontSize: 'clamp(11px, 1vw, 13px)', maxWidth: '500px', lineHeight: 1.5 }}
+          >
+            Opens Rerun visualizer in a new tab. It may be very slow on browsers due to very large MCAP size.
+          </p>
 
           {/* Dataset rows — dividers full-width, content indented */}
           <div className="flex flex-col">
