@@ -17,27 +17,40 @@ export default function Home() {
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    // GSAP Reveal Animation
-    const sections = gsap.utils.toArray<HTMLElement>(".reveal-text");
+    // Narrative Pinned Sequence
+    const narrativeSection = document.querySelector("#narrative-section");
+    const texts = gsap.utils.toArray<HTMLElement>(".narrative-text");
     
-    sections.forEach((section) => {
-      gsap.fromTo(
-        section,
-        { opacity: 0, y: 50 },
-        {
+    if (narrativeSection && texts.length > 0) {
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: narrativeSection,
+          start: "top top",
+          end: "+=300%", // Scroll for 3 screen heights
+          pin: true,
+          scrub: 1,
+          anticipatePin: 1,
+        }
+      });
+
+      texts.forEach((text, i) => {
+        // Initially hide all
+        gsap.set(text, { opacity: 0, y: 30 });
+        
+        tl.to(text, {
           opacity: 1,
           y: 0,
           duration: 1,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: section,
-            start: "top 85%", 
-            end: "bottom 15%",
-            toggleActions: "play reverse play reverse",
-          },
-        }
-      );
-    });
+          ease: "power2.out"
+        })
+        .to(text, {
+          opacity: 0,
+          y: -30,
+          duration: 1,
+          ease: "power2.in"
+        }, "+=0.5"); // Pause briefly
+      });
+    }
 
     return () => {
       ScrollTrigger.getAll().forEach((t) => t.kill());
@@ -46,14 +59,13 @@ export default function Home() {
 
   return (
     <div className="bg-[#050505]">
-      {/* ═══════════════════ GLOBAL BACKGROUND SHADER ═══════════════════ */}
-      <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
-        <WebGLShader />
-        <div className="absolute inset-0 bg-black/70 z-[1]"></div>
-      </div>
-
       {/* ═══════════════════ HERO SECTION ═══════════════════ */}
       <div className="relative min-h-screen overflow-hidden">
+        {/* Background Shader — only behind hero */}
+        <div className="absolute inset-0 z-0 pointer-events-none">
+          <ShaderAnimation />
+          <div className="absolute inset-0 bg-black/65 z-[1]"></div>
+        </div>
 
       {/* ═══════════════════ HEADER ═══════════════════ */}
       <header
@@ -242,18 +254,28 @@ export default function Home() {
       {/* ═══════════════════ BENTO VIDEO GRID ═══════════════════ */}
       <BentoGrid />
 
-      {/* ═══════════════════ STICKY NARRATIVE SECTION ═══════════════════ */}
-      <section className="relative z-10 bg-transparent overflow-hidden py-40 md:py-64">
-        <div className="max-w-xl mx-auto space-y-48 md:space-y-64 text-center px-6">
-          <p className="reveal-text font-gilroy font-normal text-white/50 text-xs md:text-sm uppercase tracking-[0.25em] leading-relaxed">
-            Saturn Labs turns human motion into the force that trains the world&apos;s most ambitious robots.
-          </p>
-          <p className="reveal-text font-gilroy font-normal text-white/50 text-xs md:text-sm uppercase tracking-[0.25em] leading-relaxed">
-            A robot is only as good as its data, and beneath every breakthrough in Physical AI, there&apos;s a symphony of real world human action powering that learning.
-          </p>
-          <p className="reveal-text font-gilroy font-normal text-white/50 text-xs md:text-sm uppercase tracking-[0.25em] leading-relaxed">
-            Saturn Labs captures that action, building the multimodal datasets that teach robots how to move, manipulate, and navigate the physical world with precision.
-          </p>
+      {/* ═══════════════════ NARRATIVE SECTION (PINNED) ═══════════════════ */}
+      <section id="narrative-section" className="relative z-10 w-full min-h-screen bg-black overflow-hidden flex items-center justify-center">
+        {/* Background Shader */}
+        <div className="absolute inset-0 z-0 opacity-40">
+          <WebGLShader />
+        </div>
+        
+        {/* Overlays */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-black pointer-events-none z-1" />
+        
+        <div className="relative z-10 w-full max-w-4xl mx-auto px-12 h-[300px] flex items-center justify-center">
+          <div className="relative w-full text-center">
+            <h2 className="narrative-text absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full font-gilroy font-normal text-white text-[18px] md:text-[22px] tracking-[0.05em] leading-relaxed italic">
+              Saturn Labs turns human motion into the force that trains the world&apos;s most ambitious robots.
+            </h2>
+            <h2 className="narrative-text absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full font-gilroy font-normal text-white text-[18px] md:text-[22px] tracking-[0.05em] leading-relaxed">
+              A robot is only as good as its data, and beneath every breakthrough in Physical AI, there&apos;s a symphony of real world human action powering that learning.
+            </h2>
+            <h2 className="narrative-text absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full font-gilroy font-normal text-white text-[18px] md:text-[22px] tracking-[0.05em] leading-relaxed">
+              Saturn Labs captures that action, building the multimodal datasets that teach robots how to move, manipulate, and navigate the physical world with precision.
+            </h2>
+          </div>
         </div>
       </section>
 

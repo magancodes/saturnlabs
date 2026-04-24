@@ -138,7 +138,7 @@ export function WebGLShader() {
   return (
     <canvas
       ref={canvasRef}
-      className="fixed inset-0 w-full h-full block -z-10 opacity-70"
+      className="w-full h-full block"
     />
   )
 }
