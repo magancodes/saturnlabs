@@ -8,6 +8,7 @@ import { EncryptedText } from "@/components/ui/encrypted-text";
 import { Footer } from "@/components/ui/footer";
 import { WebGLShader } from "@/components/ui/web-gl-shader";
 import { DottedSurface } from "@/components/ui/dotted-surface";
+import { LiquidButton } from "@/components/ui/liquid-glass-button";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -283,10 +284,42 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Optimized Shader Container */}
-        <div className="w-full h-[320px] md:h-[520px] relative mt-16 overflow-hidden border-t border-white/10 flex items-center justify-center">
-          <DottedSurface className="opacity-80" />
-          <div className="absolute inset-0 bg-gradient-to-b from-black via-transparent to-black pointer-events-none z-10" />
+        {/* Call to Action / Demo Block */}
+        <div className="w-full max-w-5xl mx-auto px-6 mt-24">
+          <div className="relative border border-[#27272a] p-2 w-full mx-auto overflow-hidden rounded-xl bg-zinc-950/20 backdrop-blur-sm">
+            <main className="relative border border-[#27272a] py-20 px-8 overflow-hidden rounded-lg flex flex-col items-center justify-center text-center">
+                {/* Background Shader for the CTA block */}
+                <div className="absolute inset-0 z-0">
+                  <WebGLShader />
+                </div>
+                
+                {/* Content Overlay */}
+                <div className="relative z-10 w-full">
+                  <h1 className="mb-4 text-white text-4xl md:text-6xl font-extrabold tracking-tighter">Design is Everything</h1>
+                  <p className="text-white/60 mb-10 max-w-xl mx-auto text-sm md:text-base">Unleashing creativity through bold visuals, seamless interfaces, and limitless possibilities.</p>
+                  
+                  <div className="mb-10 flex items-center justify-center gap-2">
+                      <span className="relative flex h-3 w-3 items-center justify-center">
+                          <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-500 opacity-75"></span>
+                          <span className="relative inline-flex h-2 w-2 rounded-full bg-green-500"></span>
+                      </span>
+                      <p className="text-[10px] md:text-xs text-green-500 uppercase tracking-widest font-medium">Available for New Projects</p>
+                  </div>
+                  
+                  <div className="flex justify-center"> 
+                      <LiquidButton className="text-white border border-white/20 rounded-full" size={'xl'}>
+                        Let&apos;s Go
+                      </LiquidButton> 
+                  </div> 
+                </div>
+            </main>
+          </div>
+        </div>
+
+        {/* Bottom Dotted Surface Transition */}
+        <div className="w-full h-[180px] md:h-[280px] relative mt-16 overflow-hidden border-t border-white/10">
+          <DottedSurface className="opacity-40" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black pointer-events-none z-10" />
         </div>
       </section>
 
