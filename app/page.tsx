@@ -12,10 +12,6 @@ const ShaderAnimation = dynamic(
   () => import("@/components/ui/shader-animation").then(m => ({ default: m.ShaderAnimation })),
   { ssr: false }
 );
-const WebGLShader = dynamic(
-  () => import("@/components/ui/web-gl-shader").then(m => ({ default: m.WebGLShader })),
-  { ssr: false }
-);
 const LaunchSection = dynamic(
   () => import("@/components/ui/launch").then(m => ({ default: m.LaunchSection })),
   { ssr: false }
@@ -242,12 +238,18 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Shader — anchored flush to the bottom */}
+        {/* Grid — anchored flush to the bottom */}
         <div className="absolute bottom-0 left-0 right-0 h-[75%] md:h-[70%] z-0 overflow-hidden">
-          <WebGLShader />
+          <div
+            className="absolute inset-0"
+            style={{
+              backgroundImage: "linear-gradient(rgba(255,255,255,0.045) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.045) 1px, transparent 1px)",
+              backgroundSize: "48px 48px",
+            }}
+          />
           {/* Top fade */}
           <div className="absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-[#050505] to-transparent pointer-events-none z-10" />
-          {/* Bottom fade — dissolves into dataset section */}
+          {/* Bottom fade */}
           <div className="absolute inset-x-0 bottom-0 h-48 bg-gradient-to-t from-[#050505] to-transparent pointer-events-none z-10" />
         </div>
       </section>

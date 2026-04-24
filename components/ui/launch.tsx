@@ -91,7 +91,6 @@ export function ShaderCanvas({
   const mouseRef = useRef({ x: 0, y: 0, l: 0, r: 0 });
 
   useEffect(() => {
-    if (window.innerWidth < 768) return
     const canvas = canvasRef.current!;
     const glRaw = canvas.getContext("webgl2", { alpha: true, premultipliedAlpha: false });
     if (!glRaw) return;

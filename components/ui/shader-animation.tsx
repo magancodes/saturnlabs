@@ -15,9 +15,6 @@ export function ShaderAnimation() {
 
   useEffect(() => {
     if (!containerRef.current) return
-    if (window.innerWidth < 768) return
-    if (!document.createElement("canvas").getContext("webgl2")) return
-
     const container = containerRef.current
 
     // Vertex shader
