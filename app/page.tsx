@@ -27,47 +27,46 @@ export default function Home() {
   const [narrativeTriggered, setNarrativeTriggered] = useState([false, false, false]);
 
   useEffect(() => {
-    // Narrative Pinned Sequence
     const narrativeSection = document.querySelector("#narrative-section");
     const texts = gsap.utils.toArray<HTMLElement>(".narrative-text");
 
     if (narrativeSection && texts.length > 0) {
+      // Trigger all EncryptedText animations as soon as section enters —
+      // keeps React state updates out of the scrub timeline entirely
+      ScrollTrigger.create({
+        trigger: narrativeSection,
+        start: "top 80%",
+        once: true,
+        onEnter: () => setNarrativeTriggered([true, true, true]),
+      });
+
+      texts.forEach((text) => gsap.set(text, { opacity: 0, y: 30 }));
+
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: narrativeSection,
           start: "top top",
-          end: "+=180%", // Faster sequence
+          end: "+=240%",
           pin: true,
-          scrub: 1,
-          anticipatePin: 1,
-        }
+          scrub: 0.5,
+          invalidateOnRefresh: true,
+        },
       });
 
-      texts.forEach((text, i) => {
-        // Initially hide all
-        gsap.set(text, { opacity: 0, y: 30 });
-
-        tl.to(text, {
-          opacity: 1,
-          y: 0,
-          duration: 1,
-          ease: "power2.out",
-          onStart: () => setNarrativeTriggered(prev => {
-            const next = [...prev];
-            next[i] = true;
-            return next;
-          }),
-        })
-          .to(text, {
-            opacity: 0,
-            y: -30,
-            duration: 1,
-            ease: "power2.in"
-          }, "+=0.5"); // Pause briefly
+      texts.forEach((text) => {
+        tl.to(text, { opacity: 1, y: 0, duration: 1, ease: "power2.out" })
+          .to(text, { opacity: 0, y: -30, duration: 1, ease: "power2.in" }, "+=0.5");
       });
+
+      // Small buffer so the last text fully exits before unpin
+      tl.to({}, { duration: 0.3 });
     }
 
+    // Refresh after fonts / images settle so pin height is accurate
+    const timer = setTimeout(() => ScrollTrigger.refresh(), 300);
+
     return () => {
+      clearTimeout(timer);
       ScrollTrigger.getAll().forEach((t) => t.kill());
     };
   }, []);
