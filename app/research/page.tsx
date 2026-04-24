@@ -75,14 +75,14 @@ export default function Research() {
               { label: "data", href: "/#data" },
               { label: "research", href: "/research" },
             ].map(({ label, href }) => (
-              <Link
+              <a
                 key={label}
                 href={href}
                 className={`font-gilroy hover:text-white hover:bg-white/[0.06] transition-all duration-200 ${label === "research" ? "text-white" : "text-white/55"}`}
                 style={{ fontSize: "14px", padding: "7px 14px", borderRadius: "9px" }}
               >
                 {label}
-              </Link>
+              </a>
             ))}
           </nav>
 
