@@ -28,39 +28,37 @@ export default function Home() {
   const encTriggered = useRef([true, false, false]);
 
   useEffect(() => {
+    const section = document.querySelector<HTMLElement>(".narrative-section");
     const panels = gsap.utils.toArray<HTMLElement>(".narrative-panel");
-    if (!panels.length) return;
+    if (!section || panels.length < 3) return;
 
-    panels.forEach((panel, i) => {
-      // Slide up + fade in on enter, slide up + fade out on exit
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: panel,
-          start: "top 85%",
-          end: "bottom 15%",
-          scrub: 1.2,
-        },
-      });
-      tl.fromTo(panel,
-        { opacity: 0, y: 60 },
-        { opacity: 1, y: 0, duration: 0.5, ease: "none" }
-      ).to(panel,
-        { opacity: 0, y: -60, duration: 0.5, ease: "none" }
-      );
+    gsap.set(panels[1], { opacity: 0, y: 60 });
+    gsap.set(panels[2], { opacity: 0, y: 60 });
 
-      // Fire EncryptedText when panel is mid-entry
-      ScrollTrigger.create({
-        trigger: panel,
-        start: "top 60%",
-        once: true,
-        onEnter: () => {
-          if (!encTriggered.current[i]) {
-            encTriggered.current[i] = true;
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: section,
+        start: "top top",
+        end: "bottom bottom",
+        scrub: 1.5,
+        onUpdate: (self) => {
+          if (self.progress > 0.3 && !encTriggered.current[1]) {
+            encTriggered.current[1] = true;
+            setNarrativeTriggered(encTriggered.current.slice() as [boolean, boolean, boolean]);
+          }
+          if (self.progress > 0.65 && !encTriggered.current[2]) {
+            encTriggered.current[2] = true;
             setNarrativeTriggered(encTriggered.current.slice() as [boolean, boolean, boolean]);
           }
         },
-      });
+      },
     });
+
+    tl
+      .to(panels[0], { opacity: 0, y: -60, duration: 1, ease: "none" })
+      .to(panels[1], { opacity: 1, y: 0, duration: 1, ease: "none" }, "<")
+      .to(panels[1], { opacity: 0, y: -60, duration: 1, ease: "none" })
+      .to(panels[2], { opacity: 1, y: 0, duration: 1, ease: "none" }, "<");
 
     return () => { ScrollTrigger.getAll().forEach(t => t.kill()); };
   }, []);
@@ -224,23 +222,25 @@ export default function Home() {
       <BentoGrid />
 
       {/* ═══════════════════ NARRATIVE SECTION ═══════════════════ */}
-      <section className="narrative-section relative w-full bg-[#050505]">
-        {[
-          "Saturn Labs turns human motion into the force that trains the world's most ambitious robots.",
-          "A robot is only as good as its data, and beneath every breakthrough in Physical AI, there's a symphony of real world human action powering that learning.",
-          "Saturn Labs captures that action, building the multimodal datasets that teach robots how to move, manipulate, and navigate the physical world with precision.",
-        ].map((sentence, i) => (
-          <div
-            key={i}
-            className="narrative-panel relative flex items-center justify-center"
-            style={{ minHeight: "100vh", padding: "0 clamp(24px, 8vw, 120px)" }}
-          >
-            <p className="font-gilroy font-light text-white text-center max-w-2xl"
-              style={{ fontSize: "clamp(17px, 2.2vw, 26px)", lineHeight: 1.7 }}>
-              <EncryptedText text={sentence} triggered={narrativeTriggered[i]} revealDelayMs={6} flipDelayMs={12} />
-            </p>
-          </div>
-        ))}
+      <section className="narrative-section relative w-full bg-[#050505]" style={{ height: "300vh" }}>
+        <div className="sticky top-0 overflow-hidden" style={{ height: "100vh" }}>
+          {[
+            "Saturn Labs turns human motion into the force that trains the world's most ambitious robots.",
+            "A robot is only as good as its data, and beneath every breakthrough in Physical AI, there's a symphony of real world human action powering that learning.",
+            "Saturn Labs captures that action, building the multimodal datasets that teach robots how to move, manipulate, and navigate the physical world with precision.",
+          ].map((sentence, i) => (
+            <div
+              key={i}
+              className="narrative-panel absolute inset-0 flex items-center justify-center"
+              style={{ padding: "0 clamp(24px, 8vw, 120px)" }}
+            >
+              <p className="font-gilroy font-light text-white text-center max-w-2xl"
+                style={{ fontSize: "clamp(17px, 2.2vw, 26px)", lineHeight: 1.7 }}>
+                <EncryptedText text={sentence} triggered={narrativeTriggered[i]} revealDelayMs={6} flipDelayMs={12} />
+              </p>
+            </div>
+          ))}
+        </div>
       </section>
 
       {/* ═══════════════════ DATASET CARDS ═══════════════════ */}
