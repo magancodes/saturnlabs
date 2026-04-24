@@ -20,6 +20,7 @@ const WebGLShader = dynamic(
   () => import("@/components/ui/web-gl-shader").then(m => ({ default: m.WebGLShader })),
   { ssr: false }
 );
+import Lenis from "lenis";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -31,12 +32,18 @@ export default function Home() {
   const [narrativeTriggered, setNarrativeTriggered] = useState([false, false, false]);
 
   useEffect(() => {
+    // Page-wide smooth scroll
+    const lenis = new Lenis({ duration: 1.2 });
+    const onLenisScroll = () => ScrollTrigger.update();
+    lenis.on("scroll", onLenisScroll);
+    const lenisTicker = (time: number) => lenis.raf(time * 1000);
+    gsap.ticker.add(lenisTicker);
+    gsap.ticker.lagSmoothing(0);
+
     const narrativeSection = document.querySelector("#narrative-section");
     const texts = gsap.utils.toArray<HTMLElement>(".narrative-text");
 
     if (narrativeSection && texts.length > 0) {
-      // Trigger all EncryptedText animations as soon as section enters —
-      // keeps React state updates out of the scrub timeline entirely
       ScrollTrigger.create({
         trigger: narrativeSection,
         start: "top 80%",
@@ -46,13 +53,21 @@ export default function Home() {
 
       texts.forEach((text) => gsap.set(text, { opacity: 0, y: 30 }));
 
+      // Each sentence takes 2.0 units (in: 1 + gap: 0.2 + out: 0.8),
+      // total = 6.0 → snap at 0, 1/3, 2/3 lands exactly on each sentence start.
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: narrativeSection,
           start: "top top",
-          end: "+=160%",
+          end: "+=200%",
           pin: true,
-          scrub: true,
+          scrub: 0.5,
+          snap: {
+            snapTo: [0, 1 / 3, 2 / 3],
+            duration: { min: 0.2, max: 0.5 },
+            delay: 0.05,
+            ease: "power1.inOut",
+          },
           invalidateOnRefresh: true,
         },
       });
@@ -61,17 +76,16 @@ export default function Home() {
         tl.to(text, { opacity: 1, y: 0, duration: 1, ease: "power2.out" })
           .to(text, { opacity: 0, y: -30, duration: 0.8, ease: "power2.in" }, "+=0.2");
       });
-
-      // Small buffer so the last text fully exits before unpin
-      tl.to({}, { duration: 0.3 });
     }
 
-    // Refresh after fonts / images settle so pin height is accurate
     const timer = setTimeout(() => ScrollTrigger.refresh(), 300);
 
     return () => {
       clearTimeout(timer);
       ScrollTrigger.getAll().forEach((t) => t.kill());
+      lenis.off("scroll", onLenisScroll);
+      gsap.ticker.remove(lenisTicker);
+      lenis.destroy();
     };
   }, []);
 
@@ -98,9 +112,9 @@ export default function Home() {
 
           {/* Nav — centered, hidden on mobile */}
           <nav className="hidden lg:flex items-center absolute left-1/2 -translate-x-1/2" style={{ gap: "72px" }}>
-            <a href="#" className="font-gilroy text-white/80 hover:text-white transition-opacity" style={{ fontSize: "16px" }}>home</a>
-            <a href="#" className="font-gilroy text-white/80 hover:text-white transition-opacity" style={{ fontSize: "16px" }}>data</a>
-            <a href="#" className="font-gilroy text-white/80 hover:text-white transition-opacity" style={{ fontSize: "16px" }}>research</a>
+            <a href="/" className="font-gilroy text-white/80 hover:text-white transition-opacity" style={{ fontSize: "16px" }}>home</a>
+            <a href="#data" className="font-gilroy text-white/80 hover:text-white transition-opacity" style={{ fontSize: "16px" }}>data</a>
+            <a href="/research" className="font-gilroy text-white/80 hover:text-white transition-opacity" style={{ fontSize: "16px" }}>research</a>
           </nav>
 
           {/* Right side: Connect button (desktop) + Hamburger (mobile) */}
@@ -253,6 +267,7 @@ export default function Home() {
 
       {/* ═══════════════════ DATASET CARDS ═══════════════════ */}
       <section
+        id="data"
         className="relative w-full bg-[#050505]"
         style={{ padding: 'clamp(200px, 25vw, 10px) clamp(24px, 11vw, 160px)' }}
       >
