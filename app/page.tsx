@@ -260,21 +260,21 @@ export default function Home() {
       {/* ═══════════════════ NARRATIVE SECTION (PINNED) ═══════════════════ */}
       <section id="narrative-section" className="relative z-10 w-full min-h-screen bg-black overflow-hidden flex items-center justify-center">
         <div className="relative w-full max-w-5xl mx-auto px-24 md:px-12 text-center h-[300px]">
-          <div className="narrative-text absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full font-gilroy font-normal text-white text-[17px] md:text-[23px] tracking-[0.05em] leading-relaxed opacity-0">
+          <div className="narrative-text absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full font-gilroy font-normal text-white text-[17px] md:text-[23px] tracking-[0.05em] leading-relaxed">
             <EncryptedText 
               text="Saturn Labs turns human motion into the force that trains the world's most ambitious robots." 
               encryptedClassName="text-white/20"
               revealDelayMs={5}
             />
           </div>
-          <div className="narrative-text absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full font-gilroy font-normal text-white text-[17px] md:text-[23px] tracking-[0.05em] leading-relaxed opacity-0">
+          <div className="narrative-text absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full font-gilroy font-normal text-white text-[17px] md:text-[23px] tracking-[0.05em] leading-relaxed">
             <EncryptedText 
               text="A robot is only as good as its data, and beneath every breakthrough in Physical AI, there's a symphony of real world human action powering that learning." 
               encryptedClassName="text-white/20"
               revealDelayMs={5}
             />
           </div>
-          <div className="narrative-text absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full font-gilroy font-normal text-white text-[17px] md:text-[23px] tracking-[0.05em] leading-relaxed opacity-0">
+          <div className="narrative-text absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full font-gilroy font-normal text-white text-[17px] md:text-[23px] tracking-[0.05em] leading-relaxed">
             <EncryptedText 
               text="Saturn Labs captures that action, building the multimodal datasets that teach robots how to move, manipulate, and navigate the physical world with precision." 
               encryptedClassName="text-white/20"
@@ -284,7 +284,7 @@ export default function Home() {
         </div>
 
         {/* New ShaderBackground transition at the bottom */}
-        <div className="absolute bottom-0 left-0 w-full h-[500px] md:h-[500px] overflow-hidden pointer-events-none">
+        <div className="absolute bottom-0 left-0 w-full h-[650px] md:h-[500px] overflow-hidden pointer-events-none">
           <div className="absolute inset-0 z-0">
             <ShaderBackground />
           </div>
