@@ -97,6 +97,7 @@ export function ShaderCanvas({
     const gl: WebGL2RenderingContext = glRaw;
 
     let disposed = false;
+    let ro: ResizeObserver | null = null;
 
     const vao = gl.createVertexArray()!;
     gl.bindVertexArray(vao);
@@ -141,7 +142,7 @@ export function ShaderCanvas({
       resizeScheduled = true;
       requestAnimationFrame(applySize);
     }
-    const ro = new ResizeObserver(scheduleSize);
+    ro = new ResizeObserver(scheduleSize);
     ro.observe(canvas);
     scheduleSize();
 
@@ -204,7 +205,7 @@ export function ShaderCanvas({
       canvas.removeEventListener("mouseup", onUp);
       canvas.removeEventListener("webglcontextlost", onContextLost);
       canvas.removeEventListener("webglcontextrestored", onContextRestored);
-      ro.disconnect();
+      ro?.disconnect();
       try { gl.deleteBuffer(vbo); } catch {}
       try { gl.deleteVertexArray(vao); } catch {}
       try { gl.getExtension("WEBGL_lose_context")?.loseContext(); } catch {}

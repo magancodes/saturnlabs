@@ -1,76 +1,64 @@
 "use client";
 import { useRef, useEffect } from "react";
-import { Renderer, Program, Mesh, Triangle, Vec2 } from "ogl";
 
-const vertex = `
-attribute vec2 position;
-void main() {
-  gl_Position = vec4(position, 0.0, 1.0);
-}
+const VERT = `#version 300 es
+in vec2 a_pos;
+void main() { gl_Position = vec4(a_pos, 0.0, 1.0); }
 `;
 
-const fragment = `
-#ifdef GL_ES
+const FRAG = `#version 300 es
 precision mediump float;
-#endif
-
+out vec4 fragColor;
 uniform vec2 uResolution;
 uniform float uTime;
 uniform float uSpeed;
 uniform float uGlow;
 
-float wave(vec2 uv, float freq, float amp, float phase, float speed) {
-    return amp * sin(uv.x * freq + uTime * speed + phase);
+float wave(vec2 uv, float freq, float amp, float phase, float spd) {
+  return amp * sin(uv.x * freq + uTime * spd + phase);
 }
 
 void main() {
-    vec2 uv = (gl_FragCoord.xy / uResolution.xy) * 2.0 - 1.0;
-    uv.x *= uResolution.x / uResolution.y;
+  vec2 uv = (gl_FragCoord.xy / uResolution.xy) * 2.0 - 1.0;
+  uv.x *= uResolution.x / uResolution.y;
 
-    // Three layered waves with slight offsets
-    float w1 = wave(uv, 2.5,  0.30, 0.0,  uSpeed * 0.8);
-    float w2 = wave(uv, 4.0,  0.18, 1.3,  uSpeed * 1.1);
-    float w3 = wave(uv, 6.5,  0.10, 2.8,  uSpeed * 0.6);
-    float centerLine = w1 + w2 + w3;
+  float w = wave(uv, 2.5, 0.30, 0.0,  uSpeed * 0.8)
+          + wave(uv, 4.0, 0.18, 1.3,  uSpeed * 1.1)
+          + wave(uv, 6.5, 0.10, 2.8,  uSpeed * 0.6);
 
-    float dist = abs(uv.y - centerLine);
+  float dist  = abs(uv.y - w);
+  float core  = exp(-dist * dist * (uGlow * 3.0));
+  float halo  = exp(-dist * dist * (uGlow * 0.4)) * 0.35;
+  float total = clamp(core + halo, 0.0, 1.0);
 
-    // Sharp core + wide soft halo
-    float core  = exp(-dist * dist * (uGlow * 3.0));
-    float halo  = exp(-dist * dist * (uGlow * 0.4)) * 0.35;
-    float total = core + halo;
+  vec3 coreCol = vec3(0.55, 0.85, 1.0);
+  vec3 midCol  = mix(vec3(0.05, 0.35, 0.75), vec3(0.15, 0.65, 0.60),
+                     0.5 + 0.5 * sin(uTime * 0.4 + uv.x * 0.8));
+  vec3 edgeCol = vec3(0.25, 0.10, 0.45);
 
-    // Cool aurora palette: deep navy → teal → faint violet edge
-    vec3 coreCol  = vec3(0.55, 0.85, 1.0);           // icy white-blue core
-    vec3 midCol   = mix(vec3(0.05, 0.35, 0.75),       // blue
-                        vec3(0.15, 0.65, 0.60),        // teal
-                        0.5 + 0.5 * sin(uTime * 0.4 + uv.x * 0.8));
-    vec3 edgeCol  = vec3(0.25, 0.10, 0.45);           // deep violet edge
+  float t       = smoothstep(0.0, 0.25, dist);
+  vec3 waveCol  = mix(coreCol, mix(midCol, edgeCol, smoothstep(0.12, 0.4, dist)), t);
+  vec3 col      = mix(vec3(0.02, 0.02, 0.04), waveCol, total);
 
-    // Blend based on distance: core → mid → edge
-    float t = smoothstep(0.0, 0.25, dist);
-    vec3 waveCol = mix(coreCol, mix(midCol, edgeCol, smoothstep(0.12, 0.4, dist)), t);
-
-    // Dark background
-    vec3 bg = vec3(0.02, 0.02, 0.04);
-
-    vec3 col = mix(bg, waveCol, clamp(total, 0.0, 1.0));
-
-    gl_FragColor = vec4(col, 1.0);
+  fragColor = vec4(col, 1.0);
 }
 `;
 
-type Props = {
-  speed?: number;
-  glow?: number;
-  resolutionScale?: number;
-};
+function compileShader(gl: WebGL2RenderingContext, type: number, src: string) {
+  const sh = gl.createShader(type)!;
+  gl.shaderSource(sh, src);
+  gl.compileShader(sh);
+  if (!gl.getShaderParameter(sh, gl.COMPILE_STATUS)) {
+    console.error(gl.getShaderInfoLog(sh));
+    gl.deleteShader(sh);
+    return null;
+  }
+  return sh;
+}
 
-export default function AuroraWaves({
-  speed = 1.0,
-  glow = 15.0,
-  resolutionScale = 1.0,
-}: Props) {
+type Props = { speed?: number; glow?: number; resolutionScale?: number };
+
+export default function AuroraWaves({ speed = 1.0, glow = 15.0, resolutionScale = 1.0 }: Props) {
   const ref = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -79,61 +67,67 @@ export default function AuroraWaves({
     const parent = canvas.parentElement;
     if (!parent) return;
 
-    const renderer = new Renderer({
-      dpr: Math.min(window.devicePixelRatio, 1),
-      canvas,
-      // @ts-ignore — ogl forwards extra opts to WebGL context
-      powerPreference: "low-power",
-      antialias: false,
+    const gl = canvas.getContext("webgl2", {
+      alpha: false, antialias: false, depth: false,
+      stencil: false, powerPreference: "low-power",
     });
+    if (!gl) return;
 
-    const gl = renderer.gl;
-    const geometry = new Triangle(gl);
+    const vs = compileShader(gl, gl.VERTEX_SHADER, VERT);
+    const fs = compileShader(gl, gl.FRAGMENT_SHADER, FRAG);
+    if (!vs || !fs) return;
 
-    const program = new Program(gl, {
-      vertex,
-      fragment,
-      uniforms: {
-        uTime: { value: 0 },
-        uResolution: { value: new Vec2() },
-        uSpeed: { value: speed },
-        uGlow: { value: glow },
-      },
-    });
+    const prog = gl.createProgram()!;
+    gl.attachShader(prog, vs); gl.attachShader(prog, fs);
+    gl.linkProgram(prog);
+    gl.deleteShader(vs); gl.deleteShader(fs);
+    if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) {
+      console.error(gl.getProgramInfoLog(prog)); return;
+    }
 
-    const mesh = new Mesh(gl, { geometry, program });
+    const buf = gl.createBuffer()!;
+    gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 3,-1, -1,3]), gl.STATIC_DRAW);
+    const loc = gl.getAttribLocation(prog, "a_pos");
+    gl.enableVertexAttribArray(loc);
+    gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+
+    const uRes   = gl.getUniformLocation(prog, "uResolution");
+    const uTime  = gl.getUniformLocation(prog, "uTime");
+    const uSpeed = gl.getUniformLocation(prog, "uSpeed");
+    const uGlow  = gl.getUniformLocation(prog, "uGlow");
 
     const resize = () => {
-      const cssW = parent.clientWidth;
-      const cssH = parent.clientHeight;
+      const cssW = parent.clientWidth, cssH = parent.clientHeight;
       const cap = Math.min(1, Math.min(1280 / cssW, 720 / cssH)) * resolutionScale;
-      const w = Math.round(cssW * cap);
-      const h = Math.round(cssH * cap);
-      renderer.setSize(w, h);
-      (program.uniforms.uResolution.value as Vec2).set(cssW, cssH);
+      canvas.width  = Math.max(1, Math.round(cssW * cap));
+      canvas.height = Math.max(1, Math.round(cssH * cap));
+      gl.viewport(0, 0, canvas.width, canvas.height);
     };
-
     const ro = new ResizeObserver(resize);
     ro.observe(parent);
     resize();
 
-    let frame = 0;
+    gl.useProgram(prog);
+    gl.uniform1f(uSpeed, speed);
+    gl.uniform1f(uGlow, glow);
+
+    let raf = 0;
     const start = performance.now();
-
-    const loop = () => {
-      program.uniforms.uTime.value = (performance.now() - start) / 1000;
-      renderer.render({ scene: mesh });
-      frame = requestAnimationFrame(loop);
+    const tick = () => {
+      gl.uniform2f(uRes, parent.clientWidth, parent.clientHeight);
+      gl.uniform1f(uTime, (performance.now() - start) / 1000);
+      gl.drawArrays(gl.TRIANGLES, 0, 3);
+      raf = requestAnimationFrame(tick);
     };
-
-    loop();
+    raf = requestAnimationFrame(tick);
 
     return () => {
-      cancelAnimationFrame(frame);
+      cancelAnimationFrame(raf);
       ro.disconnect();
       gl.getExtension("WEBGL_lose_context")?.loseContext();
     };
   }, [speed, glow, resolutionScale]);
 
-  return <canvas ref={ref} className="w-full h-full block" />;
+  return <canvas ref={ref} style={{ width: "100%", height: "100%", display: "block" }} />;
 }
