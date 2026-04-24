@@ -230,7 +230,7 @@ const ShaderBackground = () => {
   }, []);
 
   return (
-    <canvas ref={canvasRef} className="absolute inset-0 w-full h-full block" />
+    <canvas ref={canvasRef} className="absolute inset-0 w-full h-full block scale-[2] origin-center" />
   );
 };
 
