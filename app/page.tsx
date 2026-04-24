@@ -152,7 +152,7 @@ export default function Home() {
         <div>
           {/* Backed by badge */}
           <div className="flex items-center gap-3 mb-8 blur-in" style={{ animationDelay: "0s" }}>
-            <span className="font-mono text-white/30 uppercase tracking-[0.2em]" style={{ fontSize: "11px" }}>
+            <span className="font-mono text-white/60 uppercase tracking-[0.2em]" style={{ fontSize: "11px" }}>
               Backed by
             </span>
             <Image

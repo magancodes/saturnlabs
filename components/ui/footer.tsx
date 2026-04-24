@@ -199,7 +199,7 @@ export function Footer() {
           <div className="flex flex-col md:flex-row justify-between items-center gap-12">
             <div className="font-gilroy text-[13px] tracking-[0.15em] uppercase text-white/18 font-light">Silverlabs AI Inc, Delaware 19901.</div>
             <div className="flex items-center gap-4 opacity-40 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-500">
-              <span className="font-gilroy text-[11px] tracking-[0.2em] uppercase text-white/30 font-light">Backed by</span>
+              <span className="font-gilroy text-[11px] tracking-[0.2em] uppercase text-white/60 font-light">Backed by</span>
               <img src="/images/EF.png" alt="Entrepreneurs First" className="h-6 md:h-8 w-auto object-contain" />
             </div>
           </div>
