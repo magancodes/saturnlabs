@@ -92,8 +92,9 @@ export function ShaderCanvas({
 
   useEffect(() => {
     const canvas = canvasRef.current!;
-    const gl = canvas.getContext("webgl2", { alpha: true, premultipliedAlpha: false });
-    if (!gl) return;
+    const glRaw = canvas.getContext("webgl2", { alpha: true, premultipliedAlpha: false });
+    if (!glRaw) return;
+    const gl: WebGL2RenderingContext = glRaw;
 
     let disposed = false;
 
@@ -131,7 +132,7 @@ export function ShaderCanvas({
       const h = Math.max(1, Math.floor(cssH * dpr));
       if (canvas.width !== w || canvas.height !== h) {
         canvas.width = w; canvas.height = h;
-        gl!.viewport(0, 0, w, h);
+        gl.viewport(0, 0, w, h);
       }
     }
     function scheduleSize() {
