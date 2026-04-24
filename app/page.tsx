@@ -289,8 +289,8 @@ export default function Home() {
             <div className="border-t border-white/[0.09]" />
           </div>
 
-          {/* Disclaimer below links — huuuuuge vertical buffer */}
-          <div className="flex justify-center pt-64 md:pt-[24rem] pb-24">
+          {/* Disclaimer below links — even more huuuuuge vertical buffer */}
+          <div className="flex justify-center pt-80 md:pt-[32rem] pb-32 md:pb-64">
             <p 
               className="font-gilroy font-light text-white/30 text-center" 
               style={{ fontSize: 'clamp(11px, 1vw, 13px)', maxWidth: '500px', lineHeight: 1.6 }}
