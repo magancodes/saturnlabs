@@ -18,42 +18,43 @@ uniform vec2 uResolution;
 uniform float uTime;
 uniform float uSpeed;
 uniform float uGlow;
-uniform float uTheme;
 
-vec3 palette(float t) {
-    return mix(
-      vec3(0.1, 0.2, 0.5),
-      vec3(0.8, 0.4, 0.9),
-      0.5 + 0.5 * sin(t)
-    );
-}
-
-float wave(vec2 uv, float freq, float phase) {
-    return 0.4 * sin(uv.x * freq + uTime * uSpeed + phase);
-}
-
-float glow(float d, float strength) {
-    return exp(-d * d * strength);
+float wave(vec2 uv, float freq, float amp, float phase, float speed) {
+    return amp * sin(uv.x * freq + uTime * speed + phase);
 }
 
 void main() {
     vec2 uv = (gl_FragCoord.xy / uResolution.xy) * 2.0 - 1.0;
     uv.x *= uResolution.x / uResolution.y;
 
-    float y = uv.y;
+    // Three layered waves with slight offsets
+    float w1 = wave(uv, 2.5,  0.30, 0.0,  uSpeed * 0.8);
+    float w2 = wave(uv, 4.0,  0.18, 1.3,  uSpeed * 1.1);
+    float w3 = wave(uv, 6.5,  0.10, 2.8,  uSpeed * 0.6);
+    float centerLine = w1 + w2 + w3;
 
-    float w1 = wave(uv, 3.0, 0.0);
-    float w2 = wave(uv, 5.0, 1.0);
-    float w3 = wave(uv, 7.0, 2.5);
+    float dist = abs(uv.y - centerLine);
 
-    float waveLine = w1 + w2 * 0.6 + w3 * 0.4;
+    // Sharp core + wide soft halo
+    float core  = exp(-dist * dist * (uGlow * 3.0));
+    float halo  = exp(-dist * dist * (uGlow * 0.4)) * 0.35;
+    float total = core + halo;
 
-    float dist = abs(y - waveLine);
-    float g = glow(dist, uGlow);
+    // Cool aurora palette: deep navy → teal → faint violet edge
+    vec3 coreCol  = vec3(0.55, 0.85, 1.0);           // icy white-blue core
+    vec3 midCol   = mix(vec3(0.05, 0.35, 0.75),       // blue
+                        vec3(0.15, 0.65, 0.60),        // teal
+                        0.5 + 0.5 * sin(uTime * 0.4 + uv.x * 0.8));
+    vec3 edgeCol  = vec3(0.25, 0.10, 0.45);           // deep violet edge
 
-    vec3 col = palette(waveLine + y);
-    vec3 bg = mix(vec3(0.02, 0.02, 0.05), vec3(1.0), uTheme);
-    col = mix(bg, col, g * 1.5);
+    // Blend based on distance: core → mid → edge
+    float t = smoothstep(0.0, 0.25, dist);
+    vec3 waveCol = mix(coreCol, mix(midCol, edgeCol, smoothstep(0.12, 0.4, dist)), t);
+
+    // Dark background
+    vec3 bg = vec3(0.02, 0.02, 0.04);
+
+    vec3 col = mix(bg, waveCol, clamp(total, 0.0, 1.0));
 
     gl_FragColor = vec4(col, 1.0);
 }
@@ -62,14 +63,12 @@ void main() {
 type Props = {
   speed?: number;
   glow?: number;
-  theme?: "dark" | "light";
   resolutionScale?: number;
 };
 
 export default function AuroraWaves({
   speed = 1.0,
   glow = 15.0,
-  theme = "dark",
   resolutionScale = 1.0,
 }: Props) {
   const ref = useRef<HTMLCanvasElement>(null);
@@ -99,7 +98,6 @@ export default function AuroraWaves({
         uResolution: { value: new Vec2() },
         uSpeed: { value: speed },
         uGlow: { value: glow },
-        uTheme: { value: theme === "light" ? 1.0 : 0.0 },
       },
     });
 
@@ -132,7 +130,7 @@ export default function AuroraWaves({
       ro.disconnect();
       gl.getExtension("WEBGL_lose_context")?.loseContext();
     };
-  }, [speed, glow, theme, resolutionScale]);
+  }, [speed, glow, resolutionScale]);
 
   return <canvas ref={ref} className="w-full h-full block" />;
 }

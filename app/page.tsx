@@ -270,7 +270,7 @@ export default function Home() {
 
         {/* Aurora shader — anchored flush to the bottom */}
         <div className="absolute bottom-0 left-0 right-0 h-[75%] md:h-[70%] z-0 overflow-hidden">
-          <AuroraWaves speed={0.6} glow={18} theme="dark" resolutionScale={0.8} />
+          <AuroraWaves speed={0.5} glow={20} resolutionScale={0.8} />
           {/* Top fade */}
           <div className="absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-[#050505] to-transparent pointer-events-none z-10" />
           {/* Bottom fade */}
