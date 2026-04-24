@@ -46,8 +46,6 @@ export default function Home() {
 
   return (
     <div className="bg-[#050505]">
-      {/* ═══════════════════ HERO SECTION ═══════════════════ */}
-      <div className="relative min-h-screen overflow-hidden">
       {/* ═══════════════════ GLOBAL BACKGROUND SHADER ═══════════════════ */}
       <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
         <WebGLShader />
