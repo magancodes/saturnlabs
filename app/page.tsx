@@ -242,25 +242,25 @@ export default function Home() {
       <BentoGrid />
 
       {/* ═══════════════════ NARRATIVE SECTION ═══════════════════ */}
-      <section className="relative z-10 py-32 px-12 md:py-64 md:px-24 bg-black overflow-hidden">
-        <div className="max-w-5xl mx-auto space-y-24 md:space-y-40">
-          <h2 className="reveal-text font-gilroy font-normal text-white text-[clamp(1.5rem,5vw,3rem)] leading-tight max-w-3xl">
+      <section className="relative z-10 py-32 px-12 md:py-64 md:px-24 bg-black overflow-hidden flex flex-col items-center">
+        <div className="max-w-4xl mx-auto space-y-32 md:space-y-56 text-center">
+          <h2 className="reveal-text font-gilroy font-normal text-white text-[clamp(1.8rem,5vw,3.5rem)] leading-tight mx-auto">
             Saturn Labs turns human motion into the force that trains the world&apos;s most ambitious robots.
           </h2>
-          <p className="reveal-text font-gilroy font-light text-white/40 text-[clamp(1.2rem,3vw,1.8rem)] leading-relaxed max-w-4xl ml-auto text-right">
+          <p className="reveal-text font-gilroy font-light text-white/40 text-[clamp(1.3rem,3vw,2.2rem)] leading-relaxed mx-auto">
             A robot is only as good as its data, and beneath every breakthrough in Physical AI, there&apos;s a symphony of real world human action powering that learning.
           </p>
           <div className="reveal-text">
-            <h3 className="font-rhymes italic font-thin text-white text-[clamp(1.5rem,5vw,3rem)] leading-tight max-w-3xl">
+            <h3 className="font-rhymes italic font-thin text-white text-[clamp(1.8rem,5vw,3.5rem)] leading-tight mx-auto">
               Saturn Labs captures that action, building the multimodal datasets that teach robots how to move, manipulate, and navigate the physical world with precision.
             </h3>
           </div>
         </div>
 
         {/* WebGL Shader Container */}
-        <div className="relative mt-40 md:mt-64 h-[400px] md:h-[600px] w-full border-y border-white/5 bg-zinc-950 overflow-hidden">
+        <div className="relative mt-40 md:mt-64 h-[400px] md:h-[600px] w-full max-w-7xl mx-auto border border-white/5 bg-zinc-950/50 backdrop-blur-3xl overflow-hidden rounded-2xl">
           <WebGLShader />
-          <div className="absolute inset-0 bg-gradient-to-b from-black via-transparent to-black pointer-events-none" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black pointer-events-none" />
         </div>
       </section>
 
