@@ -6,22 +6,13 @@ import { cn } from "@/lib/utils";
 type EncryptedTextProps = {
   text: string;
   className?: string;
-  /**
-   * Time in milliseconds between revealing each subsequent real character.
-   * Lower is faster. Defaults to 50ms per character.
-   */
   revealDelayMs?: number;
-  /** Optional custom character set to use for the gibberish effect. */
   charset?: string;
-  /**
-   * Time in milliseconds between gibberish flips for unrevealed characters.
-   * Lower is more jittery. Defaults to 50ms.
-   */
   flipDelayMs?: number;
-  /** CSS class for styling the encrypted/scrambled characters */
   encryptedClassName?: string;
-  /** CSS class for styling the revealed characters */
   revealedClassName?: string;
+  /** When provided, overrides useInView — animation starts when this becomes true */
+  triggered?: boolean;
 };
 
 const DEFAULT_CHARSET =
@@ -53,9 +44,11 @@ export const EncryptedText: React.FC<EncryptedTextProps> = ({
   flipDelayMs = 50,
   encryptedClassName,
   revealedClassName,
+  triggered,
 }) => {
   const ref = useRef<HTMLSpanElement>(null);
   const isInView = useInView(ref, { once: true });
+  const isActive = triggered !== undefined ? triggered : isInView;
 
   const [revealCount, setRevealCount] = useState<number>(0);
   const animationFrameRef = useRef<number | null>(null);
@@ -66,7 +59,7 @@ export const EncryptedText: React.FC<EncryptedTextProps> = ({
   );
 
   useEffect(() => {
-    if (!isInView) return;
+    if (!isActive) return;
 
     // Reset state for a fresh animation whenever dependencies change
     const initial = text
@@ -122,7 +115,7 @@ export const EncryptedText: React.FC<EncryptedTextProps> = ({
         cancelAnimationFrame(animationFrameRef.current);
       }
     };
-  }, [isInView, text, revealDelayMs, charset, flipDelayMs]);
+  }, [isActive, text, revealDelayMs, charset, flipDelayMs]);
 
   if (!text) return null;
 

@@ -18,6 +18,7 @@ gsap.registerPlugin(ScrollTrigger);
 export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const [narrativeTriggered, setNarrativeTriggered] = useState([false, false, false]);
 
   useEffect(() => {
     // Narrative Pinned Sequence
@@ -39,12 +40,17 @@ export default function Home() {
       texts.forEach((text, i) => {
         // Initially hide all
         gsap.set(text, { opacity: 0, y: 30 });
-        
+
         tl.to(text, {
           opacity: 1,
           y: 0,
           duration: 1,
-          ease: "power2.out"
+          ease: "power2.out",
+          onStart: () => setNarrativeTriggered(prev => {
+            const next = [...prev];
+            next[i] = true;
+            return next;
+          }),
         })
         .to(text, {
           opacity: 0,
@@ -207,17 +213,17 @@ export default function Home() {
 
       {/* ═══════════════════ NARRATIVE SECTION (PINNED) ═══════════════════ */}
       <section id="narrative-section" className="relative z-10 w-full h-screen bg-[#050505] overflow-hidden">
-        {/* Text — centered at ~55% from top */}
-        <div className="absolute inset-x-0 top-[52%] -translate-y-1/2 z-20 w-full flex justify-center">
+        {/* Text — centered at ~44% from top */}
+        <div className="absolute inset-x-0 top-[44%] -translate-y-1/2 z-20 w-full flex justify-center">
           <div className="relative w-full max-w-[320px] md:max-w-xl lg:max-w-2xl text-center">
             <div className="narrative-text absolute inset-0 flex items-center justify-center w-full font-gilroy font-light text-white text-[17px] md:text-[22px] lg:text-[26px] leading-[1.65] tracking-normal opacity-0 text-center">
-              Saturn Labs turns human motion into the force that trains the world&apos;s most ambitious robots.
+              <EncryptedText text="Saturn Labs turns human motion into the force that trains the world's most ambitious robots." triggered={narrativeTriggered[0]} revealDelayMs={8} flipDelayMs={15} />
             </div>
             <div className="narrative-text absolute inset-0 flex items-center justify-center w-full font-gilroy font-light text-white text-[17px] md:text-[22px] lg:text-[26px] leading-[1.65] tracking-normal opacity-0 text-center">
-              A robot is only as good as its data, and beneath every breakthrough in Physical AI, there&apos;s a symphony of real world human action powering that learning.
+              <EncryptedText text="A robot is only as good as its data, and beneath every breakthrough in Physical AI, there's a symphony of real world human action powering that learning." triggered={narrativeTriggered[1]} revealDelayMs={8} flipDelayMs={15} />
             </div>
             <div className="narrative-text absolute inset-0 flex items-center justify-center w-full font-gilroy font-light text-white text-[17px] md:text-[22px] lg:text-[26px] leading-[1.65] tracking-normal opacity-0 text-center">
-              Saturn Labs captures that action, building the multimodal datasets that teach robots how to move, manipulate, and navigate the physical world with precision.
+              <EncryptedText text="Saturn Labs captures that action, building the multimodal datasets that teach robots how to move, manipulate, and navigate the physical world with precision." triggered={narrativeTriggered[2]} revealDelayMs={8} flipDelayMs={15} />
             </div>
             {/* Invisible spacer to hold height */}
             <div className="invisible font-gilroy font-light text-[17px] md:text-[22px] lg:text-[26px] leading-[1.65] text-center">
@@ -229,9 +235,59 @@ export default function Home() {
         {/* Shader — anchored flush to the bottom */}
         <div className="absolute bottom-0 left-0 right-0 h-[55%] md:h-[50%] z-0 overflow-hidden">
           <ShaderBackground />
-          {/* Top fade into the dark background */}
+          {/* Top fade */}
           <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-[#050505] to-transparent pointer-events-none z-10" />
+          {/* Bottom fade — dissolves into dataset section */}
+          <div className="absolute inset-x-0 bottom-0 h-48 bg-gradient-to-t from-[#050505] to-transparent pointer-events-none z-10" />
         </div>
+      </section>
+
+      {/* ═══════════════════ DATASET CARDS ═══════════════════ */}
+      <section
+        className="relative w-full bg-[#050505]"
+        style={{ padding: 'clamp(40px, 8vw, 120px) clamp(24px, 11vw, 160px)' }}
+      >
+          {/* Heading */}
+          <h2
+            className="font-gilroy font-normal text-white leading-tight"
+            style={{ fontSize: 'clamp(20px, 3vw, 34px)', marginBottom: 'clamp(24px, 3.5vw, 48px)' }}
+          >
+            <EncryptedText text="Explore our" encryptedClassName="text-white/30" /> <span className="font-rhymes italic"><EncryptedText text="data" encryptedClassName="text-white/30" /></span>
+          </h2>
+
+          {/* Dataset rows — dividers full-width, content indented */}
+          <div className="flex flex-col">
+            {[
+              { label: "Lego Assembly" },
+              { label: "Cloth Folding" },
+              { label: "Electronics Assembly" },
+            ].map((card) => (
+              <div key={card.label} className="group border-t border-white/[0.09]">
+                <div
+                  className="flex items-center justify-between"
+                  style={{ padding: 'clamp(18px, 2.4vw, 36px) clamp(12px, 2.2vw, 32px)' }}
+                >
+                  <span
+                    className="font-gilroy font-light text-white/90"
+                    style={{ fontSize: 'clamp(12px, 1.2vw, 15px)' }}
+                  >{card.label}</span>
+                  <a
+                    href="#"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    title="Opens Rerun visualizer in a new tab. It may be very slow on browsers due to very large MCAP size."
+                    className="bg-[#1e1e1e] rounded-[10px] flex items-center justify-center shrink-0 transition-transform group-hover:scale-105"
+                    style={{ width: 'clamp(30px, 2.8vw, 40px)', height: 'clamp(30px, 2.8vw, 40px)' }}
+                  >
+                    <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ width: 'clamp(10px, 1vw, 13px)', height: 'clamp(10px, 1vw, 13px)' }}>
+                      <path d="M3 13L13 3M13 3H6M13 3V10" stroke="#ffffff" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                  </a>
+                </div>
+              </div>
+            ))}
+            <div className="border-t border-white/[0.09]" />
+          </div>
       </section>
 
       {/* ═══════════════════ FOOTER ═══════════════════ */}
