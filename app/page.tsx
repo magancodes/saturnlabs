@@ -207,9 +207,9 @@ export default function Home() {
 
       {/* ═══════════════════ NARRATIVE SECTION (PINNED) ═══════════════════ */}
       <section id="narrative-section" className="relative z-10 w-full h-screen bg-[#050505] overflow-hidden">
-        {/* Text — positioned at ~55% from top */}
-        <div className="absolute inset-x-0 top-[52%] -translate-y-1/2 z-20 px-14 md:px-32 lg:px-56">
-          <div className="relative w-full max-w-3xl mx-auto text-center">
+        {/* Text — centered at ~55% from top */}
+        <div className="absolute inset-x-0 top-[52%] -translate-y-1/2 z-20 w-full flex justify-center">
+          <div className="relative w-full max-w-[320px] md:max-w-xl lg:max-w-2xl text-center">
             <div className="narrative-text absolute inset-0 flex items-center justify-center w-full font-gilroy font-light text-white text-[17px] md:text-[22px] lg:text-[26px] leading-[1.65] tracking-normal opacity-0 text-center">
               Saturn Labs turns human motion into the force that trains the world&apos;s most ambitious robots.
             </div>
