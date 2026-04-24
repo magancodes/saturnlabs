@@ -1,14 +1,45 @@
-"use client";
-
-import { useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Image from "next/image";
 import { ShaderAnimation } from "@/components/ui/shader-animation";
 import { BentoGrid } from "@/components/ui/bento-grid";
 import { EncryptedText } from "@/components/ui/encrypted-text";
 import { Footer } from "@/components/ui/footer";
+import { WebGLShader } from "@/components/ui/web-gl-shader";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    // GSAP Reveal Animation
+    const sections = gsap.utils.toArray<HTMLElement>(".reveal-text");
+    
+    sections.forEach((section) => {
+      gsap.fromTo(
+        section,
+        { opacity: 0, y: 50 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 1,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: section,
+            start: "top 80%", // 20% from bottom
+            toggleActions: "play none none none",
+          },
+        }
+      );
+    });
+
+    return () => {
+      ScrollTrigger.getAll().forEach((t) => t.kill());
+    };
+  }, []);
 
   return (
     <div className="bg-[#050505]">
@@ -202,6 +233,29 @@ export default function Home() {
         </div>
       </main>
       </div>
+
+      {/* ═══════════════════ NARRATIVE SECTION ═══════════════════ */}
+      <section className="relative z-10 py-32 px-12 md:py-64 md:px-24 bg-black overflow-hidden">
+        <div className="max-w-5xl mx-auto space-y-24 md:space-y-40">
+          <h2 className="reveal-text font-gilroy font-normal text-white text-[clamp(1.5rem,5vw,3rem)] leading-tight max-w-3xl">
+            Saturn Labs turns human motion into the force that trains the world&apos;s most ambitious robots.
+          </h2>
+          <p className="reveal-text font-gilroy font-light text-white/40 text-[clamp(1.2rem,3vw,1.8rem)] leading-relaxed max-w-4xl ml-auto text-right">
+            A robot is only as good as its data, and beneath every breakthrough in Physical AI, there&apos;s a symphony of real world human action powering that learning.
+          </p>
+          <div className="reveal-text">
+            <h3 className="font-rhymes italic font-thin text-white text-[clamp(1.5rem,5vw,3rem)] leading-tight max-w-3xl">
+              Saturn Labs captures that action, building the multimodal datasets that teach robots how to move, manipulate, and navigate the physical world with precision.
+            </h3>
+          </div>
+        </div>
+
+        {/* WebGL Shader Container */}
+        <div className="relative mt-40 md:mt-64 h-[400px] md:h-[600px] w-full border-y border-white/5 bg-zinc-950 overflow-hidden">
+          <WebGLShader />
+          <div className="absolute inset-0 bg-gradient-to-b from-black via-transparent to-black pointer-events-none" />
+        </div>
+      </section>
 
       {/* ═══════════════════ BENTO VIDEO GRID ═══════════════════ */}
       <BentoGrid />
