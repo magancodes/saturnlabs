@@ -13,11 +13,12 @@ export function Footer() {
 
     let animId: number;
 
+    const scale = 0.5;
     const resize = () => {
       const parent = canvas.parentElement;
       if (parent) {
-        canvas.width = parent.offsetWidth;
-        canvas.height = parent.offsetHeight;
+        canvas.width = Math.floor(parent.offsetWidth * scale);
+        canvas.height = Math.floor(parent.offsetHeight * scale);
         gl.viewport(0, 0, canvas.width, canvas.height);
       }
     };

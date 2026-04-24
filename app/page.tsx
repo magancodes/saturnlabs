@@ -31,10 +31,25 @@ export default function Home() {
   const [narrativeTriggered, setNarrativeTriggered] = useState([false, false, false]);
 
   useEffect(() => {
+    const isMobile = window.innerWidth < 768;
     const narrativeSection = document.querySelector("#narrative-section");
     const texts = gsap.utils.toArray<HTMLElement>(".narrative-text");
+    const mobileTexts = gsap.utils.toArray<HTMLElement>(".narrative-text-mobile");
 
-    if (narrativeSection && texts.length > 0) {
+    if (isMobile) {
+      // Mobile: no pin, no WebGL — simple per-paragraph fade-in
+      setNarrativeTriggered([true, true, true]);
+      mobileTexts.forEach((text) => {
+        gsap.set(text, { opacity: 0, y: 20 });
+        ScrollTrigger.create({
+          trigger: text,
+          start: "top 85%",
+          once: true,
+          onEnter: () => gsap.to(text, { opacity: 1, y: 0, duration: 0.7, ease: "power2.out" }),
+        });
+      });
+    } else if (narrativeSection && texts.length > 0) {
+      // Desktop: pinned scrub with snap
       ScrollTrigger.create({
         trigger: narrativeSection,
         start: "top 80%",
@@ -44,8 +59,6 @@ export default function Home() {
 
       texts.forEach((text) => gsap.set(text, { opacity: 0, y: 30 }));
 
-      // Each sentence takes 2.0 units (in: 1 + gap: 0.2 + out: 0.8),
-      // total = 6.0 → snap at 0, 1/3, 2/3 lands exactly on each sentence start.
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: narrativeSection,
@@ -235,33 +248,48 @@ export default function Home() {
       {/* ═══════════════════ BENTO VIDEO GRID ═══════════════════ */}
       <BentoGrid />
 
-      {/* ═══════════════════ NARRATIVE SECTION (PINNED) ═══════════════════ */}
-      <section id="narrative-section" className="relative z-10 w-full h-screen bg-[#050505] overflow-hidden">
+      {/* ═══════════════════ NARRATIVE SECTION ═══════════════════ */}
+
+      {/* MOBILE: plain stacked paragraphs, no shader, no pin */}
+      <section className="md:hidden bg-[#050505] w-full" style={{ padding: "80px 28px" }}>
+        <div className="flex flex-col gap-16 max-w-sm mx-auto text-center">
+          {[
+            "Saturn Labs turns human motion into the force that trains the world's most ambitious robots.",
+            "A robot is only as good as its data, and beneath every breakthrough in Physical AI, there's a symphony of real world human action powering that learning.",
+            "Saturn Labs captures that action, building the multimodal datasets that teach robots how to move, manipulate, and navigate the physical world with precision.",
+          ].map((sentence, i) => (
+            <p key={i} className="narrative-text-mobile font-gilroy font-light text-white text-[17px] leading-[1.65] opacity-0">
+              {sentence}
+            </p>
+          ))}
+        </div>
+      </section>
+
+      {/* DESKTOP: pinned scrub with aurora shader */}
+      <section id="narrative-section" className="hidden md:block relative z-10 w-full h-screen bg-[#050505] overflow-hidden">
         {/* Text — centered at ~44% from top */}
         <div className="absolute inset-x-0 top-[44%] -translate-y-1/2 z-20 w-full flex justify-center">
-          <div className="relative w-full max-w-[320px] md:max-w-xl lg:max-w-2xl text-center">
-            <div className="narrative-text absolute inset-0 flex items-center justify-center w-full font-gilroy font-light text-white text-[17px] md:text-[22px] lg:text-[26px] leading-[1.65] tracking-normal opacity-0 text-center">
+          <div className="relative w-full max-w-xl lg:max-w-2xl text-center">
+            <div className="narrative-text absolute inset-0 flex items-center justify-center w-full font-gilroy font-light text-white text-[22px] lg:text-[26px] leading-[1.65] tracking-normal opacity-0 text-center">
               <EncryptedText text="Saturn Labs turns human motion into the force that trains the world's most ambitious robots." triggered={narrativeTriggered[0]} revealDelayMs={8} flipDelayMs={15} />
             </div>
-            <div className="narrative-text absolute inset-0 flex items-center justify-center w-full font-gilroy font-light text-white text-[17px] md:text-[22px] lg:text-[26px] leading-[1.65] tracking-normal opacity-0 text-center">
+            <div className="narrative-text absolute inset-0 flex items-center justify-center w-full font-gilroy font-light text-white text-[22px] lg:text-[26px] leading-[1.65] tracking-normal opacity-0 text-center">
               <EncryptedText text="A robot is only as good as its data, and beneath every breakthrough in Physical AI, there's a symphony of real world human action powering that learning." triggered={narrativeTriggered[1]} revealDelayMs={8} flipDelayMs={15} />
             </div>
-            <div className="narrative-text absolute inset-0 flex items-center justify-center w-full font-gilroy font-light text-white text-[17px] md:text-[22px] lg:text-[26px] leading-[1.65] tracking-normal opacity-0 text-center">
+            <div className="narrative-text absolute inset-0 flex items-center justify-center w-full font-gilroy font-light text-white text-[22px] lg:text-[26px] leading-[1.65] tracking-normal opacity-0 text-center">
               <EncryptedText text="Saturn Labs captures that action, building the multimodal datasets that teach robots how to move, manipulate, and navigate the physical world with precision." triggered={narrativeTriggered[2]} revealDelayMs={8} flipDelayMs={15} />
             </div>
-            {/* Invisible spacer to hold height */}
-            <div className="invisible font-gilroy font-light text-[17px] md:text-[22px] lg:text-[26px] leading-[1.65] text-center">
+            {/* Invisible spacer holds container height */}
+            <div className="invisible font-gilroy font-light text-[22px] lg:text-[26px] leading-[1.65] text-center">
               Saturn Labs captures that action, building the multimodal datasets that teach robots how to move, manipulate, and navigate the physical world with precision.
             </div>
           </div>
         </div>
 
-        {/* Aurora shader — anchored flush to the bottom */}
-        <div className="absolute bottom-0 left-0 right-0 h-[75%] md:h-[70%] z-0 overflow-hidden">
+        {/* Aurora shader — desktop only */}
+        <div className="absolute bottom-0 left-0 right-0 h-[70%] z-0 overflow-hidden">
           <AuroraWaves speed={0.5} glow={20} resolutionScale={0.6} />
-          {/* Top fade */}
           <div className="absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-[#050505] to-transparent pointer-events-none z-10" />
-          {/* Bottom fade */}
           <div className="absolute inset-x-0 bottom-0 h-48 bg-gradient-to-t from-[#050505] to-transparent pointer-events-none z-10" />
         </div>
       </section>
