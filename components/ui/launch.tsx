@@ -127,7 +127,7 @@ export function ShaderCanvas({
     let resizeScheduled = false;
     function applySize() {
       resizeScheduled = false;
-      if (disposed) return;
+      if (disposed || !gl) return;
       const dpr = getDpr();
       const cssW = Math.max(1, canvas.clientWidth | 0);
       const cssH = Math.max(1, canvas.clientHeight | 0);
@@ -168,7 +168,7 @@ export function ShaderCanvas({
     frameRef.current = 0;
 
     function tick(now: number) {
-      if (disposed) return;
+      if (disposed || !gl) return;
       if (gl.isContextLost()) { rafRef.current = requestAnimationFrame(tick); return; }
 
       const t = (now - startRef.current) / 1000;
@@ -207,8 +207,8 @@ export function ShaderCanvas({
       canvas.removeEventListener("webglcontextlost", onContextLost);
       canvas.removeEventListener("webglcontextrestored", onContextRestored);
       ro?.disconnect();
-      try { gl.deleteBuffer(vbo); } catch {}
-      try { gl.deleteVertexArray(vao); } catch {}
+      try { gl?.deleteBuffer(vbo); } catch {}
+      try { gl?.deleteVertexArray(vao); } catch {}
     }
 
     return cleanup;
