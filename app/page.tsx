@@ -206,7 +206,7 @@ export default function Home() {
       <BentoGrid />
 
       {/* ═══════════════════ NARRATIVE SECTION (PINNED) ═══════════════════ */}
-      <section id="narrative-section" className="relative z-10 w-full h-screen bg-[#1a1a1e] overflow-hidden">
+      <section id="narrative-section" className="relative z-10 w-full h-screen bg-[#050505] overflow-hidden">
         {/* Text — positioned at ~55% from top */}
         <div className="absolute inset-x-0 top-[52%] -translate-y-1/2 z-20 px-10 md:px-24 lg:px-48 text-center">
           <div className="relative w-full max-w-3xl mx-auto">
@@ -227,12 +227,12 @@ export default function Home() {
         </div>
 
         {/* Shader — anchored to the bottom 42% of the viewport */}
-        <div className="absolute bottom-0 left-0 right-0 h-[42%] z-0">
+        <div className="absolute bottom-0 left-0 right-0 h-[55%] z-0">
           <ShaderBackground />
           {/* Top fade into the dark background */}
-          <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-[#1a1a1e] to-transparent pointer-events-none z-10" />
+          <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-[#050505] to-transparent pointer-events-none z-10" />
           {/* Bottom fade */}
-          <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-[#1a1a1e] to-transparent pointer-events-none z-10" />
+          <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-[#050505] to-transparent pointer-events-none z-10" />
         </div>
       </section>
 
