@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect, useState, useRef } from "react";
 import Image from "next/image";
 import { ShaderAnimation } from "@/components/ui/shader-animation";
@@ -234,6 +236,10 @@ export default function Home() {
       </main>
       </div>
 
+
+      {/* ═══════════════════ BENTO VIDEO GRID ═══════════════════ */}
+      <BentoGrid />
+
       {/* ═══════════════════ NARRATIVE SECTION ═══════════════════ */}
       <section className="relative z-10 py-32 px-12 md:py-64 md:px-24 bg-black overflow-hidden">
         <div className="max-w-5xl mx-auto space-y-24 md:space-y-40">
@@ -256,9 +262,6 @@ export default function Home() {
           <div className="absolute inset-0 bg-gradient-to-b from-black via-transparent to-black pointer-events-none" />
         </div>
       </section>
-
-      {/* ═══════════════════ BENTO VIDEO GRID ═══════════════════ */}
-      <BentoGrid />
 
       {/* ═══════════════════ FOOTER ═══════════════════ */}
       <Footer />
