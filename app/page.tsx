@@ -261,21 +261,36 @@ export default function Home() {
               { label: "Lego Assembly" },
               { label: "Cloth Folding" },
               { label: "Electronics Assembly" },
+              { label: "RGB Human Data", subtitle: "100 hour sample", highlight: true },
             ].map((card) => (
-              <div key={card.label} className="group border-t border-white/[0.09]">
+              <div 
+                key={card.label} 
+                className={cn(
+                  "group border-t border-white/[0.09] transition-colors duration-300",
+                  card.highlight ? "bg-white/[0.03] hover:bg-white/[0.05]" : "hover:bg-white/[0.02]"
+                )}
+              >
                 <div
                   className="flex items-center justify-between"
                   style={{ padding: 'clamp(24px, 3.2vw, 48px) clamp(12px, 2.2vw, 32px)' }}
                 >
-                  <span
-                    className="font-gilroy font-light text-white/90"
-                    style={{ fontSize: 'clamp(12px, 1.2vw, 15px)' }}
-                  >{card.label}</span>
+                  <div className="flex flex-col gap-1">
+                    <span
+                      className="font-gilroy font-light text-white/90"
+                      style={{ fontSize: 'clamp(12px, 1.2vw, 15px)' }}
+                    >
+                      {card.label}
+                    </span>
+                    {card.subtitle && (
+                      <span className="font-gilroy font-light text-white/40" style={{ fontSize: '11px' }}>
+                        {card.subtitle}
+                      </span>
+                    )}
+                  </div>
                   <a
                     href="#"
                     target="_blank"
                     rel="noopener noreferrer"
-                    title="Opens Rerun visualizer in a new tab. It may be very slow on browsers due to very large MCAP size."
                     className="bg-[#1e1e1e] rounded-[10px] flex items-center justify-center shrink-0 transition-transform group-hover:scale-105"
                     style={{ width: 'clamp(30px, 2.8vw, 40px)', height: 'clamp(30px, 2.8vw, 40px)' }}
                   >
