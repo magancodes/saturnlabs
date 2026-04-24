@@ -285,7 +285,7 @@ export default function Home() {
         </div>
 
         {/* Transition Shader at the bottom of the section */}
-        <div className="w-full h-[300px] md:h-[500px] relative mt-16 overflow-hidden border-t border-white/10">
+        <div className="w-full h-[300px] md:h-[500px] relative mt-16 overflow-hidden">
           <div className="absolute inset-0 z-0 opacity-60">
             <WebGLShader />
           </div>
