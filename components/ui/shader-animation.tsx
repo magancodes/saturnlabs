@@ -75,14 +75,14 @@ export function ShaderAnimation() {
     scene.add(mesh)
 
     const renderer = new THREE.WebGLRenderer({ antialias: false, powerPreference: "low-power" })
-    renderer.setPixelRatio(window.devicePixelRatio)
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5))
 
     container.appendChild(renderer.domElement)
 
     const applySize = () => {
-      const cssW = container.clientWidth
-      const cssH = container.clientHeight
-      renderer.setSize(cssW, cssH)
+      const width = container.clientWidth
+      const height = container.clientHeight
+      renderer.setSize(width, height)
       uniforms.resolution.value.x = renderer.domElement.width
       uniforms.resolution.value.y = renderer.domElement.height
     }

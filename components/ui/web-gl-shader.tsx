@@ -64,7 +64,7 @@ export function WebGLShader() {
     const initScene = () => {
       refs.scene = new THREE.Scene()
       refs.renderer = new THREE.WebGLRenderer({ canvas, alpha: true })
-      refs.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1))
+      refs.renderer.setPixelRatio(window.devicePixelRatio)
       refs.renderer.setClearColor(new THREE.Color(0x000000), 0)
 
       refs.camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, -1)
@@ -118,11 +118,11 @@ export function WebGLShader() {
     const handleResize = () => {
       if (!refs.renderer || !refs.uniforms) return
       const parent = canvas.parentElement
-      const cssW = parent ? parent.clientWidth : window.innerWidth
-      const cssH = parent ? parent.clientHeight : window.innerHeight
-      refs.renderer.setSize(cssW, cssH, false)
-      ;(refs.uniforms.resolution.value as number[])[0] = cssW
-      ;(refs.uniforms.resolution.value as number[])[1] = cssH
+      const width = parent ? parent.clientWidth : window.innerWidth
+      const height = parent ? parent.clientHeight : window.innerHeight
+      refs.renderer.setSize(width, height, false)
+      ;(refs.uniforms.resolution.value as number[])[0] = width
+      ;(refs.uniforms.resolution.value as number[])[1] = height
     }
 
     initScene()

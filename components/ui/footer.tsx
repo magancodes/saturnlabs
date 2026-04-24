@@ -16,10 +16,8 @@ export function Footer() {
     const resize = () => {
       const parent = canvas.parentElement;
       if (parent) {
-        const cssW = parent.offsetWidth;
-        const cssH = parent.offsetHeight;
-        canvas.width = Math.max(1, Math.floor(cssW * 0.5));
-        canvas.height = Math.max(1, Math.floor(cssH * 0.5));
+        canvas.width = parent.offsetWidth;
+        canvas.height = parent.offsetHeight;
         gl.viewport(0, 0, canvas.width, canvas.height);
       }
     };
