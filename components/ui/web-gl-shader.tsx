@@ -23,6 +23,7 @@ export function WebGLShader() {
 
   useEffect(() => {
     if (!canvasRef.current) return
+    if (window.innerWidth < 768) return
     if (!document.createElement("canvas").getContext("webgl2")) return
 
     const canvas = canvasRef.current
