@@ -30,9 +30,6 @@ export default function Home() {
     const panels = gsap.utils.toArray<HTMLElement>(".narrative-panel");
     if (!section || panels.length < 3) return;
 
-    gsap.set(panels[1], { opacity: 0, y: 60 });
-    gsap.set(panels[2], { opacity: 0, y: 60 });
-
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: section,
@@ -42,11 +39,12 @@ export default function Home() {
       },
     });
 
+    // Sequential: current exits fully before next enters — no overlap
     tl
-      .to(panels[0], { opacity: 0, y: -60, duration: 1, ease: "none" })
-      .to(panels[1], { opacity: 1, y: 0, duration: 1, ease: "none" }, "<")
-      .to(panels[1], { opacity: 0, y: -60, duration: 1, ease: "none" })
-      .to(panels[2], { opacity: 1, y: 0, duration: 1, ease: "none" }, "<");
+      .to(panels[0], { opacity: 0, y: -80, duration: 1, ease: "none" })
+      .fromTo(panels[1], { opacity: 0, y: 80 }, { opacity: 1, y: 0, duration: 1, ease: "none" })
+      .to(panels[1], { opacity: 0, y: -80, duration: 1, ease: "none" })
+      .fromTo(panels[2], { opacity: 0, y: 80 }, { opacity: 1, y: 0, duration: 1, ease: "none" });
 
     return () => { ScrollTrigger.getAll().forEach(t => t.kill()); };
   }, []);
@@ -210,7 +208,7 @@ export default function Home() {
       <BentoGrid />
 
       {/* ═══════════════════ NARRATIVE SECTION ═══════════════════ */}
-      <section className="narrative-section relative w-full bg-white" style={{ height: "300vh" }}>
+      <section className="narrative-section relative w-full bg-[#050505]" style={{ height: "300vh" }}>
         <div className="sticky top-0 overflow-hidden" style={{ height: "100vh" }}>
           {[
             "Saturn Labs turns human motion into the force that trains the world's most ambitious robots.",
@@ -220,9 +218,9 @@ export default function Home() {
             <div
               key={i}
               className="narrative-panel absolute inset-0 flex items-center justify-center"
-              style={{ padding: "0 clamp(24px, 8vw, 120px)" }}
+              style={{ padding: "0 clamp(24px, 8vw, 120px)", opacity: i === 0 ? 1 : 0, transform: i === 0 ? "none" : "translateY(80px)" }}
             >
-              <p className="font-gilroy font-light text-[#111] text-center max-w-2xl"
+              <p className="font-gilroy font-light text-white text-center max-w-2xl"
                 style={{ fontSize: "clamp(17px, 2.2vw, 26px)", lineHeight: 1.7 }}>
                 {sentence}
               </p>
