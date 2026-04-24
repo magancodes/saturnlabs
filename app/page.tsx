@@ -16,6 +16,10 @@ const LaunchSection = dynamic(
   () => import("@/components/ui/launch").then(m => ({ default: m.LaunchSection })),
   { ssr: false }
 );
+const WebGLShader = dynamic(
+  () => import("@/components/ui/web-gl-shader").then(m => ({ default: m.WebGLShader })),
+  { ssr: false }
+);
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -46,7 +50,7 @@ export default function Home() {
         scrollTrigger: {
           trigger: narrativeSection,
           start: "top top",
-          end: "+=240%",
+          end: "+=150%",
           pin: true,
           scrub: 0.5,
           invalidateOnRefresh: true,
@@ -55,7 +59,7 @@ export default function Home() {
 
       texts.forEach((text) => {
         tl.to(text, { opacity: 1, y: 0, duration: 1, ease: "power2.out" })
-          .to(text, { opacity: 0, y: -30, duration: 1, ease: "power2.in" }, "+=0.5");
+          .to(text, { opacity: 0, y: -30, duration: 0.8, ease: "power2.in" }, "+=0.2");
       });
 
       // Small buffer so the last text fully exits before unpin
@@ -237,15 +241,9 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Grid — anchored flush to the bottom */}
+        {/* Shader — anchored flush to the bottom */}
         <div className="absolute bottom-0 left-0 right-0 h-[75%] md:h-[70%] z-0 overflow-hidden">
-          <div
-            className="absolute inset-0"
-            style={{
-              backgroundImage: "linear-gradient(rgba(255,255,255,0.045) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.045) 1px, transparent 1px)",
-              backgroundSize: "48px 48px",
-            }}
-          />
+          <WebGLShader />
           {/* Top fade */}
           <div className="absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-[#050505] to-transparent pointer-events-none z-10" />
           {/* Bottom fade */}
