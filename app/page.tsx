@@ -24,8 +24,6 @@ gsap.registerPlugin(ScrollTrigger);
 export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
-  const [narrativeTriggered, setNarrativeTriggered] = useState([true, false, false]);
-  const encTriggered = useRef([true, false, false]);
 
   useEffect(() => {
     const section = document.querySelector<HTMLElement>(".narrative-section");
@@ -41,16 +39,6 @@ export default function Home() {
         start: "top top",
         end: "bottom bottom",
         scrub: 1.5,
-        onUpdate: (self) => {
-          if (self.progress > 0.3 && !encTriggered.current[1]) {
-            encTriggered.current[1] = true;
-            setNarrativeTriggered(encTriggered.current.slice() as [boolean, boolean, boolean]);
-          }
-          if (self.progress > 0.65 && !encTriggered.current[2]) {
-            encTriggered.current[2] = true;
-            setNarrativeTriggered(encTriggered.current.slice() as [boolean, boolean, boolean]);
-          }
-        },
       },
     });
 
@@ -222,7 +210,7 @@ export default function Home() {
       <BentoGrid />
 
       {/* ═══════════════════ NARRATIVE SECTION ═══════════════════ */}
-      <section className="narrative-section relative w-full bg-[#050505]" style={{ height: "300vh" }}>
+      <section className="narrative-section relative w-full bg-white" style={{ height: "300vh" }}>
         <div className="sticky top-0 overflow-hidden" style={{ height: "100vh" }}>
           {[
             "Saturn Labs turns human motion into the force that trains the world's most ambitious robots.",
@@ -234,9 +222,9 @@ export default function Home() {
               className="narrative-panel absolute inset-0 flex items-center justify-center"
               style={{ padding: "0 clamp(24px, 8vw, 120px)" }}
             >
-              <p className="font-gilroy font-light text-white text-center max-w-2xl"
+              <p className="font-gilroy font-light text-[#111] text-center max-w-2xl"
                 style={{ fontSize: "clamp(17px, 2.2vw, 26px)", lineHeight: 1.7 }}>
-                <EncryptedText text={sentence} triggered={narrativeTriggered[i]} revealDelayMs={6} flipDelayMs={12} />
+                {sentence}
               </p>
             </div>
           ))}
