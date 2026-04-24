@@ -16,8 +16,8 @@ const LaunchSection = dynamic(
   () => import("@/components/ui/launch").then(m => ({ default: m.LaunchSection })),
   { ssr: false }
 );
-const WebGLShader = dynamic(
-  () => import("@/components/ui/web-gl-shader").then(m => ({ default: m.WebGLShader })),
+const AuroraWaves = dynamic(
+  () => import("@/components/ui/aurora-waves"),
   { ssr: false }
 );
 import Lenis from "lenis";
@@ -33,7 +33,7 @@ export default function Home() {
 
   useEffect(() => {
     // Page-wide smooth scroll
-    const lenis = new Lenis({ duration: 1.2 });
+    const lenis = new Lenis({ duration: 0.7 });
     const onLenisScroll = () => ScrollTrigger.update();
     lenis.on("scroll", onLenisScroll);
     const lenisTicker = (time: number) => lenis.raf(time * 1000);
@@ -61,11 +61,11 @@ export default function Home() {
           start: "top top",
           end: "+=200%",
           pin: true,
-          scrub: 0.5,
+          scrub: true,
           snap: {
             snapTo: [0, 1 / 3, 2 / 3],
-            duration: { min: 0.2, max: 0.5 },
-            delay: 0.05,
+            duration: { min: 0.15, max: 0.35 },
+            delay: 0.02,
             ease: "power1.inOut",
           },
           invalidateOnRefresh: true,
@@ -268,9 +268,9 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Shader — anchored flush to the bottom */}
+        {/* Aurora shader — anchored flush to the bottom */}
         <div className="absolute bottom-0 left-0 right-0 h-[75%] md:h-[70%] z-0 overflow-hidden">
-          <WebGLShader />
+          <AuroraWaves speed={0.6} glow={18} theme="dark" resolutionScale={0.8} />
           {/* Top fade */}
           <div className="absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-[#050505] to-transparent pointer-events-none z-10" />
           {/* Bottom fade */}
