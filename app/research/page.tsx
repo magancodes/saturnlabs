@@ -6,7 +6,6 @@ import { EncryptedText } from "@/components/ui/encrypted-text";
 import { Footer } from "@/components/ui/footer";
 import Image from "next/image";
 import Link from "next/link";
-import Lenis from "lenis";
 
 function Reveal({
   children,
@@ -37,13 +36,6 @@ const DOT_GRID = Array.from({ length: 5 }, (_, i) => i);
 export default function Research() {
   const [menuOpen, setMenuOpen] = useState(false);
 
-  useEffect(() => {
-    const lenis = new Lenis({ duration: 1.2 });
-    let rafId: number;
-    const loop = (time: number) => { lenis.raf(time); rafId = requestAnimationFrame(loop); };
-    rafId = requestAnimationFrame(loop);
-    return () => { cancelAnimationFrame(rafId); lenis.destroy(); };
-  }, []);
 
   return (
     <div className="bg-[#050505] min-h-screen">

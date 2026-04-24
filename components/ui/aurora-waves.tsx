@@ -80,7 +80,7 @@ export default function AuroraWaves({
     if (!parent) return;
 
     const renderer = new Renderer({
-      dpr: Math.min(window.devicePixelRatio, 1.5),
+      dpr: Math.min(window.devicePixelRatio, 1),
       canvas,
       // @ts-ignore — ogl forwards extra opts to WebGL context
       powerPreference: "low-power",

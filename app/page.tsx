@@ -20,7 +20,6 @@ const AuroraWaves = dynamic(
   () => import("@/components/ui/aurora-waves"),
   { ssr: false }
 );
-import Lenis from "lenis";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -32,14 +31,6 @@ export default function Home() {
   const [narrativeTriggered, setNarrativeTriggered] = useState([false, false, false]);
 
   useEffect(() => {
-    // Page-wide smooth scroll
-    const lenis = new Lenis({ duration: 0.7 });
-    const onLenisScroll = () => ScrollTrigger.update();
-    lenis.on("scroll", onLenisScroll);
-    const lenisTicker = (time: number) => lenis.raf(time * 1000);
-    gsap.ticker.add(lenisTicker);
-    gsap.ticker.lagSmoothing(0);
-
     const narrativeSection = document.querySelector("#narrative-section");
     const texts = gsap.utils.toArray<HTMLElement>(".narrative-text");
 
@@ -83,9 +74,6 @@ export default function Home() {
     return () => {
       clearTimeout(timer);
       ScrollTrigger.getAll().forEach((t) => t.kill());
-      lenis.off("scroll", onLenisScroll);
-      gsap.ticker.remove(lenisTicker);
-      lenis.destroy();
     };
   }, []);
 
@@ -270,7 +258,7 @@ export default function Home() {
 
         {/* Aurora shader — anchored flush to the bottom */}
         <div className="absolute bottom-0 left-0 right-0 h-[75%] md:h-[70%] z-0 overflow-hidden">
-          <AuroraWaves speed={0.5} glow={20} resolutionScale={0.8} />
+          <AuroraWaves speed={0.5} glow={20} resolutionScale={0.6} />
           {/* Top fade */}
           <div className="absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-[#050505] to-transparent pointer-events-none z-10" />
           {/* Bottom fade */}

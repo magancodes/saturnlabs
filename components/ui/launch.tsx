@@ -119,7 +119,7 @@ export function ShaderCanvas({
     const uFrame = gl.getUniformLocation(program, "iFrame");
     const uMouse = gl.getUniformLocation(program, "iMouse");
 
-    const getDpr = () => Math.max(1, Math.min(1.5, pixelRatio ?? window.devicePixelRatio ?? 1));
+    const getDpr = () => Math.min(1, pixelRatio ?? window.devicePixelRatio ?? 1);
 
     let resizeScheduled = false;
     function applySize() {
