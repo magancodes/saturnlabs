@@ -80,9 +80,10 @@ export function ShaderAnimation() {
     container.appendChild(renderer.domElement)
 
     const applySize = () => {
-      const width = container.clientWidth
-      const height = container.clientHeight
-      renderer.setSize(width, height)
+      const cssW = container.clientWidth
+      const cssH = container.clientHeight
+      const cap = Math.min(1, Math.min(1280 / cssW, 720 / cssH))
+      renderer.setSize(Math.round(cssW * cap), Math.round(cssH * cap))
       uniforms.resolution.value.x = renderer.domElement.width
       uniforms.resolution.value.y = renderer.domElement.height
     }

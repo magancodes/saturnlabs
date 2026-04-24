@@ -118,11 +118,12 @@ export function WebGLShader() {
     const handleResize = () => {
       if (!refs.renderer || !refs.uniforms) return
       const parent = canvas.parentElement
-      const width = parent ? parent.clientWidth : window.innerWidth
-      const height = parent ? parent.clientHeight : window.innerHeight
-      refs.renderer.setSize(width, height, false)
-      ;(refs.uniforms.resolution.value as number[])[0] = width
-      ;(refs.uniforms.resolution.value as number[])[1] = height
+      const cssW = parent ? parent.clientWidth : window.innerWidth
+      const cssH = parent ? parent.clientHeight : window.innerHeight
+      const cap = Math.min(1, Math.min(1280 / cssW, 720 / cssH))
+      refs.renderer.setSize(Math.round(cssW * cap), Math.round(cssH * cap), false)
+      ;(refs.uniforms.resolution.value as number[])[0] = cssW
+      ;(refs.uniforms.resolution.value as number[])[1] = cssH
     }
 
     initScene()

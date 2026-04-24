@@ -31,63 +31,18 @@ export default function Home() {
   const [narrativeTriggered, setNarrativeTriggered] = useState([false, false, false]);
 
   useEffect(() => {
-    const isMobile = window.innerWidth < 768;
-    const narrativeSection = document.querySelector("#narrative-section");
-    const texts = gsap.utils.toArray<HTMLElement>(".narrative-text");
-    const mobileTexts = gsap.utils.toArray<HTMLElement>(".narrative-text-mobile");
-
-    if (isMobile) {
-      // Mobile: no pin, no WebGL — simple per-paragraph fade-in
-      setNarrativeTriggered([true, true, true]);
-      mobileTexts.forEach((text) => {
-        gsap.set(text, { opacity: 0, y: 20 });
-        ScrollTrigger.create({
-          trigger: text,
-          start: "top 85%",
-          once: true,
-          onEnter: () => gsap.to(text, { opacity: 1, y: 0, duration: 0.7, ease: "power2.out" }),
-        });
-      });
-    } else if (narrativeSection && texts.length > 0) {
-      // Desktop: pinned scrub with snap
+    setNarrativeTriggered([true, true, true]);
+    const panels = gsap.utils.toArray<HTMLElement>(".narrative-panel");
+    panels.forEach((panel) => {
+      gsap.set(panel, { opacity: 0, y: 24 });
       ScrollTrigger.create({
-        trigger: narrativeSection,
-        start: "top 80%",
+        trigger: panel,
+        start: "top 75%",
         once: true,
-        onEnter: () => setNarrativeTriggered([true, true, true]),
+        onEnter: () => gsap.to(panel, { opacity: 1, y: 0, duration: 0.7, ease: "power2.out" }),
       });
-
-      texts.forEach((text) => gsap.set(text, { opacity: 0, y: 30 }));
-
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: narrativeSection,
-          start: "top top",
-          end: "+=200%",
-          pin: true,
-          scrub: true,
-          snap: {
-            snapTo: [0, 1 / 3, 2 / 3],
-            duration: { min: 0.15, max: 0.35 },
-            delay: 0.02,
-            ease: "power1.inOut",
-          },
-          invalidateOnRefresh: true,
-        },
-      });
-
-      texts.forEach((text) => {
-        tl.to(text, { opacity: 1, y: 0, duration: 1, ease: "power2.out" })
-          .to(text, { opacity: 0, y: -30, duration: 0.8, ease: "power2.in" }, "+=0.2");
-      });
-    }
-
-    const timer = setTimeout(() => ScrollTrigger.refresh(), 300);
-
-    return () => {
-      clearTimeout(timer);
-      ScrollTrigger.getAll().forEach((t) => t.kill());
-    };
+    });
+    return () => { ScrollTrigger.getAll().forEach((t) => t.kill()); };
   }, []);
 
   return (
@@ -249,49 +204,31 @@ export default function Home() {
       <BentoGrid />
 
       {/* ═══════════════════ NARRATIVE SECTION ═══════════════════ */}
+      {/* No pin, no scrub — 3 plain scroll panels, fade in on enter */}
+      <section className="relative w-full bg-[#050505]">
+        {/* Aurora behind all panels — desktop only */}
+        <div className="absolute inset-0 z-0 pointer-events-none hidden md:block">
+          <AuroraWaves speed={0.5} glow={20} resolutionScale={0.5} />
+          <div className="absolute inset-x-0 top-0 h-48 bg-gradient-to-b from-[#050505] to-transparent" />
+          <div className="absolute inset-x-0 bottom-0 h-48 bg-gradient-to-t from-[#050505] to-transparent" />
+        </div>
 
-      {/* MOBILE: plain stacked paragraphs, no shader, no pin */}
-      <section className="md:hidden bg-[#050505] w-full" style={{ padding: "80px 28px" }}>
-        <div className="flex flex-col gap-16 max-w-sm mx-auto text-center">
-          {[
-            "Saturn Labs turns human motion into the force that trains the world's most ambitious robots.",
-            "A robot is only as good as its data, and beneath every breakthrough in Physical AI, there's a symphony of real world human action powering that learning.",
-            "Saturn Labs captures that action, building the multimodal datasets that teach robots how to move, manipulate, and navigate the physical world with precision.",
-          ].map((sentence, i) => (
-            <p key={i} className="narrative-text-mobile font-gilroy font-light text-white text-[17px] leading-[1.65] opacity-0">
-              {sentence}
+        {[
+          "Saturn Labs turns human motion into the force that trains the world's most ambitious robots.",
+          "A robot is only as good as its data, and beneath every breakthrough in Physical AI, there's a symphony of real world human action powering that learning.",
+          "Saturn Labs captures that action, building the multimodal datasets that teach robots how to move, manipulate, and navigate the physical world with precision.",
+        ].map((sentence, i) => (
+          <div
+            key={i}
+            className="narrative-panel relative z-10 flex items-center justify-center"
+            style={{ minHeight: "60vh", padding: "60px clamp(24px, 8vw, 120px)" }}
+          >
+            <p className="font-gilroy font-light text-white text-center max-w-2xl"
+              style={{ fontSize: "clamp(17px, 2.2vw, 26px)", lineHeight: 1.7 }}>
+              <EncryptedText text={sentence} triggered={narrativeTriggered[i]} revealDelayMs={6} flipDelayMs={12} />
             </p>
-          ))}
-        </div>
-      </section>
-
-      {/* DESKTOP: pinned scrub with aurora shader */}
-      <section id="narrative-section" className="hidden md:block relative z-10 w-full h-screen bg-[#050505] overflow-hidden">
-        {/* Text — centered at ~44% from top */}
-        <div className="absolute inset-x-0 top-[44%] -translate-y-1/2 z-20 w-full flex justify-center">
-          <div className="relative w-full max-w-xl lg:max-w-2xl text-center">
-            <div className="narrative-text absolute inset-0 flex items-center justify-center w-full font-gilroy font-light text-white text-[22px] lg:text-[26px] leading-[1.65] tracking-normal opacity-0 text-center">
-              <EncryptedText text="Saturn Labs turns human motion into the force that trains the world's most ambitious robots." triggered={narrativeTriggered[0]} revealDelayMs={8} flipDelayMs={15} />
-            </div>
-            <div className="narrative-text absolute inset-0 flex items-center justify-center w-full font-gilroy font-light text-white text-[22px] lg:text-[26px] leading-[1.65] tracking-normal opacity-0 text-center">
-              <EncryptedText text="A robot is only as good as its data, and beneath every breakthrough in Physical AI, there's a symphony of real world human action powering that learning." triggered={narrativeTriggered[1]} revealDelayMs={8} flipDelayMs={15} />
-            </div>
-            <div className="narrative-text absolute inset-0 flex items-center justify-center w-full font-gilroy font-light text-white text-[22px] lg:text-[26px] leading-[1.65] tracking-normal opacity-0 text-center">
-              <EncryptedText text="Saturn Labs captures that action, building the multimodal datasets that teach robots how to move, manipulate, and navigate the physical world with precision." triggered={narrativeTriggered[2]} revealDelayMs={8} flipDelayMs={15} />
-            </div>
-            {/* Invisible spacer holds container height */}
-            <div className="invisible font-gilroy font-light text-[22px] lg:text-[26px] leading-[1.65] text-center">
-              Saturn Labs captures that action, building the multimodal datasets that teach robots how to move, manipulate, and navigate the physical world with precision.
-            </div>
           </div>
-        </div>
-
-        {/* Aurora shader — desktop only */}
-        <div className="absolute bottom-0 left-0 right-0 h-[70%] z-0 overflow-hidden">
-          <AuroraWaves speed={0.5} glow={20} resolutionScale={0.6} />
-          <div className="absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-[#050505] to-transparent pointer-events-none z-10" />
-          <div className="absolute inset-x-0 bottom-0 h-48 bg-gradient-to-t from-[#050505] to-transparent pointer-events-none z-10" />
-        </div>
+        ))}
       </section>
 
       {/* ═══════════════════ DATASET CARDS ═══════════════════ */}

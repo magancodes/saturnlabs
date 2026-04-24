@@ -104,10 +104,13 @@ export default function AuroraWaves({
     const mesh = new Mesh(gl, { geometry, program });
 
     const resize = () => {
-      const w = parent.clientWidth;
-      const h = parent.clientHeight;
-      renderer.setSize(w * resolutionScale, h * resolutionScale);
-      (program.uniforms.uResolution.value as Vec2).set(w, h);
+      const cssW = parent.clientWidth;
+      const cssH = parent.clientHeight;
+      const cap = Math.min(1, Math.min(1280 / cssW, 720 / cssH)) * resolutionScale;
+      const w = Math.round(cssW * cap);
+      const h = Math.round(cssH * cap);
+      renderer.setSize(w, h);
+      (program.uniforms.uResolution.value as Vec2).set(cssW, cssH);
     };
 
     const ro = new ResizeObserver(resize);
