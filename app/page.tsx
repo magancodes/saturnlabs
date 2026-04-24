@@ -2,16 +2,24 @@
 
 import { useEffect, useState, useRef } from "react";
 import Image from "next/image";
-import { ShaderAnimation } from "@/components/ui/shader-animation";
+import dynamic from "next/dynamic";
 import { BentoGrid } from "@/components/ui/bento-grid";
 import { EncryptedText } from "@/components/ui/encrypted-text";
 import { Footer } from "@/components/ui/footer";
-import { WebGLShader } from "@/components/ui/web-gl-shader";
-import ShaderBackground from "@/components/ui/shader-background";
-import { DottedSurface } from "@/components/ui/dotted-surface";
-import { LiquidButton } from "@/components/ui/liquid-glass-button";
-import { LaunchSection } from "@/components/ui/launch";
 import { cn } from "@/lib/utils";
+
+const ShaderAnimation = dynamic(
+  () => import("@/components/ui/shader-animation").then(m => ({ default: m.ShaderAnimation })),
+  { ssr: false }
+);
+const ShaderBackground = dynamic(
+  () => import("@/components/ui/shader-background"),
+  { ssr: false }
+);
+const LaunchSection = dynamic(
+  () => import("@/components/ui/launch").then(m => ({ default: m.LaunchSection })),
+  { ssr: false }
+);
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -219,13 +227,23 @@ export default function Home() {
         <div className="absolute inset-x-0 top-[44%] -translate-y-1/2 z-20 w-full flex justify-center">
           <div className="relative w-full max-w-[320px] md:max-w-xl lg:max-w-2xl text-center">
             <div className="narrative-text absolute inset-0 flex items-center justify-center w-full font-gilroy font-light text-white text-[17px] md:text-[22px] lg:text-[26px] leading-[1.65] tracking-normal opacity-0 text-center">
-              <EncryptedText text="Saturn Labs turns human motion into the force that trains the world's most ambitious robots." triggered={narrativeTriggered[0]} revealDelayMs={8} flipDelayMs={15} />
+              Saturn Labs turns{" "}
+              <EncryptedText text="human motion" triggered={narrativeTriggered[0]} revealDelayMs={8} flipDelayMs={15} className="mx-1" />{" "}
+              into the force that trains the world&apos;s most ambitious{" "}
+              <EncryptedText text="robots" triggered={narrativeTriggered[0]} revealDelayMs={8} flipDelayMs={15} className="ml-1" />.
             </div>
             <div className="narrative-text absolute inset-0 flex items-center justify-center w-full font-gilroy font-light text-white text-[17px] md:text-[22px] lg:text-[26px] leading-[1.65] tracking-normal opacity-0 text-center">
-              <EncryptedText text="A robot is only as good as its data, and beneath every breakthrough in Physical AI, there's a symphony of real world human action powering that learning." triggered={narrativeTriggered[1]} revealDelayMs={8} flipDelayMs={15} />
+              A robot is only as good as its data, and beneath every breakthrough in{" "}
+              <EncryptedText text="Physical AI" triggered={narrativeTriggered[1]} revealDelayMs={8} flipDelayMs={15} className="mx-1" />,
+              there&apos;s a symphony of real world{" "}
+              <EncryptedText text="human action" triggered={narrativeTriggered[1]} revealDelayMs={8} flipDelayMs={15} className="ml-1" />{" "}
+              powering that learning.
             </div>
             <div className="narrative-text absolute inset-0 flex items-center justify-center w-full font-gilroy font-light text-white text-[17px] md:text-[22px] lg:text-[26px] leading-[1.65] tracking-normal opacity-0 text-center">
-              <EncryptedText text="Saturn Labs captures that action, building the multimodal datasets that teach robots how to move, manipulate, and navigate the physical world with precision." triggered={narrativeTriggered[2]} revealDelayMs={8} flipDelayMs={15} />
+              Saturn Labs captures that action, building the{" "}
+              <EncryptedText text="multimodal datasets" triggered={narrativeTriggered[2]} revealDelayMs={8} flipDelayMs={15} className="mx-1" />{" "}
+              that teach robots how to move, manipulate, and navigate the physical world with{" "}
+              <EncryptedText text="precision" triggered={narrativeTriggered[2]} revealDelayMs={8} flipDelayMs={15} className="ml-1" />.
             </div>
             {/* Invisible spacer to hold height */}
             <div className="invisible font-gilroy font-light text-[17px] md:text-[22px] lg:text-[26px] leading-[1.65] text-center">
