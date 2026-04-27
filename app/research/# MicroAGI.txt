@@ -1,0 +1,55 @@
+# MicroAGI
+
+[01 Alexandria](https://microagi.ai/#offering)
+[02 research](https://microagi.ai/#research)
+[03 careers](https://microagi.ai/#careers)
+[04 contact](https://microagi.ai/#contact)
+[01 Alexandria](https://microagi.ai/#offering)
+[02 research](https://microagi.ai/#research)
+[03 careers](https://microagi.ai/#careers)
+[04 contact](https://microagi.ai/#contact)
+
+# Preserving Human Excellence.
+[Sample Data](https://huggingface.co/datasets/MicroAGI-Labs/MicroAGI01)
+
+### Request Data
+Tell us about your data requirements and we'll get back to you within 24 hours.
+
+## Research Acceleration Engine.
+
+### EnablingEmbodied AI Research end to end.
+
+### Real
+Unscripted human behavior captured through frontier multimodal sensors.
+
+### Real to Sim
+Real-world structure transferred into simulation. Scene geometry from observation, not generation.
+
+### Teleops & Deployment
+Human data to robot policy to physical deployment. One partner, end to end.
+
+### Research
+
+#### CAWL
+Coactivation-Assembled Weight Layers
+We propose Coactivation-Assembled Weight Layers (CAWL), a transformer-compatible linear block with effective map Weff(c) = U A(c) Vᵀ, where A(c) is a sparse latent adjacency assembled from coactivated latent neurons. The layer routes by familiarity: a similarity query over latent neuron embeddings computes a gate that interpolates between circuit recall from a persistent table and circuit construction by dynamic pair modules.
+Paper not yet publicly available.
+
+#### Ego2Sim2Real
+CoRL 2026
+
+## Join us
+
+### Engineering
+
+### Operations
+
+### Field Operations
+
+## Join the Team.
+
+## Get in Touch.
+[Send an email instead](mailto:info@micro-agi.com)
+[Privacy Policy](https://microagi.ai/privacy)
+[Terms of Service](https://microagi.ai/terms)
+[Imprint](https://microagi.ai/imprint)

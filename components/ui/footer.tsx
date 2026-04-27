@@ -184,21 +184,21 @@ export function Footer() {
                   <circle cx="25.4095" cy="2.76191" r="2.76191" fill="white"/>
                   <circle cx="25.4095" cy="55.2381" r="2.76191" fill="white"/>
                 </svg>
-                <span className="font-rhymes italic font-thin text-[32px] xs:text-[38px] md:text-[54px] text-white/95 leading-none tracking-tight whitespace-nowrap">Saturn Labs</span>
+                <span className="font-gilroy font-light text-[32px] xs:text-[38px] md:text-[54px] text-white/95 leading-none tracking-tight whitespace-nowrap">Saturn Labs</span>
               </div>
               <p className="font-gilroy text-[13px] md:text-[15px] uppercase tracking-[0.2em] text-white/32 font-light leading-relaxed max-w-[400px]">Building the data infrastructure for Physical AI.</p>
               
               <div className="flex flex-col md:flex-row items-start md:items-center gap-[12px] md:gap-[16px]">
                 <span className="font-gilroy text-[12px] md:text-[13px] uppercase tracking-[0.3em] text-white/36 font-light">Hiring — BLR & SF</span>
                 <div className="hidden md:block w-[3px] h-[3px] rounded-full bg-white/22 shrink-0" />
-                <a href="mailto:hiring@saturnlabs.ai" className="font-gilroy text-[12px] md:text-[13px] tracking-[0.08em] text-white/72 hover:text-white transition-colors border-b border-white/22 pb-[1px]">hiring@saturnlabs.ai</a>
+                <a href="mailto:jobs@saturnlabs.ai" className="font-gilroy text-[12px] md:text-[13px] tracking-[0.08em] text-white/72 hover:text-white transition-colors border-b border-white/22 pb-[1px]">jobs@saturnlabs.ai</a>
               </div>
             </div>
 
             <div className="md:col-span-4 flex flex-col items-start md:items-end gap-[20px] md:gap-[24px] pt-[8px] md:pt-[12px]">
               <span className="font-gilroy text-[10px] md:text-[11px] uppercase tracking-[0.4em] text-white/20 font-light">Company</span>
               <div className="flex flex-col items-start md:items-end gap-[12px] md:gap-[18px]">
-                <a href="#" className="font-gilroy text-[14px] md:text-[15px] uppercase tracking-[0.25em] text-white/45 hover:text-white transition-colors font-light">LinkedIn</a>
+                <a href="https://www.linkedin.com/company/saturnlabs/" target="_blank" rel="noopener noreferrer" className="font-gilroy text-[14px] md:text-[15px] uppercase tracking-[0.25em] text-white/45 hover:text-white transition-colors font-light">LinkedIn</a>
                 <a href="#" className="font-gilroy text-[14px] md:text-[15px] uppercase tracking-[0.25em] text-white/45 hover:text-white transition-colors font-light">Privacy Policy</a>
               </div>
             </div>

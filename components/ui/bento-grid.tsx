@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState, useMemo } from "react";
 import { EncryptedText } from "@/components/ui/encrypted-text";
+import { cn } from "@/lib/utils";
 
 function AsciiBackground() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -98,13 +99,12 @@ export function BentoGrid() {
   }, []);
 
   const videos = [
-    { title: "Stereo Egocentric", tag: "01", cols: "col-span-4 md:col-span-8" },
-    { title: "Point Cloud", tag: "02", cols: "col-span-2 md:col-span-4" },
-    { title: "Tactile Force Sensor", tag: "03", cols: "col-span-3 md:col-span-5" },
-    { title: "Left Wrist Cam", tag: "04", cols: "col-span-3 md:col-span-7" },
-    { title: "Stereo Exocentric", tag: "05", cols: "col-span-3 md:col-span-7" },
-    { title: "Depth Maps", tag: "06", cols: "col-span-3 md:col-span-5" },
-    { title: "3D Pose Estimation", tag: "07", cols: "col-span-6 md:col-span-12" },
+    { title: "Stereo Egocentric", tag: "01", cols: "col-span-4 md:col-span-8", src: "/stereo_head.mp4" },
+    { title: "Point Cloud", tag: "02", cols: "col-span-2 md:col-span-4", src: "/point_cloud.webm" },
+    { title: "Tactile Force Sensor", tag: "03", cols: "col-span-6 md:col-span-12", src: "/tactile.webm" },
+    { title: "Left Wrist Cam", tag: "04", cols: "col-span-3 md:col-span-6", src: "/wristleft.mp4" },
+    { title: "Stereo Exocentric", tag: "05", cols: "col-span-3 md:col-span-6", src: "/exo_cam.mp4" },
+    { title: "Depth Maps", tag: "06", cols: "col-span-6 md:col-span-12", src: "/depth_cam.mp4" },
   ];
 
   return (
@@ -135,7 +135,7 @@ export function BentoGrid() {
             className="font-gilroy font-normal text-white"
             style={{ fontSize: "clamp(2.5rem, 6vw, 4.2rem)", lineHeight: 1.4 }}
           >
-            <EncryptedText text="Seven" />{" "}
+            <EncryptedText text="Six" />{" "}
             <span className="font-rhymes italic font-thin"><EncryptedText text="synchronized" /></span>{" "}
             <EncryptedText text="streams." />
           </h2>
@@ -155,26 +155,41 @@ export function BentoGrid() {
               data-idx={i}
               className={`group relative overflow-hidden ${video.cols} border border-white/[0.06] bg-white/[0.02] hover:border-white/15 cursor-pointer`}
               style={{
-                height: video.cols.includes("col-span-12") && !video.cols.includes("md:col-span-12") ? "clamp(160px, 25vw, 240px)" :  "clamp(160px, 30vw, 320px)",
+                height: video.title === "Depth Maps" ? "clamp(300px, 50vw, 520px)" : (video.cols.includes("col-span-12") && !video.cols.includes("md:col-span-12") ? "clamp(160px, 25vw, 240px)" :  "clamp(160px, 30vw, 320px)"),
                 opacity: revealed.has(i) ? 1 : 0,
                 transform: revealed.has(i) ? "translateY(0) scale(1)" : "translateY(80px) scale(0.95)",
                 transition: `opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1) ${i * 0.08}s, transform 0.9s cubic-bezier(0.16, 1, 0.3, 1) ${i * 0.08}s`,
               }}
             >
+              {/* Video Background */}
+              <div className="absolute inset-0 z-0">
+                <video
+                  src={video.src}
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  className={cn(
+                    "h-full w-full object-cover opacity-40 group-hover:opacity-60 transition-opacity duration-700",
+                    video.title === "Point Cloud" && "scale-[1.8] rotate-90"
+                  )}
+                />
+              </div>
+
               {/* Scan line hover */}
               <div
-                className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-1000 pointer-events-none"
+                className="absolute inset-0 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-1000 pointer-events-none"
                 style={{ background: "repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,0.015) 2px, rgba(255,255,255,0.015) 4px)" }}
               />
 
               {/* Ambient glow */}
               <div
-                className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700"
+                className="absolute inset-0 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-700"
                 style={{ background: `linear-gradient(${110 + i * 25}deg, rgba(255,255,255,0.04) 0%, transparent 60%)` }}
               />
 
               {/* Tag */}
-              <div className="absolute top-0 left-0 z-10">
+              <div className="absolute top-0 left-0 z-20">
                 <div
                   className="font-mono text-white/20 group-hover:text-white/50 transition-colors duration-500 border-r border-b border-white/[0.06] group-hover:border-white/10 flex items-center justify-center"
                   style={{ width: "36px", height: "36px", fontSize: "10px" }}
@@ -183,19 +198,8 @@ export function BentoGrid() {
                 </div>
               </div>
 
-              {/* Play icon */}
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="opacity-0 group-hover:opacity-100 transition-all duration-500 group-hover:scale-100 scale-75">
-                  <div className="w-12 h-12 md:w-16 md:h-16 border border-white/20 flex items-center justify-center">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="white" fillOpacity="0.6" stroke="none">
-                      <polygon points="8,5 20,12 8,19" />
-                    </svg>
-                  </div>
-                </div>
-              </div>
-
               {/* Label */}
-              <div className="absolute bottom-0 left-0 right-0 z-10 p-3 md:p-5 flex justify-between items-end">
+              <div className="absolute bottom-0 left-0 right-0 z-20 p-3 md:p-5 flex justify-between items-end">
                 <h3
                   className="font-gilroy font-semibold text-white/80 group-hover:text-white transition-colors duration-500"
                   style={{ fontSize: "clamp(12px, 2vw, 17px)" }}

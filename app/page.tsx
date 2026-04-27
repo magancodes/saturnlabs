@@ -5,6 +5,7 @@ import Image from "next/image";
 import dynamic from "next/dynamic";
 import { EncryptedText } from "@/components/ui/encrypted-text";
 import { cn } from "@/lib/utils";
+import { useCal } from "@/hooks/use-cal";
 
 const ShaderAnimation = dynamic(
   () => import("@/components/ui/shader-animation").then(m => ({ default: m.ShaderAnimation })),
@@ -26,6 +27,7 @@ const Footer = dynamic(
 export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const { handleCalClick } = useCal();
 
   useEffect(() => {
     let cleanup: (() => void) | null = null;
@@ -37,7 +39,7 @@ export default function Home() {
 
       const section = document.querySelector<HTMLElement>(".narrative-section");
       const panels = gsap.utils.toArray<HTMLElement>(".narrative-panel");
-      if (!section || panels.length < 3) return;
+      if (!section || panels.length < 2) return;
 
       const tl = gsap.timeline({
         scrollTrigger: {
@@ -48,11 +50,19 @@ export default function Home() {
         },
       });
 
-      tl
-        .to(panels[0], { opacity: 0, y: -80, duration: 1, ease: "none" })
-        .fromTo(panels[1], { opacity: 0, y: 80 }, { opacity: 1, y: 0, duration: 1, ease: "none" })
-        .to(panels[1], { opacity: 0, y: -80, duration: 1, ease: "none" })
-        .fromTo(panels[2], { opacity: 0, y: 80 }, { opacity: 1, y: 0, duration: 1, ease: "none" });
+      // Dynamically create timeline based on panel count
+      panels.forEach((panel, i) => {
+        if (i < panels.length - 1) {
+          // Fade out current
+          tl.to(panel, { opacity: 0, y: -80, duration: 1, ease: "none" }, i === 0 ? undefined : "+=0.2");
+          // Fade in next
+          tl.fromTo(panels[i + 1], 
+            { opacity: 0, y: 80 }, 
+            { opacity: 1, y: 0, duration: 1, ease: "none" }, 
+            "<" // start at the same time as fade out for smoother crossfade
+          );
+        }
+      });
 
       cleanup = () => { ScrollTrigger.getAll().forEach((t) => t.kill()); };
     })();
@@ -103,8 +113,8 @@ export default function Home() {
 
           {/* Right: CTA + hamburger */}
           <div className="flex items-center gap-3">
-            <a
-              href="#"
+            <button
+              onClick={handleCalClick}
               className="hidden lg:inline-flex bg-white text-black font-gilroy font-semibold items-center hover:bg-white/90 active:scale-95 transition-all whitespace-nowrap"
               style={{ padding: "9px 20px", borderRadius: "9px", fontSize: "13px", gap: "10px" }}
             >
@@ -113,7 +123,7 @@ export default function Home() {
                 <line x1="7" y1="17" x2="17" y2="7" />
                 <polyline points="7 7 17 7 17 17" />
               </svg>
-            </a>
+            </button>
 
             {/* Hamburger — mobile */}
             <button
@@ -156,11 +166,17 @@ export default function Home() {
             <line x1="6" y1="6" x2="18" y2="18" />
           </svg>
         </button>
-        <nav className="flex flex-col items-center gap-12">
+          <nav className="flex flex-col items-center gap-12">
           <a href="/" onClick={() => setMenuOpen(false)} className="font-gilroy text-white/80 hover:text-white transition-opacity" style={{ fontSize: "28px" }}>home</a>
           <a href="#data" onClick={() => setMenuOpen(false)} className="font-gilroy text-white/80 hover:text-white transition-opacity" style={{ fontSize: "28px" }}>data</a>
           <a href="/research" onClick={() => setMenuOpen(false)} className="font-gilroy text-white/80 hover:text-white transition-opacity" style={{ fontSize: "28px" }}>research</a>
-          <a href="#" onClick={() => setMenuOpen(false)} className="bg-white text-black font-gilroy font-semibold inline-flex items-center hover:opacity-90 transition-all mt-4" style={{ padding: "16px 32px", borderRadius: "8px", fontSize: "16px", gap: "12px" }}>connect with us</a>
+          <button 
+            onClick={() => { setMenuOpen(false); handleCalClick(); }} 
+            className="bg-white text-black font-gilroy font-semibold inline-flex items-center hover:opacity-90 transition-all mt-4" 
+            style={{ padding: "16px 32px", borderRadius: "8px", fontSize: "16px", gap: "12px" }}
+          >
+            connect with us
+          </button>
         </nav>
       </div>
 
@@ -203,7 +219,7 @@ export default function Home() {
             </p>
 
             <div className="blur-in" style={{ animationDelay: "0.6s" }}>
-              <a href="#" className="bg-white/5 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.3)] font-gilroy font-medium text-white inline-flex items-center hover:bg-white/10 hover:border-white/30 hover:shadow-[0_8px_32px_rgba(255,255,255,0.05)] transition-all duration-300 group" style={{ padding: "18px 40px", borderRadius: "12px", fontSize: "15px", gap: "20px" }}>
+              <a href="#data" className="bg-white/5 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.3)] font-gilroy font-medium text-white inline-flex items-center hover:bg-white/10 hover:border-white/30 hover:shadow-[0_8px_32px_rgba(255,255,255,0.05)] transition-all duration-300 group" style={{ padding: "18px 40px", borderRadius: "12px", fontSize: "15px", gap: "20px" }}>
                 check samples
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ opacity: 0.4 }} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5">
                   <line x1="7" y1="17" x2="17" y2="7" />
@@ -218,23 +234,49 @@ export default function Home() {
       {/* ═══════════════════ BENTO VIDEO GRID ═══════════════════ */}
       <BentoGrid />
 
+      {/* ═══════════════════ STATS SECTION ═══════════════════ */}
+      <section className="relative w-full bg-[#050505] " style={{ padding: "0 50px 100px" }}>
+        <div className="flex flex-col md:flex-row justify-center items-center gap-12 md:gap-32 border-t border-white/[0.05] pt-24">
+          <div className="text-center group">
+            <p className="font-gilroy font-light text-white/40 uppercase tracking-[0.2em] mb-4 text-[11px]">throughput</p>
+            <div className="font-gilroy font-light text-white leading-tight">
+              Capturing <br/>
+              <span className="font-rhymes italic font-light text-white group-hover:text-blue-400 transition-colors duration-500" style={{ fontSize: "clamp(48px, 6vw, 84px)" }}>
+                150k+
+              </span> <br/>
+              hours monthly
+            </div>
+          </div>
+          
+          <div className="text-center group">
+            <p className="font-gilroy font-light text-white/40 uppercase tracking-[0.2em] mb-4 text-[11px]">scale</p>
+            <div className="font-gilroy font-light text-white leading-tight">
+              Data collection <br className="hidden md:block"/> operations in <br/>
+              <span className="font-rhymes italic font-light text-white group-hover:text-purple-400 transition-colors duration-500" style={{ fontSize: "clamp(42px, 5vw, 68px)" }}>
+                4 continents
+              </span>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* ═══════════════════ NARRATIVE SECTION ═══════════════════ */}
       <section className="narrative-section relative w-full bg-[#050505]" style={{ height: "300vh" }}>
         <div className="sticky top-0 overflow-hidden" style={{ height: "100vh" }}>
           {[
-            "Saturn Labs turns human motion into the force that trains the world's most ambitious robots.",
-            "A robot is only as good as its data, and beneath every breakthrough in Physical AI, there's a symphony of real world human action powering that learning.",
-            "Saturn Labs captures that action, building the multimodal datasets that teach robots how to move, manipulate, and navigate the physical world with precision.",
-          ].map((sentence, i) => (
+            { text: "Saturn Labs turns human motion into the force that trains the world's most ambitious robots." },
+            { text: "A robot is only as good as its data, and beneath every breakthrough in Physical AI, there's a symphony of real world human action powering that learning." },
+            { text: "Saturn Labs captures that action, building the multimodal datasets that teach robots how to move, manipulate, and navigate the physical world with precision." },
+          ].map((item, i) => (
             <div
               key={i}
               className="narrative-panel absolute inset-0 flex items-center justify-center"
               style={{ padding: "0 clamp(24px, 8vw, 120px)", opacity: i === 0 ? 1 : 0, transform: i === 0 ? "none" : "translateY(80px)" }}
             >
-              <p className="font-gilroy font-light text-white text-center max-w-2xl"
+              <div className="font-gilroy font-light text-white text-center max-w-4xl"
                 style={{ fontSize: "clamp(17px, 2.2vw, 26px)", lineHeight: 1.7 }}>
-                {sentence}
-              </p>
+                {'text' in item ? item.text : item.node}
+              </div>
             </div>
           ))}
         </div>
@@ -257,10 +299,24 @@ export default function Home() {
         {/* Dataset rows — dividers full-width, content indented */}
         <div className="flex flex-col">
           {[
-            { label: "Lego Assembly" },
-            { label: "Cloth Folding" },
-            { label: "Electronics Assembly" },
-            { label: "RGB Human Data", subtitle: "100 hour sample", highlight: true },
+            { 
+              label: "Lego Assembly", 
+              href: "https://rerun.io/viewer?url=https%3A%2F%2Fsaturnlabsdevind.blob.core.windows.net%2Fdatasamples%2F1_foxglove_depth_trimmed.rrd%3Fsp%3Dr%26st%3D2026-04-15T06%3A39%3A12Z%26se%3D2026-09-01T14%3A54%3A12Z%26spr%3Dhttps%26sv%3D2025-11-05%26sr%3Db%26sig%3DdcYEdeYyShQIsIaSKMctzx4K4pnKQS4CwDhfHRbKYsU%253D" 
+            },
+            { 
+              label: "Cloth Folding", 
+              href: "https://rerun.io/viewer?url=https%3A%2F%2Fsaturnlabsdevind.blob.core.windows.net%2Fdatasamples%2F2_foxglove_compressed.rrd%3Fsp%3Dr%26st%3D2026-04-13T19%3A51%3A55Z%26se%3D2026-09-01T04%3A06%3A55Z%26spr%3Dhttps%26sv%3D2025-11-05%26sr%3Db%26sig%3DLgfIQT32rdSMwvI06276rIPsJNd8W4QS1x5hMRW5uUE%253D" 
+            },
+            { 
+              label: "Electronics Assembly", 
+              href: "https://rerun.io/viewer?url=https%3A%2F%2Fsaturnlabsdevind.blob.core.windows.net%2Fdatasamples%2F3_foxglove_compressed.rrd%3Fsp%3Dr%26st%3D2026-04-13T19%3A52%3A56Z%26se%3D2026-09-01T04%3A07%3A56Z%26spr%3Dhttps%26sv%3D2025-11-05%26sr%3Db%26sig%3DXn%252BGbD5FFUQUvmIMppRlTZwkHlfZsT5ld%252BA5hgE8jms%253D" 
+            },
+            { 
+              label: "RGB Human Data", 
+              subtitle: "100 hour sample", 
+              highlight: true, 
+              href: "https://data.saturnlabs.ai/share/9d1c27bc-b8c1-49cd-afd2-8225b8bde355" 
+            },
           ].map((card) => (
             <div
               key={card.label}
@@ -287,7 +343,7 @@ export default function Home() {
                   )}
                 </div>
                 <a
-                  href="#"
+                  href={card.href}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="bg-[#1e1e1e] rounded-[10px] flex items-center justify-center shrink-0 transition-transform group-hover:scale-105"

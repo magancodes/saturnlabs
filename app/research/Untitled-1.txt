@@ -1,0 +1,236 @@
+[Skip to content](https://withprotege.ai#app)
+[Home](https://withprotege.ai/)
+[About](https://withprotege.ai/about)
+[For Model Builders](https://withprotege.ai/model-builders)
+[Healthcare](https://withprotege.ai/model-builders/healthcare)
+[Video](https://withprotege.ai/model-builders/video)
+[Audio & Speech](https://withprotege.ai/model-builders/audio-speech)
+[Spatial & Physical](https://withprotege.ai/model-builders/spatial)
+[Other Domains](https://withprotege.ai/model-builders/other-domains)
+[For Data Providers](https://withprotege.ai/data-providers)
+[Healthcare](https://withprotege.ai/data-provider/healthcare)
+[Video](https://withprotege.ai/data-provider/video)
+[Audio & Speech](https://withprotege.ai/data-provider/audio-speech)
+[Spatial & Physical](https://withprotege.ai/data-provider/spatial)
+[Other Domains](https://withprotege.ai/data-provider/other-domains)
+[Articles](https://withprotege.ai/articles)
+[People](https://withprotege.ai/people)
+[DataLab](https://datalab.withprotege.ai/?utm_source=withprotege.ai&utm_medium=website&utm_campaign=nav_header)
+[Contact](https://withprotege.ai/contact)
+[About](https://withprotege.ai/about)
+[Healthcare](https://withprotege.ai/model-builders/healthcare)
+[Video](https://withprotege.ai/model-builders/video)
+[Audio & Speech](https://withprotege.ai/model-builders/audio-speech)
+[Spatial & Physical](https://withprotege.ai/model-builders/spatial)
+[Other Domains](https://withprotege.ai/model-builders/other-domains)
+[Healthcare](https://withprotege.ai/data-provider/healthcare)
+[Video](https://withprotege.ai/data-provider/video)
+[Audio & Speech](https://withprotege.ai/data-provider/audio-speech)
+[Spatial & Physical](https://withprotege.ai/data-provider/spatial)
+[Other Domains](https://withprotege.ai/data-provider/other-domains)
+[Articles](https://withprotege.ai/articles)
+[People](https://withprotege.ai/people)
+[DataLab](https://datalab.withprotege.ai/?utm_source=withprotege.ai&utm_medium=website&utm_campaign=nav_header)
+
+# Real World Data for AI Development
+
+[FOR MODEL BUILDERS](https://withprotege.ai/model-builders)
+[FOR DATA PROVIDERS](https://withprotege.ai/data-providers)
+[About us](https://withprotege.ai/about)
+
+### Pre-Training
+Massive, diverse real world datasets across industries
+
+### Post-Training
+Narrower datasets for supervised training and human feedback
+
+### Fine-Tuning
+Curated datasets to adapt models to domain-specific use cases
+
+### Evaluation & Benchmarks
+Uncontaminated data to test models in real-world scenarios
+[For Model Builders
+
+
+
+
+                                Data for AI Builders
+
+
+
+
+                            Protege streamlines access to private and proprietary real-world data across domains.
+
+
+
+
+                            Explore more](https://withprotege.ai/model-builders)
+
+## Data for AI Builders
+[FOR DATA PARTNERS
+
+
+
+
+                                Revenue for Data Holders
+
+
+
+
+                            Monetize your existing data assets or content with Protege — while maintaining clear rights protections and provenance.
+
+
+
+
+                            Explore more](https://withprotege.ai/data-providers)
+
+## AI Model Builders from Startups to Frontier Labs love Protege
+“Protege is like an internal partner for us, helping us dig into exactly what data we need for the specific problem we’re trying to solve, rather than simply being a data catalog.”
+
+## Updates and Announcements
+
+- 
+
+                            [Protege Raises $30 Million Led by a16z to Unlock Access to Data for AI Development
+                                                                                                    The Series A extension follows rapid adoption across healthcare, media, audio, motion capture, and more as AI companies increasingly need high quality, non-public data for…](https://withprotege.ai/articles/news/protege-a16z-30million-fundraise/)
+
+
+                                                                                    [News Coverage](https://withprotege.ai/articles/#news-coverage)
+
+
+                                    News – 01 07 2026
+
+
+
+
+- 
+
+                            [Introducing Protege Evaluation Datasets and Benchmarks for [Healthcare](https://withprotege.ai/articles/#healthcare) AI
+                                                                                                    Robust healthcare AI evaluations require benchmark-specific real world data that does not overlap with training data, while also reflecting the full multimodal patient journey. Current…](https://withprotege.ai/articles/news/introducing-protege-evaluation-datasets-and-benchmarks-for-healthcare-ai/)
+
+
+                                                                                    [Announcements](https://withprotege.ai/articles/#announcement)
+                                                                                    Healthcare
+
+
+                                    News – 10 23 2025
+
+
+
+
+- 
+
+                            [Protege-Prepared Data Powers New Vals AI [Healthcare](https://withprotege.ai/articles/#healthcare) Benchmarks in Clinical Documentation and Medical Billing
+                                                                                                    Two of the biggest drivers are clinical documentation (turning an encounter into a usable clinical note) and medical coding (translating care into billable codes that…](https://withprotege.ai/articles/news/data-powering-new-vals-ai-healthcare-benchmarks/)
+
+
+                                                                                    [Announcements](https://withprotege.ai/articles/#announcement)
+                                                                                    Healthcare
+
+
+                                    News – 02 19 2026
+
+
+
+
+- 
+
+                            [Protege Announces $25 Million Series A to Expand AI Training Data Platform
+                                                                                                    Protege, the platform designed to enable the secure exchange of proprietary data for artificial intelligence training, today announced the close of a $25 million Series…](https://withprotege.ai/articles/news/protege-series-a/)
+
+
+                                                                                    [Announcements](https://withprotege.ai/articles/#announcement)
+                                                                                    [News Coverage](https://withprotege.ai/articles/#news-coverage)
+
+
+                                    News – 08 13 2025
+
+
+
+
+- 
+
+                            [No, We’re Not Running Out of Training Data
+                                                                                                    Concerns about an imminent shortage of training data for AI have recently gained traction. Influential figures like Elon Musk, Ilya Sutskever, and Marc Andreessen, along…](https://withprotege.ai/articles/blog/no-we-re-not-running-out-of-training-data/)
+
+
+                                                                                    [Announcements](https://withprotege.ai/articles/#announcement)
+                                                                                    [Audio](https://withprotege.ai/articles/#audio)
+                                                                                    [Healthcare](https://withprotege.ai/articles/#healthcare)
+                                                                                    [Spatial & Physical Intelligence](https://withprotege.ai/articles/#spatial)
+                                                                                    [Video](https://withprotege.ai/articles/#video)
+
+
+                                    Blog – 04 01 2025
+
+
+
+
+[Protege Raises $30 Million Led by a16z to Unlock Access to Data for AI Development
+
+## Updates and Announcements
+
+The Series A extension follows rapid adoption across healthcare, media, audio, motion capture, and more as AI companies increasingly need high quality, non-public data for…](https://withprotege.ai/articles/news/protege-a16z-30million-fundraise/)
+
+### Protege Raises $30 Million Led by a16z to Unlock Access to Data for AI Development
+The Series A extension follows rapid adoption across healthcare, media, audio, motion capture, and more as AI companies increasingly need high quality, non-public data for…
+[News Coverage](https://withprotege.ai/articles/#news-coverage)
+[Introducing Protege Evaluation Datasets and Benchmarks for Healthcare AI
+                                                                                                    Robust healthcare AI evaluations require benchmark-specific real world data that does not overlap with training data, while also reflecting the full multimodal patient journey. Current…](https://withprotege.ai/articles/news/introducing-protege-evaluation-datasets-and-benchmarks-for-healthcare-ai/)
+
+### Introducing Protege Evaluation Datasets and Benchmarks for Healthcare AI
+Robust healthcare AI evaluations require benchmark-specific real world data that does not overlap with training data, while also reflecting the full multimodal patient journey. Current…
+[Announcements](https://withprotege.ai/articles/#announcement)
+[Healthcare](https://withprotege.ai/articles/#healthcare)
+[Protege-Prepared Data Powers New Vals AI Healthcare Benchmarks in Clinical Documentation and Medical Billing
+                                                                                                    Two of the biggest drivers are clinical documentation (turning an encounter into a usable clinical note) and medical coding (translating care into billable codes that…](https://withprotege.ai/articles/news/data-powering-new-vals-ai-healthcare-benchmarks/)
+
+### Protege-Prepared Data Powers New Vals AI Healthcare Benchmarks in Clinical Documentation and Medical Billing
+Two of the biggest drivers are clinical documentation (turning an encounter into a usable clinical note) and medical coding (translating care into billable codes that…
+[Announcements](https://withprotege.ai/articles/#announcement)
+[Healthcare](https://withprotege.ai/articles/#healthcare)
+[Protege Announces $25 Million Series A to Expand AI Training Data Platform
+                                                                                                    Protege, the platform designed to enable the secure exchange of proprietary data for artificial intelligence training, today announced the close of a $25 million Series…](https://withprotege.ai/articles/news/protege-series-a/)
+
+### Protege Announces $25 Million Series A to Expand AI Training Data Platform
+Protege, the platform designed to enable the secure exchange of proprietary data for artificial intelligence training, today announced the close of a $25 million Series…
+[Announcements](https://withprotege.ai/articles/#announcement)
+[News Coverage](https://withprotege.ai/articles/#news-coverage)
+[No, We’re Not Running Out of Training Data
+                                                                                                    Concerns about an imminent shortage of training data for AI have recently gained traction. Influential figures like Elon Musk, Ilya Sutskever, and Marc Andreessen, along…](https://withprotege.ai/articles/blog/no-we-re-not-running-out-of-training-data/)
+
+### No, We’re Not Running Out of Training Data
+Concerns about an imminent shortage of training data for AI have recently gained traction. Influential figures like Elon Musk, Ilya Sutskever, and Marc Andreessen, along…
+[Announcements](https://withprotege.ai/articles/#announcement)
+[Audio](https://withprotege.ai/articles/#audio)
+[Healthcare](https://withprotege.ai/articles/#healthcare)
+[Spatial & Physical Intelligence](https://withprotege.ai/articles/#spatial)
+[Video](https://withprotege.ai/articles/#video)
+[View All Articles](https://withprotege.ai/articles)
+
+## Unlock your AI Data Future
+
+[Explore data](https://withprotege.ai/model-builders)
+[BECOME A DATA PARTNER](https://withprotege.ai/contact#for-data-partners)
+- [Home](https://withprotege.ai/)
+- [For Model Builders](https://withprotege.ai/model-builders)
+- [For Data Providers](https://withprotege.ai/data-providers)
+- [Articles](https://withprotege.ai/articles)
+[Home](https://withprotege.ai/)
+[For Model Builders](https://withprotege.ai/model-builders)
+[For Data Providers](https://withprotege.ai/data-providers)
+[Articles](https://withprotege.ai/articles)
+- [DataLab](https://datalab.withprotege.ai?utm_source=withprotege.ai&utm_medium=website&utm_campaign=nav_footer)
+- [About](https://withprotege.ai/about)
+- [People](https://withprotege.ai/people)
+- [Contact](https://withprotege.ai/contact)
+[DataLab](https://datalab.withprotege.ai?utm_source=withprotege.ai&utm_medium=website&utm_campaign=nav_footer)
+[About](https://withprotege.ai/about)
+[People](https://withprotege.ai/people)
+[Contact](https://withprotege.ai/contact)
+[[email protected]](https://withprotege.ai/cdn-cgi/l/email-protection#10737f7e64717364506779647860627f647577753e7179)
+169 Madison Ave STE 38206 New York, NY, US 10016
+Subscribe to our Substack for expert insights on AI data, ethics, and research breakthroughs.
+[Subscribe](https://withprotege.substack.com/?utm_source=withprotege.ai&utm_medium=website&utm_campaign=homepage_footer)
+[Home](https://withprotege.ai)
+[Privacy Policy](https://withprotege.ai/privacy-policy)

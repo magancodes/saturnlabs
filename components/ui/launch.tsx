@@ -1,5 +1,6 @@
 "use client";
 import React, { useEffect, useRef } from "react";
+import { useCal } from "@/hooks/use-cal";
 
 const SHADER_SRC = `#version 300 es
 precision highp float;
@@ -228,6 +229,7 @@ export function ShaderCanvas({
 }
 
 export function LaunchSection() {
+  const { handleCalClick } = useCal();
   return (
     <section className="relative overflow-hidden bg-[#050505] min-h-[70vh] lg:min-h-screen">
       <div className="absolute inset-x-0 top-0 z-30 border-t border-white/[0.09]" />
@@ -261,8 +263,8 @@ export function LaunchSection() {
           >
             The gap between prototype and production is data. Let&apos;s close it.
           </p>
-          <a
-            href="#"
+          <button
+            onClick={handleCalClick}
             className="font-gilroy font-semibold text-white inline-flex items-center gap-3 border border-white/20 hover:border-white/40 hover:bg-white/5 transition-all duration-300"
             style={{ fontSize: "14px", padding: "14px 28px", borderRadius: "8px", letterSpacing: "0.01em" }}
           >
@@ -271,7 +273,7 @@ export function LaunchSection() {
               <line x1="7" y1="17" x2="17" y2="7" />
               <polyline points="7 7 17 7 17 17" />
             </svg>
-          </a>
+          </button>
         </div>
 
         {/* Mobile */}
@@ -293,8 +295,8 @@ export function LaunchSection() {
             The gap between prototype and production is data. Let&apos;s close it.
           </p>
           <div className="flex justify-center">
-            <a
-              href="#"
+            <button
+              onClick={handleCalClick}
               className="font-gilroy font-semibold text-white inline-flex items-center gap-3 border border-white/20 hover:border-white/40 hover:bg-white/5 transition-all duration-300"
               style={{ fontSize: "14px", padding: "14px 28px", borderRadius: "8px", letterSpacing: "0.01em" }}
             >
@@ -303,7 +305,7 @@ export function LaunchSection() {
                 <line x1="7" y1="17" x2="17" y2="7" />
                 <polyline points="7 7 17 7 17 17" />
               </svg>
-            </a>
+            </button>
           </div>
         </div>
 
