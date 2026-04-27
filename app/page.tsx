@@ -234,32 +234,6 @@ export default function Home() {
       {/* ═══════════════════ BENTO VIDEO GRID ═══════════════════ */}
       <BentoGrid />
 
-      {/* ═══════════════════ STATS SECTION ═══════════════════ */}
-      <section className="relative w-full bg-[#050505] " style={{ padding: "0 50px 100px" }}>
-        <div className="flex flex-col md:flex-row justify-center items-center gap-12 md:gap-32 border-t border-white/[0.05] pt-24">
-          <div className="text-center group">
-            <p className="font-gilroy font-light text-white/40 uppercase tracking-[0.2em] mb-4 text-[11px]">throughput</p>
-            <div className="font-gilroy font-light text-white leading-tight">
-              Capturing <br/>
-              <span className="font-rhymes italic font-light text-white group-hover:text-blue-400 transition-colors duration-500" style={{ fontSize: "clamp(48px, 6vw, 84px)" }}>
-                150k+
-              </span> <br/>
-              hours monthly
-            </div>
-          </div>
-          
-          <div className="text-center group">
-            <p className="font-gilroy font-light text-white/40 uppercase tracking-[0.2em] mb-4 text-[11px]">scale</p>
-            <div className="font-gilroy font-light text-white leading-tight">
-              Data collection <br className="hidden md:block"/> operations in <br/>
-              <span className="font-rhymes italic font-light text-white group-hover:text-purple-400 transition-colors duration-500" style={{ fontSize: "clamp(42px, 5vw, 68px)" }}>
-                4 continents
-              </span>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* ═══════════════════ NARRATIVE SECTION ═══════════════════ */}
       <section className="narrative-section relative w-full bg-[#050505]" style={{ height: "300vh" }}>
         <div className="sticky top-0 overflow-hidden" style={{ height: "100vh" }}>

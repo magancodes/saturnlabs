@@ -147,18 +147,49 @@ export function BentoGrid() {
           </p>
         </div>
 
+        {/* Stats segment — blended with ASCII */}
+        <div 
+          data-idx={-2}
+          className="flex flex-col md:flex-row justify-center items-center gap-16 md:gap-40 mb-[30vh] transition-all duration-[1200ms] ease-out"
+          style={{
+            opacity: revealed.has(-2) ? 1 : 0,
+            transform: revealed.has(-2) ? "translateY(0)" : "translateY(50px)",
+          }}
+        >
+          <div className="text-center group">
+            <p className="font-mono text-white/10 uppercase tracking-[0.4em] mb-4 text-[10px]">throughput</p>
+            <div className="font-gilroy font-light text-white/90 leading-tight">
+              Capturing <br/>
+              <span className="font-rhymes italic font-light text-white group-hover:text-cyan-400 transition-colors duration-700" style={{ fontSize: "clamp(54px, 7vw, 96px)" }}>
+                150k+
+              </span> <br/>
+              hours monthly
+            </div>
+          </div>
+          
+          <div className="text-center group">
+            <p className="font-mono text-white/10 uppercase tracking-[0.4em] mb-4 text-[10px]">scale</p>
+            <div className="font-gilroy font-light text-white/90 leading-tight">
+              Data collection <br className="hidden md:block"/> operations in <br/>
+              <span className="font-rhymes italic font-light text-white group-hover:text-purple-400 transition-colors duration-700" style={{ fontSize: "clamp(48px, 6vw, 78px)" }}>
+                4 continents
+              </span>
+            </div>
+          </div>
+        </div>
+
         {/* Bento Grid — 6 cols mobile, 12 desktop */}
         <div className="grid grid-cols-6 md:grid-cols-12 gap-2 md:gap-3">
           {videos.map((video, i) => (
             <div
               key={video.title}
               data-idx={i}
-              className={`group relative overflow-hidden ${video.cols} border border-white/[0.06] bg-white/[0.02] hover:border-white/15 cursor-pointer`}
+              className={`group relative overflow-hidden ${video.cols} border border-white/[0.06] bg-white/[0.015] hover:border-white/15 cursor-pointer backdrop-blur-[2px]`}
               style={{
                 height: video.title === "Depth Maps" ? "clamp(300px, 50vw, 520px)" : (video.cols.includes("col-span-12") && !video.cols.includes("md:col-span-12") ? "clamp(160px, 25vw, 240px)" :  "clamp(160px, 30vw, 320px)"),
                 opacity: revealed.has(i) ? 1 : 0,
-                transform: revealed.has(i) ? "translateY(0) scale(1)" : "translateY(80px) scale(0.95)",
-                transition: `opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1) ${i * 0.08}s, transform 0.9s cubic-bezier(0.16, 1, 0.3, 1) ${i * 0.08}s`,
+                transform: revealed.has(i) ? "translateY(0) scale(1)" : "translateY(60px) scale(0.98)",
+                transition: `opacity 1.1s cubic-bezier(0.16, 1, 0.3, 1) ${i * 0.1}s, transform 1.1s cubic-bezier(0.16, 1, 0.3, 1) ${i * 0.1}s`,
               }}
             >
               {/* Video Background */}
@@ -169,8 +200,9 @@ export function BentoGrid() {
                   loop
                   muted
                   playsInline
+                  preload="metadata"
                   className={cn(
-                    "h-full w-full object-cover opacity-40 group-hover:opacity-60 transition-opacity duration-700",
+                    "h-full w-full object-cover opacity-40 group-hover:opacity-75 transition-all duration-[1.2s] ease-in-out",
                     video.title === "Point Cloud" && "scale-[1.8] rotate-90"
                   )}
                 />
