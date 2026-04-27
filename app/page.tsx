@@ -275,7 +275,7 @@ export default function Home() {
             >
               <div className="font-gilroy font-light text-white text-center max-w-4xl"
                 style={{ fontSize: "clamp(17px, 2.2vw, 26px)", lineHeight: 1.7 }}>
-                {'text' in item ? item.text : item.node}
+                {item.text}
               </div>
             </div>
           ))}
