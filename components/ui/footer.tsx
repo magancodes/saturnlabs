@@ -199,7 +199,7 @@ export function Footer() {
               <span className="font-gilroy text-[10px] md:text-[11px] uppercase tracking-[0.4em] text-white/20 font-light">Company</span>
               <div className="flex flex-col items-start md:items-end gap-[12px] md:gap-[18px]">
                 <a href="https://www.linkedin.com/company/saturnlabs/" target="_blank" rel="noopener noreferrer" className="font-gilroy text-[14px] md:text-[15px] uppercase tracking-[0.25em] text-white/45 hover:text-white transition-colors font-light">LinkedIn</a>
-                <a href="#" className="font-gilroy text-[14px] md:text-[15px] uppercase tracking-[0.25em] text-white/45 hover:text-white transition-colors font-light">Privacy Policy</a>
+                <a href="/privacy-policy" className="font-gilroy text-[14px] md:text-[15px] uppercase tracking-[0.25em] text-white/45 hover:text-white transition-colors font-light">Privacy Policy</a>
               </div>
             </div>
           </div>

@@ -4,8 +4,8 @@ import { useRef, useEffect, useState } from "react";
 import { motion, useInView } from "framer-motion";
 import { EncryptedText } from "@/components/ui/encrypted-text";
 import Image from "next/image";
-import Link from "next/link";
 import dynamic from "next/dynamic";
+import { useCal } from "@/hooks/use-cal";
 
 const Footer = dynamic(
   () => import("@/components/ui/footer").then(m => ({ default: m.Footer })),
@@ -40,7 +40,7 @@ const DOT_GRID = Array.from({ length: 5 }, (_, i) => i);
 
 export default function Research() {
   const [menuOpen, setMenuOpen] = useState(false);
-
+  const { handleCalClick } = useCal();
 
   return (
     <div className="bg-[#050505] min-h-screen">
@@ -60,10 +60,10 @@ export default function Research() {
           }}
         >
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-3 shrink-0">
+          <a href="/" className="flex items-center gap-3 shrink-0">
             <Image src="/logo.svg" alt="Saturn Labs" width={51} height={58} style={{ width: "28px", height: "auto" }} />
             <span className="font-gilroy font-normal tracking-tight text-white hidden sm:block" style={{ fontSize: "18px" }}>Saturn Labs</span>
-          </Link>
+          </a>
 
           {/* Nav links */}
           <nav className="hidden lg:flex items-center" style={{ gap: "8px" }}>
@@ -75,7 +75,7 @@ export default function Research() {
               <a
                 key={label}
                 href={href}
-                className={`font-gilroy hover:text-white hover:bg-white/[0.06] transition-all duration-200 ${label === "research" ? "text-white" : "text-white/55"}`}
+                className="font-gilroy text-white/55 hover:text-white hover:bg-white/[0.06] transition-all duration-200"
                 style={{ fontSize: "14px", padding: "7px 14px", borderRadius: "9px" }}
               >
                 {label}
@@ -85,8 +85,8 @@ export default function Research() {
 
           {/* Right: CTA + hamburger */}
           <div className="flex items-center gap-3">
-            <a
-              href="#collaborate"
+            <button
+              onClick={handleCalClick}
               className="hidden lg:inline-flex bg-white text-black font-gilroy font-semibold items-center hover:bg-white/90 active:scale-95 transition-all whitespace-nowrap"
               style={{ padding: "9px 20px", borderRadius: "9px", fontSize: "13px", gap: "10px" }}
             >
@@ -95,7 +95,7 @@ export default function Research() {
                 <line x1="7" y1="17" x2="17" y2="7" />
                 <polyline points="7 7 17 7 17 17" />
               </svg>
-            </a>
+            </button>
 
             {/* Hamburger — mobile */}
             <button
@@ -123,10 +123,16 @@ export default function Research() {
           </svg>
         </button>
         <nav className="flex flex-col items-center gap-12">
-          <Link href="/" onClick={() => setMenuOpen(false)} className="font-gilroy text-white/80 hover:text-white transition-opacity" style={{ fontSize: "28px" }}>home</Link>
-          <Link href="/#data" onClick={() => setMenuOpen(false)} className="font-gilroy text-white/80 hover:text-white transition-opacity" style={{ fontSize: "28px" }}>data</Link>
-          <Link href="/research" onClick={() => setMenuOpen(false)} className="font-gilroy text-white transition-opacity" style={{ fontSize: "28px" }}>research</Link>
-          <Link href="#collaborate" onClick={() => setMenuOpen(false)} className="bg-white text-black font-gilroy font-semibold inline-flex items-center hover:opacity-90 transition-all mt-4" style={{ padding: "16px 32px", borderRadius: "8px", fontSize: "16px", gap: "12px" }}>connect with us</Link>
+          <a href="/" onClick={() => setMenuOpen(false)} className="font-gilroy text-white/80 hover:text-white transition-opacity" style={{ fontSize: "28px" }}>home</a>
+          <a href="/#data" onClick={() => setMenuOpen(false)} className="font-gilroy text-white/80 hover:text-white transition-opacity" style={{ fontSize: "28px" }}>data</a>
+          <a href="/research" onClick={() => setMenuOpen(false)} className="font-gilroy text-white/80 hover:text-white transition-opacity" style={{ fontSize: "28px" }}>research</a>
+          <button 
+            onClick={() => { setMenuOpen(false); handleCalClick(); }} 
+            className="bg-white text-black font-gilroy font-semibold inline-flex items-center hover:opacity-90 transition-all mt-4" 
+            style={{ padding: "16px 32px", borderRadius: "8px", fontSize: "16px", gap: "12px" }}
+          >
+            connect with us
+          </button>
         </nav>
       </div>
 
@@ -453,8 +459,8 @@ export default function Research() {
             </Reveal>
 
             <Reveal delay={0.28}>
-              <a
-                href="mailto:research@saturnlabs.ai"
+              <button
+                onClick={handleCalClick}
                 className="inline-flex items-center gap-4 font-gilroy font-semibold text-white border border-white/[0.12] hover:border-white/30 hover:bg-white/[0.04] transition-all duration-300"
                 style={{
                   padding: "16px 28px",
@@ -478,7 +484,7 @@ export default function Research() {
                   <line x1="5" y1="12" x2="19" y2="12" />
                   <polyline points="12 5 19 12 12 19" />
                 </svg>
-              </a>
+              </button>
             </Reveal>
           </div>
         </div>
