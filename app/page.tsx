@@ -46,20 +46,31 @@ export default function Home() {
           trigger: section,
           start: "top top",
           end: "bottom bottom",
-          scrub: 1.5,
+          scrub: 2, // Increased for buttery smooth scrolling
         },
       });
 
       // Dynamically create timeline based on panel count
       panels.forEach((panel, i) => {
         if (i < panels.length - 1) {
-          // Fade out current
-          tl.to(panel, { opacity: 0, y: -80, duration: 1, ease: "none" }, i === 0 ? undefined : "+=0.2");
-          // Fade in next
+          // Exit current: Graceful move up and fade
+          tl.to(panel, { 
+            autoAlpha: 0, 
+            y: -120, 
+            duration: 1.2, 
+            ease: "power2.inOut" 
+          });
+          
+          // Enter next: Smoothly crossfade and rise from below
           tl.fromTo(panels[i + 1], 
-            { opacity: 0, y: 80 }, 
-            { opacity: 1, y: 0, duration: 1, ease: "none" }, 
-            "<" // start at the same time as fade out for smoother crossfade
+            { autoAlpha: 0, y: 120 }, 
+            { 
+              autoAlpha: 1, 
+              y: 0, 
+              duration: 1.2, 
+              ease: "power2.inOut" 
+            }, 
+            "-=0.6" // 50% overlap for silky smooth transitions
           );
         }
       });
