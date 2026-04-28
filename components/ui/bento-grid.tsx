@@ -147,36 +147,7 @@ export function BentoGrid() {
           </p>
         </div>
 
-        {/* Stats segment — blended with ASCII */}
-        <div 
-          data-idx={-2}
-          className="flex flex-col md:flex-row justify-center items-center gap-16 md:gap-40 mb-[30vh] transition-all duration-[1200ms] ease-out"
-          style={{
-            opacity: revealed.has(-2) ? 1 : 0,
-            transform: revealed.has(-2) ? "translateY(0)" : "translateY(50px)",
-          }}
-        >
-          <div className="text-center group">
-            <p className="font-mono text-white/10 uppercase tracking-[0.4em] mb-4 text-[10px]">throughput</p>
-            <div className="font-gilroy font-light text-white/90 leading-tight">
-              Capturing <br/>
-              <span className="font-rhymes italic font-light text-white group-hover:text-cyan-400 transition-colors duration-700" style={{ fontSize: "clamp(54px, 7vw, 96px)" }}>
-                150k+
-              </span> <br/>
-              hours monthly
-            </div>
-          </div>
-          
-          <div className="text-center group">
-            <p className="font-mono text-white/10 uppercase tracking-[0.4em] mb-4 text-[10px]">scale</p>
-            <div className="font-gilroy font-light text-white/90 leading-tight">
-              Data collection <br className="hidden md:block"/> operations in <br/>
-              <span className="font-rhymes italic font-light text-white group-hover:text-purple-400 transition-colors duration-700" style={{ fontSize: "clamp(48px, 6vw, 78px)" }}>
-                4 continents
-              </span>
-            </div>
-          </div>
-        </div>
+        {/* Stats segment removed and integrated into Bento Grid */}
 
         {/* Bento Grid — 6 cols mobile, 12 desktop */}
         <div className="grid grid-cols-6 md:grid-cols-12 gap-2 md:gap-3">

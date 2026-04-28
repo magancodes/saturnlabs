@@ -235,22 +235,51 @@ export default function Home() {
       <BentoGrid />
 
       {/* ═══════════════════ NARRATIVE SECTION ═══════════════════ */}
-      <section className="narrative-section relative w-full bg-[#050505]" style={{ height: "300vh" }}>
+      <section className="narrative-section relative w-full bg-[#050505]" style={{ height: "400vh" }}>
         <div className="sticky top-0 overflow-hidden" style={{ height: "100vh" }}>
           {[
-            { text: "Saturn Labs turns human motion into the force that trains the world's most ambitious robots." },
-            { text: "A robot is only as good as its data, and beneath every breakthrough in Physical AI, there's a symphony of real world human action powering that learning." },
-            { text: "Saturn Labs captures that action, building the multimodal datasets that teach robots how to move, manipulate, and navigate the physical world with precision." },
+            { type: "stats", text: "" },
+            { type: "text", text: "Saturn Labs turns human motion into the force that trains the world's most ambitious robots." },
+            { type: "text", text: "A robot is only as good as its data, and beneath every breakthrough in Physical AI, there's a symphony of real world human action powering that learning." },
+            { type: "text", text: "Saturn Labs captures that action, building the multimodal datasets that teach robots how to move, manipulate, and navigate the physical world with precision." },
           ].map((item, i) => (
             <div
               key={i}
-              className="narrative-panel absolute inset-0 flex items-center justify-center"
+              className="narrative-panel absolute inset-0 flex items-center justify-center w-full"
               style={{ padding: "0 clamp(24px, 8vw, 120px)", opacity: i === 0 ? 1 : 0, transform: i === 0 ? "none" : "translateY(80px)" }}
             >
-              <div className="font-gilroy font-light text-white text-center max-w-4xl"
-                style={{ fontSize: "clamp(17px, 2.2vw, 26px)", lineHeight: 1.7 }}>
-                {item.text}
-              </div>
+              {item.type === "stats" ? (
+                <div className="flex flex-col md:flex-row justify-center items-center gap-16 md:gap-40 w-full mb-[10vh]">
+                  <div className="text-center group">
+                    <p className="font-mono text-white/30 uppercase tracking-[0.4em] mb-4 text-[10px] md:text-[12px]">throughput</p>
+                    <div className="font-gilroy font-light text-white/90 leading-tight">
+                      Capturing <br/>
+                      <span className="font-rhymes italic font-light text-white group-hover:text-cyan-400 transition-colors duration-700" style={{ fontSize: "clamp(54px, 7vw, 96px)" }}>
+                        150k+
+                      </span> <br/>
+                      hours monthly
+                    </div>
+                  </div>
+                  
+                  <div className="text-center group">
+                    <p className="font-mono text-white/30 uppercase tracking-[0.4em] mb-4 text-[10px] md:text-[12px]">scale</p>
+                    <div className="font-gilroy font-light text-white/90 leading-tight">
+                      Data collection <br className="hidden md:block"/> operations in <br/>
+                      <span className="font-rhymes italic font-light text-white group-hover:text-purple-400 transition-colors duration-700" style={{ fontSize: "clamp(48px, 6vw, 84px)" }}>
+                        4
+                      </span>
+                      <span className="font-rhymes italic font-light text-white" style={{ fontSize: "clamp(32px, 4vw, 56px)", marginLeft: "12px" }}>
+                        continents
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div className="font-gilroy font-light text-white text-center max-w-4xl"
+                  style={{ fontSize: "clamp(17px, 2.2vw, 26px)", lineHeight: 1.7 }}>
+                  {item.text}
+                </div>
+              )}
             </div>
           ))}
         </div>
