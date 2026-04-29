@@ -30,16 +30,15 @@ export default function SamplesPage() {
       {/* Main Container - Tightened & Fast */}
       <main className="flex-1 w-full max-w-[1200px] flex flex-col items-center px-4 md:px-12 relative z-10">
         
-        {/* Combined Hero & Narrative - Everything on one screen for fast access */}
-        <section className="w-full flex flex-col items-center text-center pt-32 pb-20 md:pt-48 md:pb-24">
+        {/* Dedicated 70vh Hero - Perfectly centers the title and prevents nav overlap */}
+        <section className="w-full h-[70vh] flex flex-col items-center justify-center text-center relative overflow-hidden">
           {/* Main Title */}
-          <div className="max-w-4xl mx-auto flex flex-col items-center mb-16">
-            <h1 className="text-5xl md:text-7xl lg:text-8xl font-semibold tracking-tighter leading-[1] reveal">
+          <div className="max-w-4xl mx-auto flex flex-col items-center">
+            <h1 className="text-6xl md:text-8xl lg:text-9xl font-semibold tracking-tighter leading-[1] reveal">
               Multimodal <br />
-              <span className="font-rhymes italic font-thin text-white/70 block" style={{ marginTop: '8px' }}>Data Samples</span>
+              <span className="font-rhymes italic font-thin text-white/70 block" style={{ marginTop: '12px' }}>Data Samples</span>
             </h1>
           </div>
-
         </section>
 
         {/* Video Grid Section - Starts quickly after the narrative */}
