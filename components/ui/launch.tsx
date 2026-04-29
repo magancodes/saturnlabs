@@ -33,7 +33,7 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord)
                 f = .2 + abs(length(a.xz - cos(a.zx * 6.)) + max(p.y / .1, - .6))
             ) / 8.;
     }
-    o = tanh(o * o.a / 1e3);
+    o = tanh(o * o.a / 200.0);
 
     float luma = dot(o.rgb, vec3(0.299, 0.587, 0.114));
     fragColor = vec4(o.rgb, smoothstep(0.0, 0.3, luma));
@@ -234,7 +234,10 @@ export function LaunchSection() {
     <section className="relative overflow-hidden bg-[#050505] min-h-[70vh] lg:min-h-screen">
       <div className="absolute inset-x-0 top-0 z-30 border-t border-white/[0.09]" />
 
-      <div className="absolute top-0 bottom-0 left-0 right-0 lg:right-auto lg:w-[52%]">
+      <div 
+        className="absolute top-0 bottom-0 left-0 right-0 lg:right-auto lg:w-[65%]"
+        style={{ maskImage: 'linear-gradient(to right, black 60%, transparent 100%)', WebkitMaskImage: 'linear-gradient(to right, black 60%, transparent 100%)' }}
+      >
         <ShaderCanvas fragSource={SHADER_SRC} />
       </div>
 

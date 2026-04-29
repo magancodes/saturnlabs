@@ -108,7 +108,7 @@ export default function Home() {
           <nav className="hidden lg:flex items-center" style={{ gap: "8px" }}>
             {[
               { label: "home", href: "/" },
-              { label: "data", href: "#data" },
+              { label: "samples", href: "/samples" },
               { label: "research", href: "/research" },
             ].map(({ label, href }) => (
               <a
@@ -179,7 +179,7 @@ export default function Home() {
         </button>
           <nav className="flex flex-col items-center gap-12">
           <a href="/" onClick={() => setMenuOpen(false)} className="font-gilroy text-white/80 hover:text-white transition-opacity" style={{ fontSize: "28px" }}>home</a>
-          <a href="#data" onClick={() => setMenuOpen(false)} className="font-gilroy text-white/80 hover:text-white transition-opacity" style={{ fontSize: "28px" }}>data</a>
+          <a href="/samples" onClick={() => setMenuOpen(false)} className="font-gilroy text-white/80 hover:text-white transition-opacity" style={{ fontSize: "28px" }}>samples</a>
           <a href="/research" onClick={() => setMenuOpen(false)} className="font-gilroy text-white/80 hover:text-white transition-opacity" style={{ fontSize: "28px" }}>research</a>
           <button 
             onClick={() => { setMenuOpen(false); handleCalClick(); }} 
@@ -196,19 +196,21 @@ export default function Home() {
         {/* Background Shader — only behind hero */}
         <div className="absolute inset-0 z-0 pointer-events-none">
           <ShaderAnimation />
-          <div className="absolute inset-0 bg-black/65 z-[1]"></div>
+          {/* Bottom fade and overall dimming */}
+          <div className="absolute inset-0 bg-black/40 z-[1]"></div>
+          <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-transparent to-transparent z-[2]"></div>
         </div>
 
         {/* ═══════════════════ HERO CONTENT ═══════════════════ */}
         <main
           className="relative z-10 flex flex-col justify-end"
-          style={{ minHeight: "100vh", paddingTop: "100px", paddingBottom: "100px", paddingLeft: "50px", paddingRight: "50px" }}
+          style={{ minHeight: "100vh", paddingTop: "100px", paddingBottom: "120px", paddingLeft: "50px", paddingRight: "50px" }}
         >
           <div>
             {/* Backed by badge */}
             <div className="flex items-center gap-3 mb-8 blur-in" style={{ animationDelay: "0s" }}>
               <span className="font-mono text-white/60 uppercase tracking-[0.2em]" style={{ fontSize: "11px" }}>Backed by</span>
-              <Image src="/images/EF.png" alt="Entrepreneurs First" width={160} height={36} className="rounded-sm" style={{ height: "24px", width: "auto" }} />
+              <Image src="/images/EF.png" alt="Entrepreneurs First" width={160} height={36} className="rounded-sm" style={{ height: "36px", width: "auto" }} />
             </div>
 
             <h1
@@ -230,7 +232,7 @@ export default function Home() {
             </p>
 
             <div className="blur-in" style={{ animationDelay: "0.6s" }}>
-              <a href="#data" className="bg-white/5 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.3)] font-gilroy font-medium text-white inline-flex items-center hover:bg-white/10 hover:border-white/30 hover:shadow-[0_8px_32px_rgba(255,255,255,0.05)] transition-all duration-300 group" style={{ padding: "18px 40px", borderRadius: "12px", fontSize: "15px", gap: "20px" }}>
+              <a href="/samples" className="bg-white/5 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.3)] font-gilroy font-medium text-white inline-flex items-center hover:bg-white/10 hover:border-white/30 hover:shadow-[0_8px_32px_rgba(255,255,255,0.05)] transition-all duration-300 group" style={{ padding: "18px 40px", borderRadius: "12px", fontSize: "15px", gap: "20px" }}>
                 check samples
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ opacity: 0.4 }} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5">
                   <line x1="7" y1="17" x2="17" y2="7" />
@@ -246,13 +248,11 @@ export default function Home() {
       <BentoGrid />
 
       {/* ═══════════════════ NARRATIVE SECTION ═══════════════════ */}
-      <section className="narrative-section relative w-full bg-[#050505]" style={{ height: "400vh" }}>
+      <section className="narrative-section relative w-full bg-[#050505]" style={{ height: "200vh" }}>
         <div className="sticky top-0 overflow-hidden" style={{ height: "100vh" }}>
           {[
             { type: "stats", text: "" },
             { type: "text", text: "Saturn Labs turns human motion into the force that trains the world's most ambitious robots." },
-            { type: "text", text: "A robot is only as good as its data, and beneath every breakthrough in Physical AI, there's a symphony of real world human action powering that learning." },
-            { type: "text", text: "Saturn Labs captures that action, building the multimodal datasets that teach robots how to move, manipulate, and navigate the physical world with precision." },
           ].map((item, i) => (
             <div
               key={i}
@@ -281,6 +281,9 @@ export default function Home() {
                       </span>
                       <span className="font-rhymes italic font-light text-white" style={{ fontSize: "clamp(32px, 4vw, 56px)", marginLeft: "12px" }}>
                         continents
+                      </span> <br />
+                      <span className="text-white font-gilroy font-medium" style={{ fontSize: "clamp(13px, 1.6vw, 18px)", tracking: "0.15em", marginTop: "16px", display: "block", opacity: 0.8 }}>
+                        US, EU, UK, JP, SINGAPORE
                       </span>
                     </div>
                   </div>

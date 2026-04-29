@@ -35,7 +35,7 @@ export function Navbar() {
           <nav className="hidden lg:flex items-center" style={{ gap: "8px" }}>
             {[
               { label: "home", href: "/" },
-              { label: "data", href: "/#data" },
+              { label: "samples", href: "/samples" },
               { label: "research", href: "/research" },
             ].map(({ label, href }) => (
               <a
@@ -90,7 +90,7 @@ export function Navbar() {
         </button>
         <nav className="flex flex-col items-center gap-12">
           <a href="/" onClick={() => setMenuOpen(false)} className="font-gilroy text-white/80 hover:text-white transition-opacity" style={{ fontSize: "28px" }}>home</a>
-          <a href="/#data" onClick={() => setMenuOpen(false)} className="font-gilroy text-white/80 hover:text-white transition-opacity" style={{ fontSize: "28px" }}>data</a>
+          <a href="/samples" onClick={() => setMenuOpen(false)} className="font-gilroy text-white/80 hover:text-white transition-opacity" style={{ fontSize: "28px" }}>samples</a>
           <a href="/research" onClick={() => setMenuOpen(false)} className="font-gilroy text-white/80 hover:text-white transition-opacity" style={{ fontSize: "28px" }}>research</a>
           <button 
             onClick={() => { setMenuOpen(false); handleCalClick(); }} 

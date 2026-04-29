@@ -10,11 +10,13 @@ uniform float iTime;
 
 void main() {
   vec2 uv = (gl_FragCoord.xy * 2.0 - iRes) / min(iRes.x, iRes.y);
-  float t = iTime * 0.05;
+  float t = iTime * 0.12; // Faster speed
   vec3 c = vec3(0.0);
   for (int j = 0; j < 3; j++)
-    for (int i = 0; i < 5; i++)
-      c[j] += 0.002 * float(i*i) / abs(fract(t - 0.01*float(j) + float(i)*0.01)*5.0 - length(uv) + mod(uv.x+uv.y, 0.2));
+    for (int i = 0; i < 5; i++) {
+      float d = abs(fract(t - 0.015*float(j) + float(i)*0.012)*4.0 - length(uv) + mod(uv.x+uv.y, 0.15));
+      c[j] += 0.0035 * float(i*i + 1) / max(d, 0.001);
+    }
   fragColor = vec4(c, 1.0);
 }`;
 

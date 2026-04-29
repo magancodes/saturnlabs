@@ -4,7 +4,7 @@ import { useEffect, useRef, useState, useMemo } from "react";
 import { EncryptedText } from "@/components/ui/encrypted-text";
 import { cn } from "@/lib/utils";
 
-function AsciiBackground() {
+export function AsciiBackground() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -47,9 +47,9 @@ function AsciiBackground() {
           const y = row * gap;
 
           // Flowing wave pattern
-          const wave = Math.sin(col * 0.15 + time * 2) * Math.cos(row * 0.1 + time) * 0.5 + 0.5;
+          const wave = Math.sin(col * 0.15 + time * 2) * Math.cos(row * 0.1 + time) * 0.5 + 0.5 + 0.2;
           const charIdx = Math.floor((wave * chars.length + time * 3 + row * 0.5) % chars.length);
-          const alpha = 0.02 + wave * 0.04;
+          const alpha = 0.04 + wave * 0.06;
 
           ctx.fillStyle = `rgba(255, 255, 255, ${alpha})`;
           ctx.fillText(chars[charIdx], x, y);
@@ -99,72 +99,39 @@ export function BentoGrid() {
   }, []);
 
   const videos = [
-    { title: "Stereo Egocentric", tag: "01", cols: "col-span-4 md:col-span-8", src: "/stereo_head.mp4" },
-    { title: "Point Cloud", tag: "02", cols: "col-span-2 md:col-span-4", src: "/point_cloud.webm" },
-    { title: "Tactile Force Sensor", tag: "03", cols: "col-span-6 md:col-span-12", src: "/tactile.webm" },
-    { title: "Left Wrist Cam", tag: "04", cols: "col-span-3 md:col-span-6", src: "/wristleft.mp4" },
-    { title: "Stereo Exocentric", tag: "05", cols: "col-span-3 md:col-span-6", src: "/exo_cam.mp4" },
-    { title: "Depth Maps", tag: "06", cols: "col-span-6 md:col-span-12", src: "/depth_cam.mp4" },
+    { title: "Stereo Egocentric", tag: "01", cols: "col-span-6 md:col-span-12", src: "https://zcszua0zjawijd0q.public.blob.vercel-storage.com/6/scaled_output_6_camera_head.mp4" },
+    { title: "Point Cloud", tag: "02", cols: "col-span-3 md:col-span-6", src: "/point_cloud.webm" },
+    { title: "Depth Maps", tag: "03", cols: "col-span-3 md:col-span-6", src: "/depth_cam.mp4" },
+    { title: "Stereo Exocentric", tag: "04", cols: "col-span-6 md:col-span-12", src: "https://zcszua0zjawijd0q.public.blob.vercel-storage.com/6/scaled_output_6_camera_exo.mp4" },
+    { title: "Wrist Camera", tag: "05", cols: "col-span-3 md:col-span-6", src: "https://zcszua0zjawijd0q.public.blob.vercel-storage.com/7/scaled_output_7_camera_wristright.mp4" },
+    { title: "Tactile Force Sensor", tag: "06", cols: "col-span-3 md:col-span-6", src: "https://zcszua0zjawijd0q.public.blob.vercel-storage.com/6/scaled_output_6_fsr_heatmap.mp4" },
   ];
 
   return (
-    <section ref={sectionRef} className="relative z-10 bg-[#050505] overflow-hidden">
+    <section ref={sectionRef} className="relative z-20 bg-[#050505]">
 
       {/* Animated ASCII shader background */}
       <AsciiBackground />
 
       {/* Content wrapper */}
-      <div className="relative z-10" style={{ padding: "280px 50px 220px" }}>
+      <div className="relative z-10" style={{ padding: "40px 50px 220px" }}>
 
-        {/* Section header — clean, aligned */}
-        <div
-          data-idx={-1}
-          className="mb-[40vh] md:mb-[50vh] transition-all duration-1000"
-          style={{
-            opacity: revealed.has(-1) ? 1 : 0,
-            transform: revealed.has(-1) ? "translateY(0)" : "translateY(40px)",
-          }}
-        >
-          <p
-            className="font-mono text-white/20 uppercase tracking-[0.4em] mb-12"
-            style={{ fontSize: "11px", letterSpacing: "0.4em" }}
-          >
-            // Data Modalities
-          </p>
-          <h2
-            className="font-gilroy font-normal text-white"
-            style={{ fontSize: "clamp(2.5rem, 6vw, 4.2rem)", lineHeight: 1.4 }}
-          >
-            <EncryptedText text="Six" />{" "}
-            <span className="font-rhymes italic font-thin"><EncryptedText text="synchronized" /></span>{" "}
-            <EncryptedText text="streams." />
-          </h2>
-          <p
-            className="font-gilroy font-light text-white/25 mt-20"
-            style={{ fontSize: "clamp(15px, 2.2vw, 19px)", maxWidth: "550px", lineHeight: 2 }}
-          >
-            Each capture session records all modalities simultaneously for perfect temporal alignment.
-          </p>
-        </div>
-
-        {/* Stats segment removed and integrated into Bento Grid */}
-
-        {/* Bento Grid — 6 cols mobile, 12 desktop */}
-        <div className="grid grid-cols-6 md:grid-cols-12 gap-2 md:gap-3">
+        {/* Bento Grid — 6 cols always to keep same layout on mobile */}
+        <div className="grid grid-cols-6 md:grid-cols-12 gap-2 md:gap-3" style={{ marginTop: "-60px" }}>
           {videos.map((video, i) => (
             <div
               key={video.title}
               data-idx={i}
               className={`group relative overflow-hidden ${video.cols} border border-white/[0.06] bg-white/[0.015] hover:border-white/15 cursor-pointer backdrop-blur-[2px]`}
               style={{
-                height: video.title === "Depth Maps" ? "clamp(300px, 50vw, 520px)" : (video.cols.includes("col-span-12") && !video.cols.includes("md:col-span-12") ? "clamp(160px, 25vw, 240px)" :  "clamp(160px, 30vw, 320px)"),
+                height: (video.title === "Stereo Exocentric" || video.title === "Stereo Egocentric") ? "clamp(240px, 40vw, 420px)" : "clamp(180px, 30vw, 320px)",
                 opacity: revealed.has(i) ? 1 : 0,
                 transform: revealed.has(i) ? "translateY(0) scale(1)" : "translateY(60px) scale(0.98)",
                 transition: `opacity 1.1s cubic-bezier(0.16, 1, 0.3, 1) ${i * 0.1}s, transform 1.1s cubic-bezier(0.16, 1, 0.3, 1) ${i * 0.1}s`,
               }}
             >
               {/* Video Background */}
-              <div className="absolute inset-0 z-0">
+              <div className="absolute inset-0 z-0 bg-[#0a0a0a]">
                 <video
                   src={video.src}
                   autoPlay
@@ -173,7 +140,8 @@ export function BentoGrid() {
                   playsInline
                   preload="metadata"
                   className={cn(
-                    "h-full w-full object-cover opacity-40 group-hover:opacity-75 transition-all duration-[1.2s] ease-in-out",
+                    "h-full w-full opacity-40 group-hover:opacity-75 transition-all duration-[1.2s] ease-in-out",
+                    (video.title === "Tactile Force Sensor" || video.title === "Stereo Exocentric" || video.title === "Stereo Egocentric") ? "object-contain" : "object-cover",
                     video.title === "Point Cloud" && "scale-[1.8] rotate-90"
                   )}
                 />
@@ -205,7 +173,7 @@ export function BentoGrid() {
               <div className="absolute bottom-0 left-0 right-0 z-20 p-3 md:p-5 flex justify-between items-end">
                 <h3
                   className="font-gilroy font-semibold text-white/80 group-hover:text-white transition-colors duration-500"
-                  style={{ fontSize: "clamp(12px, 2vw, 17px)" }}
+                  style={{ fontSize: "clamp(14px, 2.2vw, 20px)" }}
                 >
                   {video.title}
                 </h3>
@@ -223,6 +191,43 @@ export function BentoGrid() {
               <div className="absolute bottom-0 left-0 w-8 md:w-12 h-[1px] bg-white/[0.08] group-hover:bg-white/20 group-hover:w-16 md:group-hover:w-20 transition-all duration-700" />
             </div>
           ))}
+        </div>
+
+        {/* Section header — now below the grid, centered */}
+        <div
+          data-idx={-1}
+          className="mt-32 md:mt-48 flex flex-col items-center text-center transition-all duration-1000"
+          style={{
+            opacity: revealed.has(-1) ? 1 : 0,
+            transform: revealed.has(-1) ? "translateY(0)" : "translateY(40px)",
+            position: "relative",
+            zIndex: 30,
+            maxWidth: "900px",
+            margin: "120px auto 0", // Centered horizontally with top margin
+          }}
+        >
+          <p
+            className="font-mono text-white/20 uppercase tracking-[0.4em] mb-12"
+            style={{ fontSize: "11px", letterSpacing: "0.4em" }}
+          >
+            // Data Modalities
+          </p>
+          <h2
+            className="font-gilroy font-normal text-white"
+            style={{ fontSize: "clamp(2.5rem, 6.5vw, 4.8rem)", lineHeight: 1.2, marginBottom: "40px" }}
+          >
+            <EncryptedText text="Six" triggered={revealed.has(-1)} />{" "}
+            <span className="font-rhymes italic font-thin"><EncryptedText text="synchronized" triggered={revealed.has(-1)} /></span>{" "}
+            <EncryptedText text="streams." triggered={revealed.has(-1)} />
+          </h2>
+          <div
+            className="font-gilroy font-bold text-white flex flex-col gap-5"
+            style={{ fontSize: "clamp(18px, 3vw, 28px)", lineHeight: 1.3 }}
+          >
+            <p>Egocentric Stereo RGB+Depth + Wrist Cams + Stero Exocentric + Tactile</p>
+            <p>All cameras at 1080p 60fps &gt;140deg FOV.</p>
+            <p>Tightly synced MCA</p>
+          </div>
         </div>
       </div>
     </section>
