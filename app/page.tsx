@@ -282,7 +282,7 @@ export default function Home() {
                       <span className="font-rhymes italic font-light text-white" style={{ fontSize: "clamp(32px, 4vw, 56px)", marginLeft: "12px" }}>
                         continents
                       </span> <br />
-                      <span className="text-white font-gilroy font-medium" style={{ fontSize: "clamp(13px, 1.6vw, 18px)", tracking: "0.15em", marginTop: "16px", display: "block", opacity: 0.8 }}>
+                      <span className="text-white font-gilroy font-medium" style={{ fontSize: "clamp(13px, 1.6vw, 18px)", letterSpacing: "0.15em", marginTop: "16px", display: "block", opacity: 0.8 }}>
                         US, EU, UK, JP, SINGAPORE
                       </span>
                     </div>
