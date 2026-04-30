@@ -84,43 +84,101 @@ export default function Home() {
       const diffSection = document.querySelector<HTMLElement>(".difference-section");
       const diffPanels = gsap.utils.toArray<HTMLElement>(".difference-panel");
       if (diffSection && diffPanels.length > 1) {
+        // Triple-Stack 4-Stage Storytelling Timeline
         const diffTl = gsap.timeline({
           scrollTrigger: {
             trigger: diffSection,
             start: "top top",
             end: "bottom bottom",
-            scrub: 2.2,
+            scrub: 3.5, 
           },
         });
 
         diffPanels.forEach((panel, i) => {
-          if (i < diffPanels.length - 1) {
-            // Exit current
-            diffTl.to(panel, { 
-              y: -80, 
-              autoAlpha: 0,
-              duration: 0.4, 
-              ease: "power2.inOut",
-              force3D: true
+          // Each panel's journey:
+          // 1. Reveal as Bottom Context (Only for the immediate next)
+          // 2. Glide to Center (Active Focus)
+          // 3. Glide to Top (Visible Context)
+          // 4. Final Exit (Fade Out)
+          
+          const startTime = i * 0.5; // High-velocity stagger
+
+          // Initial Visibility logic
+          if (i === 0) {
+            // First panel starts in focus
+            gsap.set(panel, { 
+              autoAlpha: 1, 
+              y: 0, 
+              scale: 1.1, 
+              filter: "blur(0px)",
+              transformOrigin: "center center"
             });
-            
-            // Enter next
-            diffTl.fromTo(diffPanels[i + 1], 
-              { y: 80, autoAlpha: 0 }, 
-              { 
-                y: 0, 
-                autoAlpha: 1,
-                duration: 0.4, 
-                ease: "power2.inOut",
-                force3D: true
-              }, 
-              "-=0.35"
-            );
+          } else if (i === 1) {
+            // Second panel is preloaded at bottom context
+            gsap.set(panel, { 
+              autoAlpha: 0.2, 
+              y: 150, 
+              scale: 0.5, 
+              filter: "blur(4px)",
+              transformOrigin: "center center"
+            });
+          } else {
+            // All others start completely hidden
+            gsap.set(panel, { 
+              autoAlpha: 0, 
+              y: 150, 
+              scale: 0.5, 
+              filter: "blur(4px)",
+              transformOrigin: "center center"
+            });
+          }
+
+          // Reveal panel as "next" context (for panels 2 and onwards)
+          if (i > 1) {
+            diffTl.to(panel, {
+              autoAlpha: 0.2,
+              filter: "blur(4px)",
+              duration: 0.3,
+              ease: "power2.inOut"
+            }, startTime - 0.3);
+          }
+
+          // Animate to focus (for panels 1 and onwards)
+          if (i > 0) {
+            diffTl.to(panel, {
+              autoAlpha: 1,
+              y: 0,
+              scale: 1.1,
+              filter: "blur(0px)",
+              duration: 0.5,
+              ease: "power3.inOut"
+            }, startTime);
+          }
+
+          // Animation to Top (Faded context) - EXCEPT for the last panel
+          if (i < diffPanels.length - 1) {
+            diffTl.to(panel, {
+              autoAlpha: 0.2,
+              y: -150,
+              scale: 0.5,
+              filter: "blur(4px)",
+              duration: 0.5,
+              ease: "power3.inOut"
+            }, startTime + 0.5);
+
+            // Animation to Final Exit (Fade out completely)
+            diffTl.to(panel, {
+              autoAlpha: 0,
+              y: -300,
+              filter: "blur(10px)",
+              duration: 0.5,
+              ease: "power3.inOut"
+            }, startTime + 1.0);
           }
         });
 
         // Buffer to keep it sticky at the end
-        diffTl.to({}, { duration: 1.5 });
+        diffTl.to({}, { duration: 0.2 });
       }
 
       cleanup = () => { ScrollTrigger.getAll().forEach((t) => t.kill()); };
@@ -331,7 +389,7 @@ export default function Home() {
                         continents
                       </span> <br />
                       <span className="text-white font-gilroy font-medium" style={{ fontSize: "clamp(13px, 1.6vw, 18px)", letterSpacing: "0.15em", marginTop: "16px", display: "block", opacity: 0.8 }}>
-                        US, EU, UK, JP, SINGAPORE
+                        US, EU, UK, JP, SJN, IN
                       </span>
                     </div>
                   </div>
@@ -358,7 +416,7 @@ export default function Home() {
           className="font-gilroy font-normal text-white leading-tight"
           style={{ fontSize: 'clamp(20px, 3vw, 34px)', marginBottom: 'clamp(24px, 3.5vw, 48px)' }}
         >
-          <EncryptedText text="Explore our" encryptedClassName="text-white/30" /> <span className="font-rhymes italic"><EncryptedText text="data" encryptedClassName="text-white/30" /></span>
+          <EncryptedText text="Explore our" encryptedClassName="text-white/30" /> <span className="font-rhymes italic"><EncryptedText text="samples" encryptedClassName="text-white/30" /></span>
         </h2>
 
         {/* Dataset rows — dividers full-width, content indented */}
@@ -383,11 +441,16 @@ export default function Home() {
               href: "https://data.saturnlabs.ai/share/9d1c27bc-b8c1-49cd-afd2-8225b8bde355" 
             },
           ].map((card) => (
-            <div
+            <a
               key={card.label}
+              href={card.href}
+              target="_blank"
+              rel="noopener noreferrer"
               className={cn(
-                "group border-t border-white/[0.09] transition-colors duration-300",
-                card.highlight ? "bg-white/[0.03] hover:bg-white/[0.05]" : "hover:bg-white/[0.02]"
+                "group border-t border-white/[0.09] transition-all duration-500 block",
+                card.highlight 
+                  ? "bg-white text-black hover:bg-blue-800 hover:text-white" 
+                  : "bg-transparent text-white hover:bg-blue-800/40"
               )}
             >
               <div
@@ -396,30 +459,51 @@ export default function Home() {
               >
                 <div className="flex flex-col gap-1">
                   <span
-                    className="font-gilroy font-light text-white/90"
+                    className={cn(
+                      "font-gilroy font-light transition-colors duration-500",
+                      card.highlight ? "text-black group-hover:text-white" : "text-white/90 group-hover:text-white"
+                    )}
                     style={{ fontSize: 'clamp(12px, 1.2vw, 15px)' }}
                   >
                     {card.label}
                   </span>
                   {card.subtitle && (
-                    <span className="font-gilroy font-light text-white/40" style={{ fontSize: '11px' }}>
+                    <span 
+                      className={cn(
+                        "font-gilroy font-light transition-colors duration-500",
+                        card.highlight ? "text-black/60 group-hover:text-white/60" : "text-white/40 group-hover:text-white/60"
+                      )} 
+                      style={{ fontSize: '11px' }}
+                    >
                       {card.subtitle}
                     </span>
                   )}
                 </div>
-                <a
-                  href={card.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="bg-[#1e1e1e] rounded-[10px] flex items-center justify-center shrink-0 transition-transform group-hover:scale-105"
+                <div
+                  className={cn(
+                    "rounded-[10px] flex items-center justify-center shrink-0 transition-all duration-500 group-hover:scale-125 group-hover:shadow-[0_0_20px_rgba(37,99,235,0.4)]",
+                    card.highlight ? "bg-black group-hover:bg-blue-600" : "bg-white/10 group-hover:bg-blue-600"
+                  )}
                   style={{ width: 'clamp(30px, 2.8vw, 40px)', height: 'clamp(30px, 2.8vw, 40px)' }}
                 >
-                  <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ width: 'clamp(10px, 1vw, 13px)', height: 'clamp(10px, 1vw, 13px)' }}>
-                    <path d="M3 13L13 3M13 3H6M13 3V10" stroke="#ffffff" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
+                  <svg 
+                    viewBox="0 0 16 16" 
+                    fill="none" 
+                    xmlns="http://www.w3.org/2000/svg" 
+                    className="transition-transform duration-500 group-hover:scale-110"
+                    style={{ width: 'clamp(10px, 1vw, 13px)', height: 'clamp(10px, 1vw, 13px)' }}
+                  >
+                    <path 
+                      d="M3 13L13 3M13 3H6M13 3V10" 
+                      className="stroke-white"
+                      strokeWidth="2.2" 
+                      strokeLinecap="round" 
+                      strokeLinejoin="round" 
+                    />
                   </svg>
-                </a>
+                </div>
               </div>
-            </div>
+            </a>
           ))}
           <div className="border-t border-white/[0.09]" />
         </div>
@@ -436,17 +520,20 @@ export default function Home() {
       </section>
 
       {/* ═══════════════════ DIFFERENCE SECTION ═══════════════════ */}
-      <section className="difference-section relative w-full bg-[#050505]" style={{ height: "220vh" }}>
+      <section className="difference-section relative w-full bg-[#050505]" style={{ height: "120vh" }}>
         <div className="sticky top-0 h-screen flex flex-col items-center justify-center overflow-hidden">
+          {/* Subtle Ambient Gradient Overlay */}
+          <div className="absolute inset-0 z-0 bg-gradient-to-b from-[#050505] via-transparent to-[#050505] pointer-events-none" />
+
           {/* Title */}
-          <h2 className="absolute top-[12vh] font-gilroy font-normal text-white text-center" style={{ fontSize: "clamp(32px, 4vw, 48px)" }}>
-            How Are We <span className="font-rhymes italic">Different?</span>
+          <h2 className="absolute top-[8vh] font-gilroy font-light text-white text-center z-20" style={{ fontSize: "clamp(32px, 4vw, 48px)", letterSpacing: "0.02em" }}>
+            How Are We Different?
           </h2>
 
-          <div className="flex flex-col md:flex-row items-center justify-center w-full max-w-7xl px-8 md:px-20 gap-12 md:gap-24">
+          <div className="flex flex-col md:flex-row items-center justify-center w-full max-w-[1400px] px-8 md:px-20 gap-12 md:gap-32 z-10">
             {/* Left: Illustration */}
-            <div className="w-full md:w-1/2 flex justify-center md:justify-end px-6 md:px-0">
-              <div className="relative w-full max-w-[640px] aspect-[4/3]">
+            <div className="w-full md:w-5/12 flex justify-center md:justify-end px-6 md:px-0">
+              <div className="relative w-full max-w-[600px] aspect-[4/3] will-change-transform">
                 <Image 
                   src="/images/image 5.png" 
                   alt="Illustration" 
@@ -458,34 +545,35 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Right: Scrolling Text */}
-            <div className="w-full md:w-1/2 relative h-[300px] md:h-[400px] flex items-center">
+            {/* Right: Text Storytelling */}
+            <div className="w-full md:w-7/12 relative h-[40vh] flex items-center justify-center md:justify-start">
               {[
-                "Our data streams have <b>internal and</b> <span class='font-rhymes italic'>external</span> signatures allowing your team to independently <b>verify</b> <span class='font-rhymes italic'>multimodal syncing</span>.",
-                "Our hardware has been <b>developed in-house</b> so we can easily <b>customize</b> it to <span class='font-rhymes italic'>your needs</span>.",
-                "Our <b>human-in-the-loop</b> process ensures <span class='font-rhymes italic'>high quality</span> annotations.",
-                "We have a <b>larger workforce</b> and can scale your experiments <span class='font-rhymes italic'>exponentially</span>.",
-                "We will bring <b>fresh cake</b> if visiting <span class='font-rhymes italic'>your office :)</span>"
+                "Our data streams have internal and external signatures allowing your team to independently verify multimodal syncing.",
+                "Our hardware has been developed in-house so we can easily customize it to your needs.",
+                "Our human-in-the-loop process ensures high quality annotations.",
+                "We have a larger workforce and can scale your experiments exponentially.",
+                "We will bring fresh cake if visiting your office :)"
               ].map((text, i) => (
                 <div
                   key={i}
                   className="difference-panel absolute inset-0 flex items-center justify-center md:justify-start"
-                  style={{ opacity: i === 0 ? 1 : 0, transform: i === 0 ? "none" : "translateY(50px)" }}
+                  style={{ willChange: "transform, opacity, filter" }}
                 >
                   <p 
-                    className="font-gilroy font-light text-white leading-[1.4] max-w-[540px] text-center md:text-left"
+                    className="font-gilroy font-medium text-white text-center md:text-left leading-tight"
                     style={{ fontSize: "clamp(20px, 2.8vw, 36px)" }}
-                    dangerouslySetInnerHTML={{ __html: text }}
-                  />
+                  >
+                    {text.split(' ').map((word, idx) => (
+                      ['internal', 'external', 'multimodal', 'in-house', 'human-in-the-loop', 'larger', 'exponentially', 'fresh', 'cake'].includes(word.toLowerCase().replace(/[^a-z-]/g, '')) ? (
+                        <span key={idx} className="font-rhymes italic font-thin text-white/70">{word} </span>
+                      ) : (
+                        word + ' '
+                      )
+                    ))}
+                  </p>
                 </div>
               ))}
             </div>
-          </div>
-          
-          {/* Scroll Indicator */}
-          <div className="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3 opacity-20 hidden md:flex">
-            <span className="font-mono text-[9px] uppercase tracking-[0.3em] text-white">Scroll</span>
-            <div className="w-[1px] h-12 bg-gradient-to-b from-white to-transparent" />
           </div>
         </div>
       </section>

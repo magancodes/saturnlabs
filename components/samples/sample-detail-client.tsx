@@ -13,8 +13,15 @@ const Footer = dynamic(
 );
 
 function StreamVideo({ src }: { src: string }) {
+  const [isLoading, setIsLoading] = useState(true);
+
   return (
-    <div className="relative w-full h-full flex items-center justify-center">
+    <div className="relative w-full h-full flex items-center justify-center min-h-[300px]">
+      {isLoading && (
+        <div className="absolute inset-0 flex items-center justify-center bg-[#050505] z-10 transition-opacity duration-500">
+          <Loader2 className="w-10 h-10 text-white/20 animate-spin" />
+        </div>
+      )}
       <video
         src={src}
         autoPlay
@@ -22,7 +29,8 @@ function StreamVideo({ src }: { src: string }) {
         muted
         playsInline
         preload="auto"
-        className="w-full h-auto max-h-screen object-contain"
+        className={`w-full h-auto max-h-screen object-contain transition-opacity duration-1000 ${isLoading ? 'opacity-0' : 'opacity-100'}`}
+        onLoadedData={() => setIsLoading(false)}
       />
     </div>
   );
@@ -72,9 +80,8 @@ export default function SampleDetailClient({ sample }: { sample: Sample }) {
                 href={`https://rerun.io/viewer?url=${encodeURIComponent(sample.rrdUrl)}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-4 bg-white text-black font-bold h-16 px-10 rounded-xl hover:bg-zinc-100 transition-all text-base shadow-2xl"
+                className="group inline-flex items-center justify-center bg-white text-black font-bold text-sm h-[56px] px-[120px] min-w-[400px] rounded-[12px] hover:bg-zinc-100 transition-all shadow-[0_20px_60px_rgba(0,0,0,0.5)] active:scale-[0.98] tracking-[0.05em] whitespace-nowrap"
               >
-                <ExternalLink className="h-5 w-5" />
                 Launch Visualizer
               </a>
             )}

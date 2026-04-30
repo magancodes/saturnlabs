@@ -3,6 +3,36 @@
 import { useEffect, useRef, useState, useMemo } from "react";
 import { EncryptedText } from "@/components/ui/encrypted-text";
 import { cn } from "@/lib/utils";
+import { Loader2 } from "lucide-react";
+
+function BentoVideo({ video, index }: { video: any, index: number }) {
+  const [isLoading, setIsLoading] = useState(true);
+
+  return (
+    <div className="absolute inset-0 z-0 bg-[#0a0a0a]">
+      {isLoading && (
+        <div className="absolute inset-0 flex items-center justify-center z-10">
+          <Loader2 className="w-6 h-6 text-white/10 animate-spin" />
+        </div>
+      )}
+      <video
+        src={video.src}
+        autoPlay
+        loop
+        muted
+        playsInline
+        preload="metadata"
+        className={cn(
+          "h-full w-full transition-all duration-[1.2s] ease-in-out",
+          (video.title === "Tactile Force Sensor" || video.title === "Stereo Exocentric" || video.title === "Stereo Egocentric") ? "object-contain" : "object-cover",
+          video.title === "Point Cloud" && "scale-[1.8] rotate-90",
+          isLoading ? "opacity-0" : "opacity-100"
+        )}
+        onLoadedData={() => setIsLoading(false)}
+      />
+    </div>
+  );
+}
 
 export function AsciiBackground() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -77,26 +107,6 @@ export function AsciiBackground() {
 
 export function BentoGrid() {
   const sectionRef = useRef<HTMLDivElement>(null);
-  const [revealed, setRevealed] = useState<Set<number>>(new Set());
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            const idx = Number(entry.target.getAttribute("data-idx"));
-            setRevealed((prev) => new Set(prev).add(idx));
-          }
-        });
-      },
-      { threshold: 0.1 }
-    );
-
-    const cards = sectionRef.current?.querySelectorAll("[data-idx]");
-    cards?.forEach((card) => observer.observe(card));
-
-    return () => observer.disconnect();
-  }, []);
 
   const videos = [
     { title: "Stereo Egocentric", tag: "01", cols: "col-span-6 md:col-span-12", src: "https://zcszua0zjawijd0q.public.blob.vercel-storage.com/6/scaled_output_6_camera_head.mp4" },
@@ -104,7 +114,7 @@ export function BentoGrid() {
     { title: "Depth Maps", tag: "03", cols: "col-span-3 md:col-span-6", src: "/depth_cam.mp4" },
     { title: "Stereo Exocentric", tag: "04", cols: "col-span-6 md:col-span-12", src: "https://zcszua0zjawijd0q.public.blob.vercel-storage.com/6/scaled_output_6_camera_exo.mp4" },
     { title: "Wrist Camera", tag: "05", cols: "col-span-3 md:col-span-6", src: "https://zcszua0zjawijd0q.public.blob.vercel-storage.com/7/scaled_output_7_camera_wristright.mp4" },
-    { title: "Tactile Force Sensor", tag: "06", cols: "col-span-3 md:col-span-6", src: "https://zcszua0zjawijd0q.public.blob.vercel-storage.com/6/scaled_output_6_fsr_heatmap.mp4" },
+    { title: "Tactile Force Sensor", tag: "06", cols: "col-span-3 md:col-span-6", src: "https://www.saturnlabs.ai/tactile.webm" },
   ];
 
   return (
@@ -125,27 +135,12 @@ export function BentoGrid() {
               className={`group relative overflow-hidden ${video.cols} border border-white/[0.06] bg-white/[0.015] hover:border-white/15 cursor-pointer backdrop-blur-[2px]`}
               style={{
                 height: (video.title === "Stereo Exocentric" || video.title === "Stereo Egocentric") ? "clamp(240px, 40vw, 420px)" : "clamp(180px, 30vw, 320px)",
-                opacity: revealed.has(i) ? 1 : 0,
-                transform: revealed.has(i) ? "translateY(0) scale(1)" : "translateY(60px) scale(0.98)",
-                transition: `opacity 1.1s cubic-bezier(0.16, 1, 0.3, 1) ${i * 0.1}s, transform 1.1s cubic-bezier(0.16, 1, 0.3, 1) ${i * 0.1}s`,
+                opacity: 1,
+                transform: "translateY(0) scale(1)",
               }}
             >
               {/* Video Background */}
-              <div className="absolute inset-0 z-0 bg-[#0a0a0a]">
-                <video
-                  src={video.src}
-                  autoPlay
-                  loop
-                  muted
-                  playsInline
-                  preload="metadata"
-                  className={cn(
-                    "h-full w-full opacity-40 group-hover:opacity-75 transition-all duration-[1.2s] ease-in-out",
-                    (video.title === "Tactile Force Sensor" || video.title === "Stereo Exocentric" || video.title === "Stereo Egocentric") ? "object-contain" : "object-cover",
-                    video.title === "Point Cloud" && "scale-[1.8] rotate-90"
-                  )}
-                />
-              </div>
+              <BentoVideo video={video} index={i} />
 
               {/* Scan line hover */}
               <div
@@ -159,31 +154,15 @@ export function BentoGrid() {
                 style={{ background: `linear-gradient(${110 + i * 25}deg, rgba(255,255,255,0.04) 0%, transparent 60%)` }}
               />
 
-              {/* Tag */}
-              <div className="absolute top-0 left-0 z-20">
-                <div
-                  className="font-mono text-white/20 group-hover:text-white/50 transition-colors duration-500 border-r border-b border-white/[0.06] group-hover:border-white/10 flex items-center justify-center"
-                  style={{ width: "36px", height: "36px", fontSize: "10px" }}
-                >
-                  {video.tag}
-                </div>
-              </div>
-
-              {/* Label */}
-              <div className="absolute bottom-0 left-0 right-0 z-20 p-3 md:p-5 flex justify-between items-end">
+              {/* Label (Top Left) */}
+              <div className="absolute top-4 left-4 md:top-6 md:left-6 z-20 flex flex-col gap-1 md:gap-2">
+                <span className="font-mono text-white/30 text-[10px] md:text-[11px] tracking-[0.3em] uppercase">{video.tag}</span>
                 <h3
-                  className="font-gilroy font-semibold text-white/80 group-hover:text-white transition-colors duration-500"
-                  style={{ fontSize: "clamp(14px, 2.2vw, 20px)" }}
+                  className="font-gilroy font-bold text-white transition-colors duration-500"
+                  style={{ fontSize: "clamp(18px, 2.5vw, 30px)", lineHeight: 1.1, letterSpacing: "-0.02em" }}
                 >
                   {video.title}
                 </h3>
-                <svg
-                  className="w-3 h-3 md:w-4 md:h-4 text-white/20 group-hover:text-white/60 transition-all duration-500 group-hover:translate-x-1 group-hover:-translate-y-1 shrink-0"
-                  viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
-                >
-                  <line x1="7" y1="17" x2="17" y2="7" />
-                  <polyline points="7 7 17 7 17 17" />
-                </svg>
               </div>
 
               {/* Edge accents */}
@@ -196,37 +175,36 @@ export function BentoGrid() {
         {/* Section header — now below the grid, centered */}
         <div
           data-idx={-1}
-          className="mt-32 md:mt-48 flex flex-col items-center text-center transition-all duration-1000"
+          className="mt-32 md:mt-48 flex flex-col items-center text-center"
           style={{
-            opacity: revealed.has(-1) ? 1 : 0,
-            transform: revealed.has(-1) ? "translateY(0)" : "translateY(40px)",
+            opacity: 1,
+            transform: "translateY(0)",
             position: "relative",
             zIndex: 30,
-            maxWidth: "900px",
-            margin: "120px auto 0", // Centered horizontally with top margin
+            maxWidth: "1000px",
+            margin: "120px auto 0",
           }}
         >
-          <p
-            className="font-mono text-white/20 uppercase tracking-[0.4em] mb-12"
-            style={{ fontSize: "11px", letterSpacing: "0.4em" }}
-          >
-            // Data Modalities
-          </p>
           <h2
-            className="font-gilroy font-normal text-white"
-            style={{ fontSize: "clamp(2.5rem, 6.5vw, 4.8rem)", lineHeight: 1.2, marginBottom: "40px" }}
+            className="font-rhymes italic font-thin text-white/30 mb-20"
+            style={{ fontSize: "clamp(22px, 2.5vw, 30px)", letterSpacing: "-0.01em" }}
           >
-            <EncryptedText text="Six" triggered={revealed.has(-1)} />{" "}
-            <span className="font-rhymes italic font-thin"><EncryptedText text="synchronized" triggered={revealed.has(-1)} /></span>{" "}
-            <EncryptedText text="streams." triggered={revealed.has(-1)} />
+            Six synchronized streams.
           </h2>
+          
           <div
-            className="font-gilroy font-bold text-white flex flex-col gap-5"
-            style={{ fontSize: "clamp(18px, 3vw, 28px)", lineHeight: 1.3 }}
+            className="font-gilroy font-light text-white flex flex-col gap-8"
+            style={{ fontSize: "clamp(24px, 4vw, 42px)", lineHeight: 1.1, letterSpacing: "-0.03em" }}
           >
-            <p>Egocentric Stereo RGB+Depth + Wrist Cams + Stero Exocentric + Tactile</p>
-            <p>All cameras at 1080p 60fps &gt;140deg FOV.</p>
-            <p>Tightly synced MCA</p>
+            <p>
+              Egocentric Stereo RGB+Depth + Wrist Cams + Stereo Exocentric + Tactile
+            </p>
+            <p>
+              All cameras at 1080p 60fps &gt;140deg FOV.
+            </p>
+            <p>
+              Tightly synced MCAP with &lt;5ms latency across all streams.
+            </p>
           </div>
         </div>
       </div>

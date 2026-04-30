@@ -1,8 +1,9 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import { Navbar } from "@/components/ui/navbar";
+import { Loader2 } from "lucide-react";
 import dynamic from "next/dynamic";
 import { samples } from "@/lib/samples";
 
@@ -10,6 +11,30 @@ const Footer = dynamic(
   () => import("@/components/ui/footer").then(m => ({ default: m.Footer })),
   { ssr: false }
 );
+
+function SamplePreview({ src }: { src: string }) {
+  const [isLoading, setIsLoading] = useState(true);
+
+  return (
+    <div className="relative w-full h-full overflow-hidden bg-white/5">
+      {isLoading && (
+        <div className="absolute inset-0 flex items-center justify-center bg-[#0a0a0a] z-10">
+          <Loader2 className="w-8 h-8 text-white/10 animate-spin" />
+        </div>
+      )}
+      <video
+        src={src}
+        autoPlay
+        loop
+        muted
+        playsInline
+        preload="auto"
+        className={`h-full w-full object-cover transition-all duration-1000 ${isLoading ? 'opacity-0' : 'opacity-70 group-hover:opacity-100'}`}
+        onLoadedData={() => setIsLoading(false)}
+      />
+    </div>
+  );
+}
 
 export default function SamplesPage() {
   const stats = [
@@ -32,12 +57,39 @@ export default function SamplesPage() {
         
         {/* Dedicated 70vh Hero - Perfectly centers the title and prevents nav overlap */}
         <section className="w-full h-[70vh] flex flex-col items-center justify-center text-center relative overflow-hidden">
-          {/* Main Title */}
-          <div className="max-w-4xl mx-auto flex flex-col items-center">
-            <h1 className="text-6xl md:text-8xl lg:text-9xl font-semibold tracking-tighter leading-[1] reveal">
-              Multimodal <br />
-              <span className="font-rhymes italic font-thin text-white/70 block" style={{ marginTop: '12px' }}>Data Samples</span>
-            </h1>
+          {/* Main Content */}
+          <div className="max-w-5xl mx-auto flex flex-col items-center">
+            {/* Subtext on top */}
+            <p 
+              className="font-rhymes italic font-thin text-white mb-8"
+              style={{ fontSize: "16px" }}
+            >
+              multimodal data samples
+            </p>
+            
+            <div className="flex flex-col gap-10">
+              <h1 
+                className="font-gilroy font-semibold text-white leading-[1.1] tracking-tight"
+                style={{ fontSize: "clamp(28px, 4.5vw, 54px)" }}
+              >
+                Egocentric Stereo RGB+Depth + Wrist Cams + Stereo Exocentric + Tactile
+              </h1>
+              
+              <div className="flex flex-col gap-6">
+                <p 
+                  className="font-gilroy font-light text-white/90"
+                  style={{ fontSize: "clamp(20px, 3.2vw, 36px)", lineHeight: 1.2 }}
+                >
+                  All cameras at 1080p 60fps &gt;140deg FOV.
+                </p>
+                <p 
+                  className="font-gilroy font-light text-white/70"
+                  style={{ fontSize: "clamp(18px, 2.5vw, 28px)", lineHeight: 1.2 }}
+                >
+                  Tightly synced MCAP with &lt;5ms latency across all streams.
+                </p>
+              </div>
+            </div>
           </div>
         </section>
 
@@ -56,16 +108,8 @@ export default function SamplesPage() {
                 }}
               >
                 {/* Background Video / Preview */}
-                <div className="aspect-[3/4.2] relative overflow-hidden bg-white/5">
-                  <video
-                    src={sample.preview}
-                    autoPlay
-                    loop
-                    muted
-                    playsInline
-                    preload="auto"
-                    className="h-full w-full object-cover opacity-70 group-hover:opacity-100 transition-opacity duration-700"
-                  />
+                <div className="aspect-[3/4.2] relative overflow-hidden">
+                  <SamplePreview src={sample.preview} />
                   
                   {/* Internal Content - Compact and Clean */}
                   <div 
@@ -73,12 +117,9 @@ export default function SamplesPage() {
                     style={{ padding: '48px 32px' }}
                   >
                     <div className="flex flex-col">
-                      <h3 className="text-xl md:text-2xl font-bold tracking-tight text-white leading-tight drop-shadow-xl" style={{ marginBottom: '10px' }}>
+                      <h3 className="text-xl md:text-2xl font-bold tracking-tight text-white leading-tight drop-shadow-xl" style={{ marginBottom: '24px' }}>
                         {sample.id === "lego-assembly" ? "Lego Assembly" : sample.title}
                       </h3>
-                      <p className="text-[13px] text-white/90 font-light leading-relaxed drop-shadow-lg" style={{ marginBottom: '28px' }}>
-                        Full-stack multimodal data: Egocentric Stereo RGB+Depth, dual Wrist Cameras, Stereo Exocentric, and high-frequency Tactile Force Sensing.
-                      </p>
                       
                       <Link href={`/samples/${sample.id}`} className="block w-full">
                         <button 
