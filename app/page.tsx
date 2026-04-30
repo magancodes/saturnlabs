@@ -46,7 +46,7 @@ export default function Home() {
           trigger: section,
           start: "top top",
           end: "bottom bottom",
-          scrub: 2, // Increased for buttery smooth scrolling
+          scrub: 2.2,
         },
       });
 
@@ -55,25 +55,73 @@ export default function Home() {
         if (i < panels.length - 1) {
           // Exit current: Graceful move up and fade
           tl.to(panel, { 
+            y: -150, 
             autoAlpha: 0, 
-            y: -120, 
-            duration: 1.2, 
-            ease: "power2.inOut" 
+            duration: 0.4, 
+            ease: "power2.inOut",
+            force3D: true
           });
           
           // Enter next: Smoothly crossfade and rise from below
           tl.fromTo(panels[i + 1], 
             { autoAlpha: 0, y: 120 }, 
             { 
-              autoAlpha: 1, 
               y: 0, 
-              duration: 1.2, 
-              ease: "power2.inOut" 
+              autoAlpha: 1,
+              duration: 0.4, 
+              ease: "power2.inOut",
+              force3D: true
             }, 
-            "-=0.6" // 50% overlap for silky smooth transitions
+            "-=0.35" 
           );
         }
       });
+      
+      // Buffer to keep it sticky at the end
+      tl.to({}, { duration: 0.5 });
+
+      // Difference Section Animation
+      const diffSection = document.querySelector<HTMLElement>(".difference-section");
+      const diffPanels = gsap.utils.toArray<HTMLElement>(".difference-panel");
+      if (diffSection && diffPanels.length > 1) {
+        const diffTl = gsap.timeline({
+          scrollTrigger: {
+            trigger: diffSection,
+            start: "top top",
+            end: "bottom bottom",
+            scrub: 2.2,
+          },
+        });
+
+        diffPanels.forEach((panel, i) => {
+          if (i < diffPanels.length - 1) {
+            // Exit current
+            diffTl.to(panel, { 
+              y: -80, 
+              autoAlpha: 0,
+              duration: 0.4, 
+              ease: "power2.inOut",
+              force3D: true
+            });
+            
+            // Enter next
+            diffTl.fromTo(diffPanels[i + 1], 
+              { y: 80, autoAlpha: 0 }, 
+              { 
+                y: 0, 
+                autoAlpha: 1,
+                duration: 0.4, 
+                ease: "power2.inOut",
+                force3D: true
+              }, 
+              "-=0.35"
+            );
+          }
+        });
+
+        // Buffer to keep it sticky at the end
+        diffTl.to({}, { duration: 1.5 });
+      }
 
       cleanup = () => { ScrollTrigger.getAll().forEach((t) => t.kill()); };
     })();
@@ -248,7 +296,7 @@ export default function Home() {
       <BentoGrid />
 
       {/* ═══════════════════ NARRATIVE SECTION ═══════════════════ */}
-      <section className="narrative-section relative w-full bg-[#050505]" style={{ height: "200vh" }}>
+      <section className="narrative-section relative w-full bg-[#050505]" style={{ height: "120vh" }}>
         <div className="sticky top-0 overflow-hidden" style={{ height: "100vh" }}>
           {[
             { type: "stats", text: "" },
@@ -384,6 +432,61 @@ export default function Home() {
           >
             Opens Rerun visualizer in a new tab. It may be very slow on browsers due to very large MCAP size.
           </p>
+        </div>
+      </section>
+
+      {/* ═══════════════════ DIFFERENCE SECTION ═══════════════════ */}
+      <section className="difference-section relative w-full bg-[#050505]" style={{ height: "220vh" }}>
+        <div className="sticky top-0 h-screen flex flex-col items-center justify-center overflow-hidden">
+          {/* Title */}
+          <h2 className="absolute top-[12vh] font-gilroy font-normal text-white text-center" style={{ fontSize: "clamp(32px, 4vw, 48px)" }}>
+            How Are We <span className="font-rhymes italic">Different?</span>
+          </h2>
+
+          <div className="flex flex-col md:flex-row items-center justify-center w-full max-w-7xl px-8 md:px-20 gap-12 md:gap-24">
+            {/* Left: Illustration */}
+            <div className="w-full md:w-1/2 flex justify-center md:justify-end px-6 md:px-0">
+              <div className="relative w-full max-w-[640px] aspect-[4/3]">
+                <Image 
+                  src="/images/image 5.png" 
+                  alt="Illustration" 
+                  fill 
+                  className="object-contain"
+                  priority
+                  unoptimized
+                />
+              </div>
+            </div>
+
+            {/* Right: Scrolling Text */}
+            <div className="w-full md:w-1/2 relative h-[300px] md:h-[400px] flex items-center">
+              {[
+                "Our data streams have <b>internal and</b> <span class='font-rhymes italic'>external</span> signatures allowing your team to independently <b>verify</b> <span class='font-rhymes italic'>multimodal syncing</span>.",
+                "Our hardware has been <b>developed in-house</b> so we can easily <b>customize</b> it to <span class='font-rhymes italic'>your needs</span>.",
+                "Our <b>human-in-the-loop</b> process ensures <span class='font-rhymes italic'>high quality</span> annotations.",
+                "We have a <b>larger workforce</b> and can scale your experiments <span class='font-rhymes italic'>exponentially</span>.",
+                "We will bring <b>fresh cake</b> if visiting <span class='font-rhymes italic'>your office :)</span>"
+              ].map((text, i) => (
+                <div
+                  key={i}
+                  className="difference-panel absolute inset-0 flex items-center justify-center md:justify-start"
+                  style={{ opacity: i === 0 ? 1 : 0, transform: i === 0 ? "none" : "translateY(50px)" }}
+                >
+                  <p 
+                    className="font-gilroy font-light text-white leading-[1.4] max-w-[540px] text-center md:text-left"
+                    style={{ fontSize: "clamp(20px, 2.8vw, 36px)" }}
+                    dangerouslySetInnerHTML={{ __html: text }}
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+          
+          {/* Scroll Indicator */}
+          <div className="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3 opacity-20 hidden md:flex">
+            <span className="font-mono text-[9px] uppercase tracking-[0.3em] text-white">Scroll</span>
+            <div className="w-[1px] h-12 bg-gradient-to-b from-white to-transparent" />
+          </div>
         </div>
       </section>
 
