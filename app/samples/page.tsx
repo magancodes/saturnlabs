@@ -53,7 +53,7 @@ export default function SamplesPage() {
       </div>
 
       {/* Main Container - Tightened & Fast */}
-      <main className="flex-1 w-full max-w-[1200px] flex flex-col items-center px-4 md:px-12 relative z-10">
+      <main className="flex-1 w-full max-w-[1200px] flex flex-col items-center px-8 md:px-12 relative z-10">
         
         {/* Dedicated Hero - 50vh height */}
         <section className="w-full h-[50vh] flex flex-col items-center justify-center text-center relative overflow-hidden">
@@ -95,11 +95,11 @@ export default function SamplesPage() {
 
         {/* Video Grid Section - Starts quickly after the narrative */}
         <section className="w-full flex flex-col items-center pb-32">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-10 w-full max-w-full justify-items-center">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-10 w-full max-w-full justify-items-center">
             {samples.map((sample, idx) => (
               <div 
                 key={sample.id} 
-                className="group relative flex flex-col overflow-hidden transition-all duration-500 hover:-translate-y-2 reveal w-full"
+                className="group relative flex flex-col overflow-hidden transition-all duration-500 hover:-translate-y-2 reveal w-full max-w-[390px] md:max-w-none"
                 style={{ 
                   animationDelay: `${0.1 + idx * 0.05}s`,
                   borderRadius: '16px',
