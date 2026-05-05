@@ -55,8 +55,8 @@ export default function SamplesPage() {
       {/* Main Container - Tightened & Fast */}
       <main className="flex-1 w-full max-w-[1200px] flex flex-col items-center px-4 md:px-12 relative z-10">
         
-        {/* Dedicated 70vh Hero - Perfectly centers the title and prevents nav overlap */}
-        <section className="w-full h-[70vh] flex flex-col items-center justify-center text-center relative overflow-hidden">
+        {/* Dedicated Hero - 50vh height */}
+        <section className="w-full h-[50vh] flex flex-col items-center justify-center text-center relative overflow-hidden">
           {/* Main Content */}
           <div className="max-w-5xl mx-auto flex flex-col items-center">
             {/* Subtext on top */}
@@ -67,26 +67,26 @@ export default function SamplesPage() {
               multimodal data samples
             </p>
             
-            <div className="flex flex-col gap-10">
+            <div className="flex flex-col gap-6">
               <h1 
-                className="font-gilroy font-semibold text-white leading-[1.1] tracking-tight"
-                style={{ fontSize: "clamp(28px, 4.5vw, 54px)" }}
+                className="font-gilroy font-semibold text-white leading-tight tracking-tight"
+                style={{ fontSize: "clamp(20px, 3vw, 32px)" }}
               >
                 Egocentric Stereo RGB+Depth + Wrist Cams + Stereo Exocentric + Tactile
               </h1>
               
-              <div className="flex flex-col gap-6">
+              <div className="flex flex-col gap-2">
                 <p 
-                  className="font-gilroy font-light text-white/90"
-                  style={{ fontSize: "clamp(20px, 3.2vw, 36px)", lineHeight: 1.2 }}
+                  className="font-gilroy font-light text-white/80"
+                  style={{ fontSize: "clamp(14px, 1.5vw, 17px)", lineHeight: 1.5 }}
                 >
                   All cameras at 1080p 60fps &gt;140deg FOV.
                 </p>
                 <p 
-                  className="font-gilroy font-light text-white/70"
-                  style={{ fontSize: "clamp(18px, 2.5vw, 28px)", lineHeight: 1.2 }}
+                  className="font-gilroy font-light text-white/80"
+                  style={{ fontSize: "clamp(14px, 1.5vw, 17px)", lineHeight: 1.5 }}
                 >
-                  Tightly synced MCAP with &lt;5ms latency across all streams.
+                  &lt;5ms synced MCAP across all streams.
                 </p>
               </div>
             </div>
@@ -95,11 +95,11 @@ export default function SamplesPage() {
 
         {/* Video Grid Section - Starts quickly after the narrative */}
         <section className="w-full flex flex-col items-center pb-32">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 w-full max-w-full justify-items-center">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-10 w-full max-w-full justify-items-center">
             {samples.map((sample, idx) => (
               <div 
                 key={sample.id} 
-                className="group relative flex flex-col overflow-hidden transition-all duration-500 hover:-translate-y-2 reveal w-full max-w-[340px]"
+                className="group relative flex flex-col overflow-hidden transition-all duration-500 hover:-translate-y-2 reveal w-full"
                 style={{ 
                   animationDelay: `${0.1 + idx * 0.05}s`,
                   borderRadius: '16px',
@@ -108,25 +108,25 @@ export default function SamplesPage() {
                 }}
               >
                 {/* Background Video / Preview */}
-                <div className="aspect-[3/4.2] relative overflow-hidden">
+                <div className="aspect-video relative overflow-hidden">
                   <SamplePreview src={sample.preview} />
                   
                   {/* Internal Content - Compact and Clean */}
                   <div 
-                    className="absolute inset-0 flex flex-col justify-end"
-                    style={{ padding: '48px 32px' }}
+                    className="absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-black/80 via-transparent to-transparent"
+                    style={{ padding: '24px 24px' }}
                   >
                     <div className="flex flex-col">
-                      <h3 className="text-xl md:text-2xl font-bold tracking-tight text-white leading-tight drop-shadow-xl" style={{ marginBottom: '24px' }}>
+                      <h3 className="text-lg md:text-xl font-bold tracking-tight text-white leading-tight drop-shadow-xl" style={{ marginBottom: '16px' }}>
                         {sample.id === "lego-assembly" ? "Lego Assembly" : sample.title}
                       </h3>
                       
                       <Link href={`/samples/${sample.id}`} className="block w-full">
                         <button 
-                          className="w-full bg-white text-black font-bold text-sm hover:bg-zinc-100 transition-all active:scale-[0.98] shadow-2xl"
+                          className="w-full bg-white text-black font-bold text-xs hover:bg-zinc-100 transition-all active:scale-[0.98] shadow-2xl"
                           style={{ 
-                            height: '56px',
-                            borderRadius: '12px'
+                            height: '42px',
+                            borderRadius: '8px'
                           }}
                         >
                           View Sample

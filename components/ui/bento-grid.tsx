@@ -127,7 +127,7 @@ export function BentoGrid() {
       <div className="relative z-10" style={{ padding: "40px 50px 220px" }}>
 
         {/* Bento Grid — 6 cols always to keep same layout on mobile */}
-        <div className="grid grid-cols-6 md:grid-cols-12 gap-2 md:gap-3" style={{ marginTop: "-60px" }}>
+        <div className="grid grid-cols-6 md:grid-cols-12 gap-2 md:gap-3" style={{ marginTop: "-140px" }}>
           {videos.map((video, i) => (
             <div
               key={video.title}
@@ -186,15 +186,15 @@ export function BentoGrid() {
           }}
         >
           <h2
-            className="font-rhymes italic font-thin text-white/30 mb-20"
+            className="font-rhymes italic font-thin text-white/30 mb-12"
             style={{ fontSize: "clamp(22px, 2.5vw, 30px)", letterSpacing: "-0.01em" }}
           >
             Six synchronized streams.
           </h2>
           
           <div
-            className="font-gilroy font-light text-white flex flex-col gap-8"
-            style={{ fontSize: "clamp(24px, 4vw, 42px)", lineHeight: 1.1, letterSpacing: "-0.03em" }}
+            className="font-gilroy font-light text-white flex flex-col gap-4"
+            style={{ fontSize: "clamp(16px, 1.8vw, 20px)", lineHeight: 1.5, letterSpacing: "0.02em" }}
           >
             <p>
               Egocentric Stereo RGB+Depth + Wrist Cams + Stereo Exocentric + Tactile
@@ -203,7 +203,7 @@ export function BentoGrid() {
               All cameras at 1080p 60fps &gt;140deg FOV.
             </p>
             <p>
-              Tightly synced MCAP with &lt;5ms latency across all streams.
+              &lt;5ms synced MCAP across all streams.
             </p>
           </div>
         </div>

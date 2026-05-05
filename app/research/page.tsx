@@ -101,9 +101,6 @@ export default function Research() {
             <br />
             Deeper{" "}
             <span className="font-rhymes italic font-thin text-foreground">Questions.</span>
-            <br />
-            Smarter{" "}
-            <span className="font-rhymes italic font-thin text-foreground">Robots.</span>
           </motion.h1>
 
           <motion.p
@@ -119,7 +116,7 @@ export default function Research() {
             }}
           >
             Pushing the boundaries of physical AI through rigorous data
-            methodology and open collaboration.
+            experimentation and open collaboration.
           </motion.p>
 
           <motion.div

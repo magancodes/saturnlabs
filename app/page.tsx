@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import dynamic from "next/dynamic";
 import { EncryptedText } from "@/components/ui/encrypted-text";
@@ -26,7 +26,6 @@ const Footer = dynamic(
 
 export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const scrollRef = useRef<HTMLDivElement>(null);
   const { handleCalClick } = useCal();
 
   useEffect(() => {
@@ -78,110 +77,14 @@ export default function Home() {
       });
       
       // Buffer to keep it sticky at the end
-      tl.to({}, { duration: 0.5 });
-
-      // Difference Section Animation
-      const diffSection = document.querySelector<HTMLElement>(".difference-section");
-      const diffPanels = gsap.utils.toArray<HTMLElement>(".difference-panel");
-      if (diffSection && diffPanels.length > 1) {
-        // Triple-Stack 4-Stage Storytelling Timeline
-        const diffTl = gsap.timeline({
-          scrollTrigger: {
-            trigger: diffSection,
-            start: "top top",
-            end: "bottom bottom",
-            scrub: 3.5, 
-          },
-        });
-
-        diffPanels.forEach((panel, i) => {
-          // Each panel's journey:
-          // 1. Reveal as Bottom Context (Only for the immediate next)
-          // 2. Glide to Center (Active Focus)
-          // 3. Glide to Top (Visible Context)
-          // 4. Final Exit (Fade Out)
-          
-          const startTime = i * 0.5; // High-velocity stagger
-
-          // Initial Visibility logic
-          if (i === 0) {
-            // First panel starts in focus
-            gsap.set(panel, { 
-              autoAlpha: 1, 
-              y: 0, 
-              scale: 1.1, 
-              filter: "blur(0px)",
-              transformOrigin: "center center"
-            });
-          } else if (i === 1) {
-            // Second panel is preloaded at bottom context
-            gsap.set(panel, { 
-              autoAlpha: 0.2, 
-              y: 150, 
-              scale: 0.5, 
-              filter: "blur(4px)",
-              transformOrigin: "center center"
-            });
-          } else {
-            // All others start completely hidden
-            gsap.set(panel, { 
-              autoAlpha: 0, 
-              y: 150, 
-              scale: 0.5, 
-              filter: "blur(4px)",
-              transformOrigin: "center center"
-            });
-          }
-
-          // Reveal panel as "next" context (for panels 2 and onwards)
-          if (i > 1) {
-            diffTl.to(panel, {
-              autoAlpha: 0.2,
-              filter: "blur(4px)",
-              duration: 0.3,
-              ease: "power2.inOut"
-            }, startTime - 0.3);
-          }
-
-          // Animate to focus (for panels 1 and onwards)
-          if (i > 0) {
-            diffTl.to(panel, {
-              autoAlpha: 1,
-              y: 0,
-              scale: 1.1,
-              filter: "blur(0px)",
-              duration: 0.5,
-              ease: "power3.inOut"
-            }, startTime);
-          }
-
-          // Animation to Top (Faded context) - EXCEPT for the last panel
-          if (i < diffPanels.length - 1) {
-            diffTl.to(panel, {
-              autoAlpha: 0.2,
-              y: -150,
-              scale: 0.5,
-              filter: "blur(4px)",
-              duration: 0.5,
-              ease: "power3.inOut"
-            }, startTime + 0.5);
-
-            // Animation to Final Exit (Fade out completely)
-            diffTl.to(panel, {
-              autoAlpha: 0,
-              y: -300,
-              filter: "blur(10px)",
-              duration: 0.5,
-              ease: "power3.inOut"
-            }, startTime + 1.0);
-          }
-        });
-
-        // Buffer to keep it sticky at the end
-        diffTl.to({}, { duration: 0.2 });
-      }
+      tl.to({}, { duration: 0.2 });
 
       cleanup = () => { ScrollTrigger.getAll().forEach((t) => t.kill()); };
+      
+      // Refresh positions after dynamic components likely finished loading
+      setTimeout(() => {
+        ScrollTrigger.refresh();
+      }, 1000);
     })();
 
     return () => { cleanup?.(); };
@@ -310,7 +213,7 @@ export default function Home() {
         {/* ═══════════════════ HERO CONTENT ═══════════════════ */}
         <main
           className="relative z-10 flex flex-col justify-end"
-          style={{ minHeight: "100vh", paddingTop: "100px", paddingBottom: "120px", paddingLeft: "50px", paddingRight: "50px" }}
+          style={{ minHeight: "100vh", paddingTop: "100px", paddingBottom: "220px", paddingLeft: "50px", paddingRight: "50px" }}
         >
           <div>
             {/* Backed by badge */}
@@ -323,10 +226,10 @@ export default function Home() {
               className="font-gilroy font-normal text-white blur-in"
               style={{ fontSize: "clamp(3rem, 8vw, 5.5rem)", lineHeight: 1.05, letterSpacing: "-0.03em", marginBottom: "16px", animationDelay: "0.15s" }}
             >
-              <EncryptedText text="Human Data for a" encryptedClassName="text-white/30" />
+              <EncryptedText text="Human Data for" encryptedClassName="text-white/30" />
               <br />
               <span className="font-rhymes italic font-thin">
-                <EncryptedText text="Physical World" encryptedClassName="text-white/30" />
+                <EncryptedText text="Physical AI" encryptedClassName="text-white/30" />
               </span>
             </h1>
 
@@ -354,7 +257,7 @@ export default function Home() {
       <BentoGrid />
 
       {/* ═══════════════════ NARRATIVE SECTION ═══════════════════ */}
-      <section className="narrative-section relative w-full bg-[#050505]" style={{ height: "120vh" }}>
+      <section className="narrative-section relative z-30 w-full bg-[#050505]" style={{ height: "180vh" }}>
         <div className="sticky top-0 overflow-hidden" style={{ height: "100vh" }}>
           {[
             { type: "stats", text: "" },
@@ -389,7 +292,7 @@ export default function Home() {
                         continents
                       </span> <br />
                       <span className="text-white font-gilroy font-medium" style={{ fontSize: "clamp(13px, 1.6vw, 18px)", letterSpacing: "0.15em", marginTop: "16px", display: "block", opacity: 0.8 }}>
-                        US, EU, UK, JP, SJN, IN
+                        US, EU, UK, JP, SGN, IN
                       </span>
                     </div>
                   </div>
@@ -409,7 +312,7 @@ export default function Home() {
       <section
         id="data"
         className="relative w-full bg-[#050505]"
-        style={{ padding: 'clamp(200px, 25vw, 10px) clamp(24px, 11vw, 160px)' }}
+        style={{ padding: 'clamp(60px, 10vw, 120px) clamp(24px, 11vw, 160px)' }}
       >
         {/* Heading */}
         <h2
@@ -505,75 +408,69 @@ export default function Home() {
               </div>
             </a>
           ))}
-          <div className="border-t border-white/[0.09]" />
-        </div>
-
-        {/* Disclaimer below links */}
-        <div className="flex justify-center" style={{ padding: '20px 0 8px' }}>
-          <p
-            className="font-gilroy font-light text-white/30 text-center"
-            style={{ fontSize: 'clamp(11px, 1vw, 13px)', maxWidth: '500px', lineHeight: 1.8 }}
-          >
-            Opens Rerun visualizer in a new tab. It may be very slow on browsers due to very large MCAP size.
-          </p>
         </div>
       </section>
 
       {/* ═══════════════════ DIFFERENCE SECTION ═══════════════════ */}
-      <section className="difference-section relative w-full bg-[#050505]" style={{ height: "120vh" }}>
-        <div className="sticky top-0 h-screen flex flex-col items-center justify-center overflow-hidden">
-          {/* Subtle Ambient Gradient Overlay */}
-          <div className="absolute inset-0 z-0 bg-gradient-to-b from-[#050505] via-transparent to-[#050505] pointer-events-none" />
+      <section
+        className="difference-section bg-[#050505]"
+        style={{
+          width: "100%",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          padding: "120px 24px",
+        }}
+      >
+        <div style={{ width: "100%", maxWidth: "1000px", margin: "0 auto" }}>
 
           {/* Title */}
-          <h2 className="absolute top-[8vh] font-gilroy font-light text-white text-center z-20" style={{ fontSize: "clamp(32px, 4vw, 48px)", letterSpacing: "0.02em" }}>
-            How Are We Different?
+          <h2
+            className="font-gilroy font-light text-white"
+            style={{
+              fontSize: "clamp(28px, 3.8vw, 46px)",
+              letterSpacing: "0.01em",
+              textAlign: "center",
+              marginBottom: "80px",
+            }}
+          >
+            How Are We <span className="font-rhymes italic">Different?</span>
           </h2>
 
-          <div className="flex flex-col md:flex-row items-center justify-center w-full max-w-[1400px] px-8 md:px-20 gap-12 md:gap-32 z-10">
-            {/* Left: Illustration */}
-            <div className="w-full md:w-5/12 flex justify-center md:justify-end px-6 md:px-0">
-              <div className="relative w-full max-w-[600px] aspect-[4/3] will-change-transform">
-                <Image 
-                  src="/images/image 5.png" 
-                  alt="Illustration" 
-                  fill 
-                  className="object-contain"
-                  priority
-                  unoptimized
-                />
-              </div>
+          {/* Two-column grid — stacks on mobile, side-by-side on md+ */}
+          <div className="grid grid-cols-1 md:grid-cols-2 items-center gap-10 md:gap-[60px]">
+
+            {/* Top on mobile / Left on desktop: Illustration */}
+            <div style={{ position: "relative", width: "100%", aspectRatio: "4/3" }}>
+              <Image
+                src="/images/image 5.png"
+                alt="Illustration"
+                fill
+                className="object-contain"
+                priority
+                unoptimized
+              />
             </div>
 
-            {/* Right: Text Storytelling */}
-            <div className="w-full md:w-7/12 relative h-[40vh] flex items-center justify-center md:justify-start">
+            {/* Bottom on mobile / Right on desktop: Text list */}
+            <div style={{ display: "flex", flexDirection: "column", gap: "28px" }}>
               {[
+                "We have a larger workforce and can scale your experiments exponentially.",
                 "Our data streams have internal and external signatures allowing your team to independently verify multimodal syncing.",
                 "Our hardware has been developed in-house so we can easily customize it to your needs.",
                 "Our human-in-the-loop process ensures high quality annotations.",
-                "We have a larger workforce and can scale your experiments exponentially.",
-                "We will bring fresh cake if visiting your office :)"
+                "We will bring fresh cake if visiting your office :)",
               ].map((text, i) => (
-                <div
+                <p
                   key={i}
-                  className="difference-panel absolute inset-0 flex items-center justify-center md:justify-start"
-                  style={{ willChange: "transform, opacity, filter" }}
+                  className="font-gilroy font-light text-white"
+                  style={{ fontSize: "15px", lineHeight: 1.6, margin: 0 }}
                 >
-                  <p 
-                    className="font-gilroy font-medium text-white text-center md:text-left leading-tight"
-                    style={{ fontSize: "clamp(20px, 2.8vw, 36px)" }}
-                  >
-                    {text.split(' ').map((word, idx) => (
-                      ['internal', 'external', 'multimodal', 'in-house', 'human-in-the-loop', 'larger', 'exponentially', 'fresh', 'cake'].includes(word.toLowerCase().replace(/[^a-z-]/g, '')) ? (
-                        <span key={idx} className="font-rhymes italic font-thin text-white/70">{word} </span>
-                      ) : (
-                        word + ' '
-                      )
-                    ))}
-                  </p>
-                </div>
+                  {text}
+                </p>
               ))}
             </div>
+
           </div>
         </div>
       </section>

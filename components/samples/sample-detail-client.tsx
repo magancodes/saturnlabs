@@ -52,9 +52,9 @@ export default function SampleDetailClient({ sample }: { sample: Sample }) {
         >
           <Link
             href="/samples"
-            className="group inline-flex items-center gap-4 text-[12px] uppercase tracking-[0.3em] text-white/30 hover:text-white transition-all mb-16"
+            className="group inline-flex items-center gap-4 text-[12px] uppercase tracking-[0.3em] text-white transition-all mb-16"
           >
-            <div className="flex items-center justify-center w-10 h-10 rounded-full border border-white/10 group-hover:border-white/30 transition-all">
+            <div className="flex items-center justify-center w-10 h-10 rounded-full border border-white/40 transition-all">
               <ArrowLeft className="h-3 w-3" />
             </div>
             Back to library
@@ -63,7 +63,7 @@ export default function SampleDetailClient({ sample }: { sample: Sample }) {
           <div className="flex flex-col items-center gap-12">
             <div className="space-y-10">
               <h1 
-                className="text-5xl md:text-7xl lg:text-8xl font-semibold tracking-tighter leading-tight reveal text-center"
+                className="text-4xl md:text-6xl font-semibold tracking-tighter leading-tight reveal text-center"
               >
                 {sample.title}
               </h1>
@@ -134,8 +134,8 @@ export default function SampleDetailClient({ sample }: { sample: Sample }) {
             })}
             
             {!sample.rrdUrl && (
-              <div className="md:col-span-6 lg:col-span-12 flex items-center justify-center p-20 border border-dashed border-white/10 rounded-[24px] bg-white/[0.01] mt-8 h-40">
-                <p className="font-mono text-white/20 uppercase tracking-[0.4em] text-[10px] font-bold text-center">
+              <div className="md:col-span-6 lg:col-span-12 flex items-center justify-center p-20 border border-dashed border-white/20 rounded-[24px] bg-white/[0.02] mt-8 h-40">
+                <p className="font-mono text-white uppercase tracking-[0.4em] text-[13px] font-bold text-center">
                   Rerun RRD Visualization coming soon
                 </p>
               </div>
