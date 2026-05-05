@@ -312,102 +312,149 @@ export default function Home() {
       <section
         id="data"
         className="relative w-full bg-[#050505]"
-        style={{ padding: 'clamp(60px, 10vw, 120px) clamp(24px, 11vw, 160px)' }}
+        style={{
+          width: "100%",
+          display: "flex",
+          justifyContent: "center",
+          padding: "120px 24px",
+        }}
       >
-        {/* Heading */}
-        <h2
-          className="font-gilroy font-normal text-white leading-tight"
-          style={{ fontSize: 'clamp(20px, 3vw, 34px)', marginBottom: 'clamp(24px, 3.5vw, 48px)' }}
-        >
-          <EncryptedText text="Explore our" encryptedClassName="text-white/30" /> <span className="font-rhymes italic"><EncryptedText text="samples" encryptedClassName="text-white/30" /></span>
-        </h2>
+        <div style={{ width: "100%", maxWidth: "780px", margin: "0 auto" }}>
+          {/* Heading — centered */}
+          <h2
+            className="font-gilroy font-normal text-white"
+            style={{
+              fontSize: "clamp(28px, 3.8vw, 44px)",
+              textAlign: "center",
+              marginBottom: "60px",
+              letterSpacing: "-0.01em",
+            }}
+          >
+            <EncryptedText text="Explore Our" encryptedClassName="text-white/30" />{" "}
+            <span className="font-rhymes italic">
+              <EncryptedText text="Samples" encryptedClassName="text-white/30" />
+            </span>
+          </h2>
 
-        {/* Dataset rows — dividers full-width, content indented */}
-        <div className="flex flex-col">
-          {[
-            { 
-              label: "Lego Assembly", 
-              href: "https://rerun.io/viewer?url=https%3A%2F%2Fsaturnlabsdevind.blob.core.windows.net%2Fdatasamples%2F1_foxglove_depth_trimmed.rrd%3Fsp%3Dr%26st%3D2026-04-15T06%3A39%3A12Z%26se%3D2026-09-01T14%3A54%3A12Z%26spr%3Dhttps%26sv%3D2025-11-05%26sr%3Db%26sig%3DdcYEdeYyShQIsIaSKMctzx4K4pnKQS4CwDhfHRbKYsU%253D" 
-            },
-            { 
-              label: "Cloth Folding", 
-              href: "https://rerun.io/viewer?url=https%3A%2F%2Fsaturnlabsdevind.blob.core.windows.net%2Fdatasamples%2F2_foxglove_compressed.rrd%3Fsp%3Dr%26st%3D2026-04-13T19%3A51%3A55Z%26se%3D2026-09-01T04%3A06%3A55Z%26spr%3Dhttps%26sv%3D2025-11-05%26sr%3Db%26sig%3DLgfIQT32rdSMwvI06276rIPsJNd8W4QS1x5hMRW5uUE%253D" 
-            },
-            { 
-              label: "Electronics Assembly", 
-              href: "https://rerun.io/viewer?url=https%3A%2F%2Fsaturnlabsdevind.blob.core.windows.net%2Fdatasamples%2F3_foxglove_compressed.rrd%3Fsp%3Dr%26st%3D2026-04-13T19%3A52%3A56Z%26se%3D2026-09-01T04%3A07%3A56Z%26spr%3Dhttps%26sv%3D2025-11-05%26sr%3Db%26sig%3DXn%252BGbD5FFUQUvmIMppRlTZwkHlfZsT5ld%252BA5hgE8jms%253D" 
-            },
-            { 
-              label: "RGB Human Data", 
-              subtitle: "100 hour sample", 
-              highlight: true, 
-              href: "https://data.saturnlabs.ai/share/9d1c27bc-b8c1-49cd-afd2-8225b8bde355" 
-            },
-          ].map((card) => (
-            <a
-              key={card.label}
-              href={card.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={cn(
-                "group border-t border-white/[0.09] transition-all duration-500 block",
-                card.highlight 
-                  ? "bg-white text-black hover:bg-blue-800 hover:text-white" 
-                  : "bg-transparent text-white hover:bg-blue-800/40"
-              )}
-            >
-              <div
-                className="flex items-center justify-between"
-                style={{ padding: 'clamp(24px, 3.2vw, 48px) clamp(12px, 2.2vw, 32px)' }}
+          {/* 2×2 grid of sample cards */}
+          <div
+            className="grid grid-cols-1 sm:grid-cols-2"
+            style={{ gap: "20px", marginBottom: "80px" }}
+          >
+            {[
+              {
+                tag: "MULTIMODAL",
+                label: "Lego Assembly",
+                href: "https://rerun.io/viewer?url=https%3A%2F%2Fsaturnlabsdevind.blob.core.windows.net%2Fdatasamples%2F1_foxglove_depth_trimmed.rrd%3Fsp%3Dr%26st%3D2026-04-15T06%3A39%3A12Z%26se%3D2026-09-01T14%3A54%3A12Z%26spr%3Dhttps%26sv%3D2025-11-05%26sr%3Db%26sig%3DdcYEdeYyShQIsIaSKMctzx4K4pnKQS4CwDhfHRbKYsU%253D",
+              },
+              {
+                tag: "MULTIMODAL",
+                label: "Cloth Folding",
+                href: "https://rerun.io/viewer?url=https%3A%2F%2Fsaturnlabsdevind.blob.core.windows.net%2Fdatasamples%2F2_foxglove_compressed.rrd%3Fsp%3Dr%26st%3D2026-04-13T19%3A51%3A55Z%26se%3D2026-09-01T04%3A06%3A55Z%26spr%3Dhttps%26sv%3D2025-11-05%26sr%3Db%26sig%3DLgfIQT32rdSMwvI06276rIPsJNd8W4QS1x5hMRW5uUE%253D",
+              },
+              {
+                tag: "MULTIMODAL",
+                label: "Electronics Assembly",
+                href: "https://rerun.io/viewer?url=https%3A%2F%2Fsaturnlabsdevind.blob.core.windows.net%2Fdatasamples%2F3_foxglove_compressed.rrd%3Fsp%3Dr%26st%3D2026-04-13T19%3A52%3A56Z%26se%3D2026-09-01T04%3A07%3A56Z%26spr%3Dhttps%26sv%3D2025-11-05%26sr%3Db%26sig%3DXn%252BGbD5FFUQUvmIMppRlTZwkHlfZsT5ld%252BA5hgE8jms%253D",
+              },
+              {
+                tag: "RGB",
+                label: "RGB 100 Hour Sample",
+                highlight: true,
+                href: "https://data.saturnlabs.ai/share/9d1c27bc-b8c1-49cd-afd2-8225b8bde355",
+              },
+            ].map((card) => (
+              <a
+                key={card.label}
+                href={card.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group block transition-transform duration-300 hover:scale-[1.02]"
+                style={{
+                  background: card.highlight ? "#00E89C" : "#0a0a0a",
+                  border: card.highlight ? "1px solid #00E89C" : "1px solid rgba(255,255,255,0.08)",
+                  borderRadius: "14px",
+                  padding: "24px 26px",
+                  minHeight: "160px",
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "space-between",
+                  gap: "48px",
+                }}
               >
-                <div className="flex flex-col gap-1">
+                {/* Top: Pill tag — solid white background */}
+                <span
+                  className="font-gilroy font-semibold inline-block w-fit"
+                  style={{
+                    background: "#ffffff",
+                    color: "#000000",
+                    fontSize: "10px",
+                    letterSpacing: "0.08em",
+                    padding: "5px 11px",
+                    borderRadius: "6px",
+                    border: "none",
+                  }}
+                >
+                  {card.tag}
+                </span>
+
+                {/* Bottom: Title + arrow button */}
+                <div className="flex items-end justify-between gap-4">
                   <span
-                    className={cn(
-                      "font-gilroy font-light transition-colors duration-500",
-                      card.highlight ? "text-black group-hover:text-white" : "text-white/90 group-hover:text-white"
-                    )}
-                    style={{ fontSize: 'clamp(12px, 1.2vw, 15px)' }}
+                    className="font-gilroy font-semibold leading-tight"
+                    style={{
+                      color: card.highlight ? "#000000" : "#ffffff",
+                      fontSize: "17px",
+                    }}
                   >
                     {card.label}
                   </span>
-                  {card.subtitle && (
-                    <span 
-                      className={cn(
-                        "font-gilroy font-light transition-colors duration-500",
-                        card.highlight ? "text-black/60 group-hover:text-white/60" : "text-white/40 group-hover:text-white/60"
-                      )} 
-                      style={{ fontSize: '11px' }}
-                    >
-                      {card.subtitle}
-                    </span>
-                  )}
-                </div>
-                <div
-                  className={cn(
-                    "rounded-[10px] flex items-center justify-center shrink-0 transition-all duration-500 group-hover:scale-125 group-hover:shadow-[0_0_20px_rgba(37,99,235,0.4)]",
-                    card.highlight ? "bg-black group-hover:bg-blue-600" : "bg-white/10 group-hover:bg-blue-600"
-                  )}
-                  style={{ width: 'clamp(30px, 2.8vw, 40px)', height: 'clamp(30px, 2.8vw, 40px)' }}
-                >
-                  <svg 
-                    viewBox="0 0 16 16" 
-                    fill="none" 
-                    xmlns="http://www.w3.org/2000/svg" 
-                    className="transition-transform duration-500 group-hover:scale-110"
-                    style={{ width: 'clamp(10px, 1vw, 13px)', height: 'clamp(10px, 1vw, 13px)' }}
+                  <div
+                    className="flex items-center justify-center shrink-0 transition-transform duration-300 group-hover:scale-110"
+                    style={{
+                      width: "40px",
+                      height: "40px",
+                      borderRadius: "8px",
+                      background: "#ffffff",
+                      border: "none",
+                    }}
                   >
-                    <path 
-                      d="M3 13L13 3M13 3H6M13 3V10" 
-                      className="stroke-white"
-                      strokeWidth="2.2" 
-                      strokeLinecap="round" 
-                      strokeLinejoin="round" 
-                    />
-                  </svg>
+                    <svg
+                      width="14"
+                      height="14"
+                      viewBox="0 0 16 16"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M3 13L13 3M13 3H6M13 3V10"
+                        stroke="#000000"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </div>
                 </div>
-              </div>
-            </a>
-          ))}
+              </a>
+            ))}
+          </div>
+
+          {/* View All Samples button */}
+          <a
+            href="/samples"
+            className="block w-full font-gilroy font-semibold text-center transition-all duration-300 hover:bg-white/90"
+            style={{
+              background: "#ffffff",
+              color: "#000000",
+              border: "1px solid #ffffff",
+              borderRadius: "14px",
+              padding: "20px",
+              fontSize: "15px",
+            }}
+          >
+            View All Samples
+          </a>
         </div>
       </section>
 

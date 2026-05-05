@@ -124,7 +124,7 @@ export function BentoGrid() {
       <AsciiBackground />
 
       {/* Content wrapper */}
-      <div className="relative z-10" style={{ padding: "40px 50px 220px" }}>
+      <div className="relative z-10" style={{ padding: "40px 50px 80px" }}>
 
         {/* Bento Grid — 6 cols always to keep same layout on mobile */}
         <div className="grid grid-cols-6 md:grid-cols-12 gap-2 md:gap-3" style={{ marginTop: "-140px" }}>
