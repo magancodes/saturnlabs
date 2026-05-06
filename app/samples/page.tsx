@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { Navbar } from "@/components/ui/navbar";
 import { Loader2 } from "lucide-react";
@@ -37,12 +37,6 @@ function SamplePreview({ src }: { src: string }) {
 }
 
 export default function SamplesPage() {
-  const stats = [
-    { label: "Continents", value: "4" },
-    { label: "Data Samples", value: "150k+" },
-    { label: "FPS Synced", value: "60" }
-  ];
-
   return (
     <div className="min-h-screen flex flex-col bg-[#050505] text-white font-gilroy selection:bg-white/10 items-center overflow-x-hidden scroll-smooth">
       <Navbar />
@@ -53,7 +47,7 @@ export default function SamplesPage() {
       </div>
 
       {/* Main Container - Tightened & Fast */}
-      <main className="flex-1 w-full max-w-[1200px] flex flex-col items-center px-8 md:px-12 relative z-10">
+      <main className="flex-1 w-full max-w-[1200px] flex flex-col items-center px-4 sm:px-8 md:px-12 relative z-10">
         
         {/* Dedicated Hero - 50vh height */}
         <section className="w-full h-[50vh] flex flex-col items-center justify-center text-center relative overflow-hidden">
@@ -93,26 +87,28 @@ export default function SamplesPage() {
           </div>
         </section>
 
-        {/* Video Grid Section - Starts quickly after the narrative */}
-        <section className="w-full flex flex-col items-center pb-32">
+        {/* Video Grid Section - Multimodal samples (excludes RGB 100-hour) */}
+        <section className="w-full flex flex-col items-center" style={{ paddingBottom: "160px" }}>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-10 w-full max-w-full justify-items-center">
-            {samples.map((sample, idx) => (
-              <div 
-                key={sample.id} 
-                className="group relative flex flex-col overflow-hidden transition-all duration-500 hover:-translate-y-2 reveal w-full max-w-[390px] md:max-w-none"
-                style={{ 
+            {samples.filter(s => s.id !== "rgb-100-hour").map((sample, idx) => (
+              <div
+                key={sample.id}
+                className="group relative flex flex-col overflow-hidden transition-all duration-500 hover:-translate-y-2 reveal w-full md:max-w-none"
+                style={{
                   animationDelay: `${0.1 + idx * 0.05}s`,
                   borderRadius: '16px',
                   border: sample.highlight ? '1px solid #00E89C' : '1px solid rgba(255, 255, 255, 0.05)',
-                  backgroundColor: sample.highlight ? '#00E89C' : '#0a0a0a'
+                  backgroundColor: sample.highlight ? '#00E89C' : '#0a0a0a',
+                  minWidth: "350px",
+                  maxWidth: "100%"
                 }}
               >
                 {/* Background Video / Preview */}
                 <div className="aspect-video relative overflow-hidden">
                   <SamplePreview src={sample.preview} />
-                  
+
                   {/* Internal Content - Compact and Clean */}
-                  <div 
+                  <div
                     className={`absolute inset-0 flex flex-col justify-end ${sample.highlight ? 'bg-gradient-to-t from-black/40 via-transparent to-transparent' : 'bg-gradient-to-t from-black/80 via-transparent to-transparent'}`}
                     style={{ padding: '24px 24px' }}
                   >
@@ -120,16 +116,16 @@ export default function SamplesPage() {
                       <h3 className={`text-lg md:text-xl font-bold tracking-tight leading-tight drop-shadow-xl ${sample.highlight ? 'text-black' : 'text-white'}`} style={{ marginBottom: '16px' }}>
                         {sample.id === "lego-assembly" ? "Lego Assembly" : sample.title}
                       </h3>
-                      
-                      <Link 
-                        href={sample.externalUrl || `/samples/${sample.id}`} 
+
+                      <Link
+                        href={sample.externalUrl || `/samples/${sample.id}`}
                         className="block w-full"
                         target={sample.externalUrl ? "_blank" : undefined}
                         rel={sample.externalUrl ? "noopener noreferrer" : undefined}
                       >
-                        <button 
+                        <button
                           className={`w-full font-bold text-xs transition-all active:scale-[0.98] shadow-2xl ${sample.highlight ? 'bg-black text-white hover:bg-black/80' : 'bg-white text-black hover:bg-zinc-100'}`}
-                          style={{ 
+                          style={{
                             height: '42px',
                             borderRadius: '8px'
                           }}
@@ -142,6 +138,75 @@ export default function SamplesPage() {
                 </div>
               </div>
             ))}
+          </div>
+        </section>
+
+        {/* ═══════════════════ RGB DATA SAMPLES ═══════════════════ */}
+        <section className="w-full flex flex-col items-center" style={{ paddingBottom: "160px" }}>
+          {/* Header */}
+          <div className="flex flex-col items-center text-center max-w-5xl mx-auto" style={{ marginBottom: "64px", paddingLeft: "16px", paddingRight: "16px" }}>
+            <p
+              className="font-rhymes italic font-thin text-white"
+              style={{ fontSize: "16px", marginBottom: "24px" }}
+            >
+              RGB data samples
+            </p>
+            <h2
+              className="font-gilroy font-semibold text-white leading-tight tracking-tight"
+              style={{ fontSize: "clamp(20px, 3vw, 32px)" }}
+            >
+              100+ hours of RGB egocentric footage captured across diverse real world environments
+            </h2>
+          </div>
+
+          {/* Big video card */}
+          <div
+            className="group relative w-full overflow-hidden reveal"
+            style={{
+              borderRadius: "16px",
+              border: "1px solid rgba(255, 255, 255, 0.05)",
+              backgroundColor: "#0a0a0a",
+              minWidth: "350px",
+            }}
+          >
+            <div className="aspect-video relative overflow-hidden">
+              <SamplePreview src="https://saturnlabsdevind.blob.core.windows.net/egoencoded/rubysissm@gmail.com/general/b31d2672_VID_20260407_062753.mp4?sv=2026-02-06&st=2026-05-06T13%3A36%3A32Z&se=2026-05-06T17%3A36%3A32Z&sr=b&sp=r&sig=xgZ5twazFZn6eThYuJAdAdE64aL%2BxHsyd8EzUS2dndY%3D&rsct=video%2Fmp4" />
+
+              {/* Dark overlay for text/button visibility */}
+              <div
+                className="absolute inset-0 pointer-events-none"
+                style={{ background: "rgba(0,0,0,0.35)" }}
+              />
+
+              {/* Bottom overlay with title + View Sample button */}
+              <div
+                className="absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-black/85 via-black/30 to-transparent"
+                style={{ padding: "32px" }}
+              >
+                <h3
+                  className="font-gilroy font-bold text-white tracking-tight leading-tight drop-shadow-xl"
+                  style={{ fontSize: "clamp(18px, 2vw, 22px)", marginBottom: "20px" }}
+                >
+                  100 hour RGB sample
+                </h3>
+                <Link
+                  href="https://data.saturnlabs.ai/share/9d1c27bc-b8c1-49cd-afd2-8225b8bde355"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block w-full"
+                >
+                  <button
+                    className="w-full font-bold text-sm bg-white text-black hover:bg-zinc-100 transition-all active:scale-[0.98] shadow-2xl"
+                    style={{
+                      height: "52px",
+                      borderRadius: "10px",
+                    }}
+                  >
+                    View Sample
+                  </button>
+                </Link>
+              </div>
+            </div>
           </div>
         </section>
 
