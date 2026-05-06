@@ -11,6 +11,8 @@ export type Sample = {
   preview: string
   streams: SampleStream[]
   rrdUrl: string
+  externalUrl?: string
+  highlight?: boolean
 }
 
 export const samples: Sample[] = [
@@ -116,6 +118,14 @@ export const samples: Sample[] = [
     ],
     rrdUrl:
       "https://saturnlabsdevind.blob.core.windows.net/datasamples/3_foxglove_compressed.rrd?sp=r&st=2026-04-13T19:52:56Z&se=2026-09-01T04:07:56Z&spr=https&sv=2025-11-05&sr=b&sig=Xn%2BGbD5FFUQUvmIMppRlTZwkHlfZsT5ld%2BA5hgE8jms%3D",
+  },
+  {
+    id: "rgb-100-hour",
+    title: "100 hour RGB data",
+    preview: "https://saturnlabsdevind.blob.core.windows.net/egoencoded/tejas@saturnlabs.ai/general/3c94fb4a_Manipulation_BuildingLego_1m51s.mp4?sv=2026-02-06&st=2026-05-06T09%3A57%3A36Z&se=2026-05-06T13%3A57%3A36Z&sr=b&sp=r&sig=9mbK691q%2BKBI9hVIW5xYzDIXoE63EuSTea2F2ApDiTY%3D&rsct=video%2Fmp4",
+    streams: [],
+    rrdUrl: "",
+    externalUrl: "https://data.saturnlabs.ai/share/9d1c27bc-b8c1-49cd-afd2-8225b8bde355",
   },
 ]
 

@@ -103,8 +103,8 @@ export default function SamplesPage() {
                 style={{ 
                   animationDelay: `${0.1 + idx * 0.05}s`,
                   borderRadius: '16px',
-                  border: '1px solid rgba(255, 255, 255, 0.05)',
-                  backgroundColor: '#0a0a0a'
+                  border: sample.highlight ? '1px solid #00E89C' : '1px solid rgba(255, 255, 255, 0.05)',
+                  backgroundColor: sample.highlight ? '#00E89C' : '#0a0a0a'
                 }}
               >
                 {/* Background Video / Preview */}
@@ -113,17 +113,22 @@ export default function SamplesPage() {
                   
                   {/* Internal Content - Compact and Clean */}
                   <div 
-                    className="absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-black/80 via-transparent to-transparent"
+                    className={`absolute inset-0 flex flex-col justify-end ${sample.highlight ? 'bg-gradient-to-t from-black/40 via-transparent to-transparent' : 'bg-gradient-to-t from-black/80 via-transparent to-transparent'}`}
                     style={{ padding: '24px 24px' }}
                   >
                     <div className="flex flex-col">
-                      <h3 className="text-lg md:text-xl font-bold tracking-tight text-white leading-tight drop-shadow-xl" style={{ marginBottom: '16px' }}>
+                      <h3 className={`text-lg md:text-xl font-bold tracking-tight leading-tight drop-shadow-xl ${sample.highlight ? 'text-black' : 'text-white'}`} style={{ marginBottom: '16px' }}>
                         {sample.id === "lego-assembly" ? "Lego Assembly" : sample.title}
                       </h3>
                       
-                      <Link href={`/samples/${sample.id}`} className="block w-full">
+                      <Link 
+                        href={sample.externalUrl || `/samples/${sample.id}`} 
+                        className="block w-full"
+                        target={sample.externalUrl ? "_blank" : undefined}
+                        rel={sample.externalUrl ? "noopener noreferrer" : undefined}
+                      >
                         <button 
-                          className="w-full bg-white text-black font-bold text-xs hover:bg-zinc-100 transition-all active:scale-[0.98] shadow-2xl"
+                          className={`w-full font-bold text-xs transition-all active:scale-[0.98] shadow-2xl ${sample.highlight ? 'bg-black text-white hover:bg-black/80' : 'bg-white text-black hover:bg-zinc-100'}`}
                           style={{ 
                             height: '42px',
                             borderRadius: '8px'

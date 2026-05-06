@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import dynamic from "next/dynamic";
 import { EncryptedText } from "@/components/ui/encrypted-text";
 import { cn } from "@/lib/utils";
@@ -339,23 +340,23 @@ export default function Home() {
           {/* 2×2 grid of sample cards */}
           <div
             className="grid grid-cols-1 sm:grid-cols-2"
-            style={{ gap: "20px", marginBottom: "80px" }}
+            style={{ gap: "20px", marginBottom: "50px" }}
           >
             {[
               {
                 tag: "MULTIMODAL",
                 label: "Lego Assembly",
-                href: "https://rerun.io/viewer?url=https%3A%2F%2Fsaturnlabsdevind.blob.core.windows.net%2Fdatasamples%2F1_foxglove_depth_trimmed.rrd%3Fsp%3Dr%26st%3D2026-04-15T06%3A39%3A12Z%26se%3D2026-09-01T14%3A54%3A12Z%26spr%3Dhttps%26sv%3D2025-11-05%26sr%3Db%26sig%3DdcYEdeYyShQIsIaSKMctzx4K4pnKQS4CwDhfHRbKYsU%253D",
+                href: "/samples/lego-assembly",
               },
               {
                 tag: "MULTIMODAL",
                 label: "Cloth Folding",
-                href: "https://rerun.io/viewer?url=https%3A%2F%2Fsaturnlabsdevind.blob.core.windows.net%2Fdatasamples%2F2_foxglove_compressed.rrd%3Fsp%3Dr%26st%3D2026-04-13T19%3A51%3A55Z%26se%3D2026-09-01T04%3A06%3A55Z%26spr%3Dhttps%26sv%3D2025-11-05%26sr%3Db%26sig%3DLgfIQT32rdSMwvI06276rIPsJNd8W4QS1x5hMRW5uUE%253D",
+                href: "/samples/folding-clothes-2",
               },
               {
                 tag: "MULTIMODAL",
                 label: "Electronics Assembly",
-                href: "https://rerun.io/viewer?url=https%3A%2F%2Fsaturnlabsdevind.blob.core.windows.net%2Fdatasamples%2F3_foxglove_compressed.rrd%3Fsp%3Dr%26st%3D2026-04-13T19%3A52%3A56Z%26se%3D2026-09-01T04%3A07%3A56Z%26spr%3Dhttps%26sv%3D2025-11-05%26sr%3Db%26sig%3DXn%252BGbD5FFUQUvmIMppRlTZwkHlfZsT5ld%252BA5hgE8jms%253D",
+                href: "/samples/electronics-assembly",
               },
               {
                 tag: "RGB",
@@ -364,11 +365,11 @@ export default function Home() {
                 href: "https://data.saturnlabs.ai/share/9d1c27bc-b8c1-49cd-afd2-8225b8bde355",
               },
             ].map((card) => (
-              <a
+              <Link
                 key={card.label}
                 href={card.href}
-                target="_blank"
-                rel="noopener noreferrer"
+                target={card.href.startsWith("http") ? "_blank" : undefined}
+                rel={card.href.startsWith("http") ? "noopener noreferrer" : undefined}
                 className="group block transition-transform duration-300 hover:scale-[1.02]"
                 style={{
                   background: card.highlight ? "#00E89C" : "#0a0a0a",
@@ -436,12 +437,12 @@ export default function Home() {
                     </svg>
                   </div>
                 </div>
-              </a>
+              </Link>
             ))}
           </div>
 
           {/* View All Samples button */}
-          <a
+          <Link
             href="/samples"
             className="block w-full font-gilroy font-semibold text-center transition-all duration-300 hover:bg-white/90"
             style={{
@@ -454,7 +455,7 @@ export default function Home() {
             }}
           >
             View All Samples
-          </a>
+          </Link>
         </div>
       </section>
 
