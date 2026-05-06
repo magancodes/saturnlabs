@@ -503,10 +503,9 @@ export default function Home() {
             {/* Bottom on mobile / Right on desktop: Text list */}
             <div style={{ display: "flex", flexDirection: "column", gap: "28px" }}>
               {[
-                "We have a larger workforce and can scale your experiments exponentially.",
                 "Our data streams have internal and external signatures allowing your team to independently verify multimodal syncing.",
                 "Our hardware has been developed in-house so we can easily customize it to your needs.",
-                "Our human-in-the-loop process ensures high quality annotations.",
+                "We have a larger workforce and can scale your experiments exponentially.",
                 "We will bring fresh cake if visiting your office :)",
               ].map((text, i) => (
                 <p
